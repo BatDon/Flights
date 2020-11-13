@@ -14,4 +14,5 @@
 <!--    <string name="interstitial_ad_unit_id">"ca-app-pub-3940256099942544~1033173712"</string>-->
     <string name="interstitial_ad_unit_id">"ca-app-pub-3940256099942544/1033173712"</string>
     <string name="get_flights_service">GetFlightsService</string>
+    <string name="problem_retrieving_data">Problem retrieving data...Please try later!</string>
 </resources>
