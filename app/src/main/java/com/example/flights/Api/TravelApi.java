@@ -18,10 +18,15 @@ public interface TravelApi {
 //    @GET("/UK/GBP/en-GB/?query=Stockholm")
 
 
+
     @GET("/apiservices/autosuggest/v1.0/UK/GBP/en-GB/")
     Call<Places> getPlaces(@Query("query") String place_name);
-//    @GET("/UK/GBP/en-GB")
-//    Call<Places> getPlaces(@Query("query") String place_name);
 
+    @GET("/UK/GBP/en-GB")
+    Call<Places> getPlaces(@Query("query") String place_name);
+
+    //Chose url dynamically depending on user selection
+//    @GET("/apiservices/autosuggest/v1.0/UK/GBP/en-GB/")
+//    Call<Places> getPlaces(@Query("query") String place_name);
 
 }
