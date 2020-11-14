@@ -22,9 +22,7 @@ public interface TravelApi {
 
 //    @GET("/apiservices/autosuggest/v1.0/UK/GBP/en-GB/")
 //    Call<Places> getPlaces(@Query("query") String place_name);
-
-
-
+    
 
     @GET("/apiservices/autosuggest/v1.0/{country}/{currency}/{locality}/")
     Call<Places> getPlaces(@Path("country") String country,@Path ("currency") String currency,

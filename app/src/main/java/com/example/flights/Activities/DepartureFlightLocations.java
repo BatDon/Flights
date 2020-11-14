@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import com.example.flights.R;
 
-public class FlightToDestination extends AppCompatActivity {
+public class DepartureFlightLocations extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

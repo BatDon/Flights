@@ -15,4 +15,11 @@
     <string name="interstitial_ad_unit_id">"ca-app-pub-3940256099942544/1033173712"</string>
     <string name="get_flights_service">GetFlightsService</string>
     <string name="problem_retrieving_data">Problem retrieving data...Please try later!</string>
+    <string name="country_name">UK</string>
+    <string name="currency">GBP</string>
+    <string name="locale">en-GB</string>
+    <string name="localeName">Stockholm</string>
+
+    <string name="fileName">flightDepartures</string>
+    <string name="pathWithoutFileName">/data/user/0/com.example.flights/files/</string>
 </resources>

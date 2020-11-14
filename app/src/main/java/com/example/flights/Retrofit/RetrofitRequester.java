@@ -41,7 +41,7 @@ public class RetrofitRequester extends AppCompatActivity {
     }
 
     public interface onRetrofitListener {
-        public void onPopularRetrofitFinished(List<Place> placeList);
+        public void onRetrofitFinished(List<Place> placeList);
     }
 
     private onRetrofitListener onRetrofitListener;
@@ -60,10 +60,10 @@ public class RetrofitRequester extends AppCompatActivity {
 
 //        SharedPreferences sharedpreferences = getSharedPreferences(Constants.FLIGHT_PREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences sharedpreferences = mContext.getSharedPreferences(Constants.FLIGHT_PREFERENCES, Context.MODE_PRIVATE);
-        String userCountry=sharedpreferences.getString("country","United Kingdom");
-        String userCurrency=sharedpreferences.getString("currency","GBP");
-        String userLocale=sharedpreferences.getString("locale","en-GP");
-        String userLocalityName=sharedpreferences.getString("localityName","Stockholm");
+        String userCountry=sharedpreferences.getString(Constants.KEY_PREFERENCE_COUNTRY, "UK");
+        String userCurrency=sharedpreferences.getString(Constants.KEY_PREFERENCE_CURRENCY, "GBP");
+        String userLocale=sharedpreferences.getString(Constants.KEY_PREFERENCE_LOCALE, "en-GB");
+        String userLocalityName=sharedpreferences.getString(Constants.KEY_PREFERENCE_LOCALITY_NAME,"Stockholm");
         Call<Places> call = travelApi.getPlaces(userCountry,userCurrency,userLocale, userLocalityName);
 //       Stockholm will be replaced by user selection
 //        Call<Places> call = travelApi.getPlaces("Stockholm");
@@ -79,7 +79,7 @@ public class RetrofitRequester extends AppCompatActivity {
             public void onResponse(Call<Places> call, Response<Places> response) {
                 List<Place> placeList = generateDataList(response.body());
                 if (onRetrofitListener != null) {
-                    onRetrofitListener.onPopularRetrofitFinished(placeList);
+                    onRetrofitListener.onRetrofitFinished(placeList);
                 }
             }
 

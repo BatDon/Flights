@@ -57,4 +57,9 @@ dependencies {
     //multidex
     implementation 'com.android.support:multidex:1.0.3'
 
+    //ViewModel
+    // Lifecycle components
+    implementation "android.arch.lifecycle:extensions:2.2.0"
+    annotationProcessor "android.arch.lifecycle:compiler:2.2.0"
+
 }

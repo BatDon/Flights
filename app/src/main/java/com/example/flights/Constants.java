@@ -15,4 +15,5 @@ public class Constants {
     public static final String KEY_PREFERENCE_LOCALE="com.example.flights.key_locale";
     public static final String KEY_PREFERENCE_LOCALITY_NAME="com.example.flights.key_locality_name";
 
+
 }

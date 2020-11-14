@@ -107,7 +107,5 @@ public class GetFlightsService extends IntentService {
             }
         });
 
-
-        Intent i = new Intent();
     }
 }

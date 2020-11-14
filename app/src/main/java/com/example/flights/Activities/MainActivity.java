@@ -4,8 +4,9 @@ import com.example.flights.Constants;
 import com.example.flights.GetFlightsService;
 import com.example.flights.Pojos.Place;
 import com.example.flights.R;
-import com.example.flights.RelativeUrlCreator;
 import com.example.flights.Retrofit.RetrofitRequester;
+import com.example.flights.ViewModels.MainActivityViewModel;
+import com.example.flights.ViewModels.MainActivityViewModelFactory;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
@@ -13,35 +14,32 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 
-import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Spinner;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import android.widget.Toast;
 
 import java.util.List;
-import java.util.Timer;
 
 import timber.log.Timber;
 
-public class MainActivity extends AppCompatActivity implements RetrofitRequester.onRetrofitListener {
+public class MainActivity extends AppCompatActivity{
+
+//public class MainActivity extends AppCompatActivity implements RetrofitRequester.onRetrofitListener {
 
 //public class MainActivity extends AppCompatActivity implements RetrofitRequester.onRetrofitListener,
 //        AdapterView.OnItemSelectedListener {
@@ -54,7 +52,12 @@ public class MainActivity extends AppCompatActivity implements RetrofitRequester
     private Button mNextLevelButton;
     private InterstitialAd mInterstitialAd;
     private TextView mLevelTextView;
+    private EditText countryEditText;
+    private EditText placeEditText;
+    private EditText currencyEditText;
+    private EditText localityEditText;
     //private Spinner countrySpinner;
+    private MainActivityViewModel mainActivityViewModel;
 
     String[] countryArray;
 
@@ -73,6 +76,8 @@ public class MainActivity extends AppCompatActivity implements RetrofitRequester
 //        }
         setUpViews();
 
+        setUpViewModel();
+
 
         MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
 
@@ -89,15 +94,24 @@ public class MainActivity extends AppCompatActivity implements RetrofitRequester
 
         sharedpreferences = getSharedPreferences(Constants.FLIGHT_PREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();
-        editor.putString("country", "UK");
-        editor.putString("currency", "GBP");
-        editor.putString("locale", "en-GB");
-        editor.putString("localityName","Stockholm");
+        editor.putString(Constants.KEY_PREFERENCE_COUNTRY, "UK");
+        editor.putString(Constants.KEY_PREFERENCE_CURRENCY, "GBP");
+        editor.putString(Constants.KEY_PREFERENCE_LOCALE, "en-GB");
+        editor.putString(Constants.KEY_PREFERENCE_LOCALITY_NAME,"Stockholm");
+//        editor.putString("country", "UK");
+//        editor.putString("currency", "GBP");
+//        editor.putString("locale", "en-GB");
+//        editor.putString("localityName","Stockholm");
         editor.commit();
     }
 
     private void setUpViews(){
         setContentView(R.layout.activity_main);
+
+        countryEditText=findViewById(R.id.countryEditText);
+        placeEditText=findViewById(R.id.placeEditText);
+        currencyEditText=findViewById(R.id.currencyEditText);
+        localityEditText=findViewById(R.id.localeEditText);
 
 
         // Create the text view to show the level number.
@@ -108,19 +122,39 @@ public class MainActivity extends AppCompatActivity implements RetrofitRequester
         mNextLevelButton = ((Button) findViewById(R.id.next_level_button));
         mNextLevelButton.setEnabled(false);
 
+        Intent i = new Intent(MainActivity.this, GetFlightsService.class);
+// potentially add data to the intent
+//                i.putExtra("KEY1", "Value to be used by the service");
+        MainActivity.this.startService(i);
+
         mNextLevelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
+                if(countryEditText.getText().toString().equals("") || placeEditText.getText().toString().equals("") ||
+                        currencyEditText.getText().toString().equals("") || localityEditText.getText().toString().equals("")){
+                    Toast.makeText(MainActivity.this, "Please fill in all flight information", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 showInterstitial();
-                new RetrofitRequester(MainActivity.this).requestPlaces(MainActivity.this);
+
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+                editor.putString(Constants.KEY_PREFERENCE_COUNTRY, countryEditText.getText().toString());
+                editor.putString(Constants.KEY_PREFERENCE_LOCALITY_NAME, placeEditText.getText().toString());
+                editor.putString(Constants.KEY_PREFERENCE_CURRENCY,currencyEditText.getText().toString());
+                editor.putString(Constants.KEY_PREFERENCE_LOCALE, localityEditText.getText().toString());
+                editor.commit();
+                //new RetrofitRequester(MainActivity.this).requestPlaces(MainActivity.this);
 
                 // starts and triggers GetFlightsService
 //                Intent i = new Intent(MainActivity.this, GetFlightsService.class);
-// potentially add data to the intent
-//                i.putExtra("KEY1", "Value to be used by the service");
+//// potentially add data to the intent
+////                i.putExtra("KEY1", "Value to be used by the service");
 //                MainActivity.this.startService(i);
 
-//                new RetrofitRequester().requestPlaces(MainActivity.this);
+                //new RetrofitRequester(MainActivity.this).requestPlaces(MainActivity.this);
+                mainActivityViewModel.requestFlightDestinations();
 
             }
 
@@ -136,6 +170,12 @@ public class MainActivity extends AppCompatActivity implements RetrofitRequester
 //        countryArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 //        //Setting the ArrayAdapter data on the Spinner
 //        countrySpinner.setAdapter(countryArrayAdapter);
+    }
+
+    private void setUpViewModel(){
+        MainActivityViewModelFactory mainActivityViewModelFactory=new MainActivityViewModelFactory(getApplication());
+        mainActivityViewModel = ViewModelProviders.of(this, mainActivityViewModelFactory).get(MainActivityViewModel.class);
+        //context=movieDetailsViewModel.getApplication();
     }
 
     private void initializeBroadcastReceiver() {
@@ -186,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements RetrofitRequester
             @Override
             public void onAdClosed() {
                 // Proceed to the next level.
-                Intent intent=new Intent(MainActivity.this, FlightToDestination.class);
+                Intent intent=new Intent(MainActivity.this, DepartureFlightLocations.class);
                 startActivity(intent);
 
                 //goToNextLevel();
@@ -226,39 +266,40 @@ public class MainActivity extends AppCompatActivity implements RetrofitRequester
 
 
 
-    @Override
-    public void onPopularRetrofitFinished(List<Place> placeList) {
-        Timber.i("onPopularRetrofitFinished called");
-
-        Timber.i("userSelectedCountryName= "+userSelectedCountryName);
-        Timber.i("userSelectedLocalityName= "+userSelectedLocalityName);
-        if (placeList == null) {
-            Timber.i("placeList equals null");
-        }
-        for (Place place : placeList) {
-            String countryName = place.getCountryName();
-            Timber.i("countryName= "+countryName);
-            String cityName = place.getPlaceName();
-            Timber.i("cityName= "+cityName);
-
-            if(countryName.equals(userSelectedCountryName)){
-                if(cityName.equals(userSelectedLocalityName)){
-                    Timber.i("match found");
-                }
-                else{
-                    Timber.i("countryName match but not localityName Match");
-                }
-            }else{
-                Timber.i("wrong country returned");
-            }
-
-
-//        Place place = placeList.get(0);
-//        String placeId = place.getCityId();
-//        Timber.i("placeId= " + placeId);
-        }
-        Timber.i("for each loop finished onPopularRetrofitFinished");
-    }
+//    @Override
+//    public void onRetrofitFinished(List<Place> placeList) {
+//        Timber.i("onPopularRetrofitFinished called");
+//
+//        Timber.i("userSelectedCountryName= "+userSelectedCountryName);
+//        Timber.i("userSelectedLocalityName= "+userSelectedLocalityName);
+//        if (placeList == null) {
+//            Timber.i("placeList equals null");
+//        }
+//        else {
+//            for (Place place : placeList) {
+//                String countryName = place.getCountryName();
+//                Timber.i("countryName= " + countryName);
+//                String cityName = place.getPlaceName();
+//                Timber.i("cityName= " + cityName);
+//
+//                if (countryName.equals(userSelectedCountryName)) {
+//                    if (cityName.equals(userSelectedLocalityName)) {
+//                        Timber.i("match found");
+//                    } else {
+//                        Timber.i("countryName match but not localityName Match");
+//                    }
+//                } else {
+//                    Timber.i("wrong country returned");
+//                }
+//
+//
+//                //        Place place = placeList.get(0);
+//                //        String placeId = place.getCityId();
+//                //        Timber.i("placeId= " + placeId);
+//            }
+//        }
+//        Timber.i("for each loop finished onPopularRetrofitFinished");
+//    }
 
 //    @Override
 //    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -295,38 +336,46 @@ public class MainActivity extends AppCompatActivity implements RetrofitRequester
         @Override
         public void onReceive(Context context, Intent intent) {
             Timber.i("onReceive in ResponseReceiver called");
-            String countryName="";
-            String localityName="";
-//            if(intent.hasExtra(Constants.PLACE_COUNTRY)){
-//                countryName=intent.getStringExtra(Constants.PLACE_COUNTRY);
-//                userSelectedCountryName=countryName;
-//                Timber.i("countryName= "+countryName);
-//            }
-//            if(intent.hasExtra(Constants.PLACE_LOCALITY)){
-//                localityName=intent.getStringExtra(Constants.PLACE_LOCALITY);
-//                userSelectedLocalityName=localityName;
-//                Timber.i("localityName "+localityName);
-//                //Remove just for testing
-//                if(localityName.equals("Bogotá")){
-//                    localityName="Bogota";
-//                    userSelectedLocalityName="Bogota";
-//                }
+            String countryName = "";
+            String localityName = "";
+            SharedPreferences.Editor editor = sharedpreferences.edit();
+            if (intent.hasExtra(Constants.PLACE_COUNTRY)) {
+                countryName = intent.getStringExtra(Constants.PLACE_COUNTRY);
+                userSelectedCountryName = countryName;
+                Timber.i("countryName= " + countryName);
+
+//                editor.putString(Constants.KEY_PREFERENCE_COUNTRY, userSelectedCountryName);
+//                editor.commit();
+                countryEditText.setText(userSelectedCountryName);
+            }
+            if (intent.hasExtra(Constants.PLACE_LOCALITY)) {
+                localityName = intent.getStringExtra(Constants.PLACE_LOCALITY);
+                userSelectedLocalityName = localityName;
+                Timber.i("localityName " + localityName);
+                //Remove just for testing
+                if (localityName.equals("Bogotá")) {
+                    localityName = "Bogota";
+                    userSelectedLocalityName = "Bogota";
+//                    editor.putString(Constants.KEY_PREFERENCE_LOCALITY_NAME, userSelectedLocalityName);
+//                    editor.commit();
+                    placeEditText.setText(userSelectedLocalityName);
+                }
+                placeEditText.setText(userSelectedLocalityName);
+//                editor.putString(Constants.KEY_PREFERENCE_LOCALITY_NAME, userSelectedLocalityName);
+
+
 
 //                new RelativeUrlCreator().createURI("Colombia","COP","es-CO","Bogota");
 
-//                new RetrofitRequester().requestPlaces(MainActivity.this);
+                //}
 
-
-                //new RetrofitRequester(localityName).requestPlaces(MainActivity.this);
-            //}
-            new RetrofitRequester(MainActivity.this).requestPlaces(MainActivity.this);
 
 //            if(!countryName.equals("")&&!localityName.equals("")){
 //                new RetrofitRequester(localityName, countryName).requestPlaces(MainActivity.this);
 //            }
 
-//            new RetrofitRequester(localityName).requestPlaces(MainActivity.this);
-
+            }
+//            new RetrofitRequester(MainActivity.this).requestPlaces(MainActivity.this);
         }
     }
 
