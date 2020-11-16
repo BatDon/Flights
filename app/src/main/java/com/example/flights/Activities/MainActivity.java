@@ -131,20 +131,28 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(View view) {
 
+                //correct but blocked out for testing
 
-                if(countryEditText.getText().toString().equals("") || placeEditText.getText().toString().equals("") ||
-                        currencyEditText.getText().toString().equals("") || localityEditText.getText().toString().equals("")){
-                    Toast.makeText(MainActivity.this, "Please fill in all flight information", Toast.LENGTH_LONG).show();
-                    return;
-                }
+//                if(countryEditText.getText().toString().equals("") || placeEditText.getText().toString().equals("") ||
+//                        currencyEditText.getText().toString().equals("") || localityEditText.getText().toString().equals("")){
+//                    Toast.makeText(MainActivity.this, "Please fill in all flight information", Toast.LENGTH_LONG).show();
+//                    return;
+//                }
                 showInterstitial();
 
-                SharedPreferences.Editor editor = sharedpreferences.edit();
-                editor.putString(Constants.KEY_PREFERENCE_COUNTRY, countryEditText.getText().toString());
-                editor.putString(Constants.KEY_PREFERENCE_LOCALITY_NAME, placeEditText.getText().toString());
-                editor.putString(Constants.KEY_PREFERENCE_CURRENCY,currencyEditText.getText().toString());
-                editor.putString(Constants.KEY_PREFERENCE_LOCALE, localityEditText.getText().toString());
-                editor.commit();
+
+                //correct but blocked out for testing
+
+//                SharedPreferences.Editor editor = sharedpreferences.edit();
+//                editor.putString(Constants.KEY_PREFERENCE_COUNTRY, countryEditText.getText().toString());
+//                editor.putString(Constants.KEY_PREFERENCE_LOCALITY_NAME, placeEditText.getText().toString());
+//                editor.putString(Constants.KEY_PREFERENCE_CURRENCY,currencyEditText.getText().toString());
+//                editor.putString(Constants.KEY_PREFERENCE_LOCALE, localityEditText.getText().toString());
+//                editor.commit();
+
+
+
+
                 //new RetrofitRequester(MainActivity.this).requestPlaces(MainActivity.this);
 
                 // starts and triggers GetFlightsService

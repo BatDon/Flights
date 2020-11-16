@@ -6,9 +6,10 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Place implements Parcelable {
+public class Place implements Parcelable, Serializable {
 
     @SerializedName("PlaceId")
     @Expose
@@ -37,6 +38,16 @@ public class Place implements Parcelable {
 //        cityId = in.readString();
 //        countryName = in.readString();
 //    }
+
+
+    public Place(String placeId, String placeName, String countryId, String regionId, String cityId, String countryName) {
+        this.placeId = placeId;
+        this.placeName = placeName;
+        this.countryId = countryId;
+        this.regionId = regionId;
+        this.cityId = cityId;
+        this.countryName = countryName;
+    }
 
     public static final Creator<Place> CREATOR = new Creator<Place>() {
         @Override

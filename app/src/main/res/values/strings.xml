@@ -22,4 +22,11 @@
 
     <string name="fileName">flightDepartures</string>
     <string name="pathWithoutFileName">/data/user/0/com.example.flights/files/</string>
+    <string name="class_not_found">Class Not Found</string>
+    <string name="placeId">Place Id</string>
+    <string name="placeName">Place Name</string>
+    <string name="countryId">Country Id</string>
+    <string name="regionId">Region Id</string>
+    <string name="cityId">City Id</string>
+    <string name="countryName">Country Name</string>
 </resources>
