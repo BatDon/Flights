@@ -7,10 +7,12 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
 import com.example.flights.Adapters.FlightDeparturesAdapter;
+import com.example.flights.Constants;
 import com.example.flights.Pojos.Place;
 import com.example.flights.R;
 import com.example.flights.ViewModels.MainActivityViewModel;
@@ -104,5 +106,8 @@ public class DepartureFlightLocations extends AppCompatActivity implements Fligh
     @Override
     public void onFlightDepartureClick(int position) {
         Toast.makeText(this, ""+position, Toast.LENGTH_SHORT).show();
+        Intent flightDateIntent=new Intent(this, FlightDate.class);
+        flightDateIntent.putExtra(Constants.FLIGHT_ORIGIN_POSITION, position);
+        startActivity(flightDateIntent);
     }
 }

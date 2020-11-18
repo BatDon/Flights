@@ -21,6 +21,7 @@
     <string name="localeName">Stockholm</string>
 
     <string name="fileName">flightDepartures</string>
+    <string name="fileNameQuote">flightQuotes</string>
     <string name="pathWithoutFileName">/data/user/0/com.example.flights/files/</string>
     <string name="class_not_found">Class Not Found</string>
     <string name="placeId">Place Id</string>
@@ -29,4 +30,13 @@
     <string name="regionId">Region Id</string>
     <string name="cityId">City Id</string>
     <string name="countryName">Country Name</string>
+    <string name="detail_error_message">Unable to get origin flight position number</string>
+    <string name="origin_place">Origin Place</string>
+    <string name="origin_country">Origin Country</string>
+    <string name="departure_date">Departure Date</string>
+    <string name="destinationPlace">Destination Place</string>
+    <string name="inboundDate">Return Date</string>
+    <string name="returnDate">Return Date</string>
+    <string name="date">Date</string>
+    <string name="search_flights">Search Flights</string>
 </resources>

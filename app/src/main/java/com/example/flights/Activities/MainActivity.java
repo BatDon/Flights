@@ -1,6 +1,8 @@
 package com.example.flights.Activities;
 
 import com.example.flights.Constants;
+import com.example.flights.DatabaseClasses.OutgoingFlight;
+import com.example.flights.DatabaseClasses.ReturnFlight;
 import com.example.flights.GetFlightsService;
 import com.example.flights.Pojos.Place;
 import com.example.flights.R;
@@ -13,6 +15,8 @@ import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -131,6 +135,7 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(View view) {
 
+                //TODO uncomment after done testing
                 //correct but blocked out for testing
 
 //                if(countryEditText.getText().toString().equals("") || placeEditText.getText().toString().equals("") ||
@@ -151,18 +156,10 @@ public class MainActivity extends AppCompatActivity{
 //                editor.commit();
 
 
-
-
-                //new RetrofitRequester(MainActivity.this).requestPlaces(MainActivity.this);
-
-                // starts and triggers GetFlightsService
-//                Intent i = new Intent(MainActivity.this, GetFlightsService.class);
-//// potentially add data to the intent
-////                i.putExtra("KEY1", "Value to be used by the service");
-//                MainActivity.this.startService(i);
-
-                //new RetrofitRequester(MainActivity.this).requestPlaces(MainActivity.this);
+                //COMMENTED OUT FOR TESTING
                 mainActivityViewModel.requestFlightDestinations();
+
+
 
             }
 
@@ -389,3 +386,14 @@ public class MainActivity extends AppCompatActivity{
 
 
 }
+
+
+
+//  OutgoingFlight outgoingFlight=new OutgoingFlight("USD","59","2018-05-11T00:00:00");
+//                ReturnFlight returnFlight=new ReturnFlight("USD","59","2018-06-22T00:00:00");
+
+    // Write a message to the database
+//    FirebaseDatabase database = FirebaseDatabase.getInstance();
+//    DatabaseReference outgoingFlightReference = database.getReference("outgoingFlight");
+
+//        outgoingFlightReference.child("flight2").setValue(outgoingFlight);
