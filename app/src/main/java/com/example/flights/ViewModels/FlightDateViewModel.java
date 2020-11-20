@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.flights.Pojos.FlightDatePojos.Currency;
 import com.example.flights.Pojos.FlightDatePojos.InboundLeg;
 import com.example.flights.Pojos.FlightDatePojos.OutboundLeg;
 import com.example.flights.Pojos.FlightDatePojos.Quote;
@@ -36,6 +37,8 @@ public class FlightDateViewModel extends AndroidViewModel implements RetrofitReq
 
     List<Quote> quoteList;
     public MutableLiveData<List<Quote>> liveDataQuoteList=new MutableLiveData<List<Quote>>(){};
+
+    List<Currency> currencyList;
 //    Quote quote;
 //    String minPrice;
 //    String direct;
@@ -51,12 +54,16 @@ public class FlightDateViewModel extends AndroidViewModel implements RetrofitReq
     InboundLeg inboundLeg;
     String quoteDateTime;
 
+    Currency currency;
+
 
     ArrayList<Quote> quoteArrayList;
+    ArrayList<Currency> currencyArrayList;
+    public ArrayList<Currency> setCurrencyAL;
 
     int position;
 
-    public FlightDateViewModel(@NonNull Application application, int position) {
+    public FlightDateViewModel(@NonNull Application application) {
         super(application);
         context=application;
 //        this.movieId=movieId;
@@ -79,21 +86,35 @@ public class FlightDateViewModel extends AndroidViewModel implements RetrofitReq
         new RetrofitRequesterQuote(getApplication()).requestQuotes(FlightDateViewModel.this);
     }
 
-//    public void writeToFile(ArrayList<Place> placeList) {
-//
-//        try {
-//            FileOutputStream fileOut = new FileOutputStream(new File(context.getString(R.string.pathWithoutFileName)+R.string.fileName+".txt"));
-//            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
-//            objectOut.writeObject(placeList);
-//            objectOut.close();
-//            fileOut.close();
-//
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
+    public void writeToFile(ArrayList<Quote> quoteList) {
 
-    public ArrayList<Quote> getPlaceDir() {
+        try {
+            FileOutputStream fileOut = new FileOutputStream(new File(context.getString(R.string.pathWithoutFileName)+R.string.fileNameQuote+".txt"));
+            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+            objectOut.writeObject(quoteList);
+            objectOut.close();
+            fileOut.close();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void writeToCurrencyFile(ArrayList<Currency> currencyList) {
+
+        try {
+            FileOutputStream fileOut = new FileOutputStream(new File(context.getString(R.string.pathWithoutFileName)+R.string.fileNameCurrency+".txt"));
+            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+            objectOut.writeObject(currencyList);
+            objectOut.close();
+            fileOut.close();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public ArrayList<Quote> getQuoteDir() {
         ArrayList<Quote> quoteArrayList;
 
         try {
@@ -118,16 +139,55 @@ public class FlightDateViewModel extends AndroidViewModel implements RetrofitReq
             return null;
         }
 
-//        setValuesForFavorites(placeArrayList);
-        ArrayList<Quote> allQuotes=new ArrayList<>();
+////        setValuesForFavorites(placeArrayList);
+//        ArrayList<Quote> allQuotes=new ArrayList<>();
+//
+//        for (int i = 0; i < quoteArrayList.size(); i++) {
+//            Timber.i("setValuesForFavories i= "+i);
+//            setValuesForFavorites(quoteArrayList, i);
+//            Quote quote=getQuoteDetails();
+//            allQuotes.add(quote);
+//        }
+//        return allQuotes;
+        return quoteArrayList;
+    }
 
-        for (int i = 0; i < quoteArrayList.size(); i++) {
-            Timber.i("setValuesForFavories i= "+i);
-            setValuesForFavorites(quoteArrayList, i);
-            Quote quote=getQuoteDetails();
-            allQuotes.add(quote);
+    public ArrayList<Currency> getCurrencyDir() {
+        ArrayList<Currency> currencyArrayList;
+
+        try {
+
+//            int fileNumber=Integer.parseInt(file_location);
+//            file_location=Integer.toString(fileNumber);
+//            FileInputStream fis = new FileInputStream(new File(context.getString(R.string.pathToRelatedMoviesFile)));
+            FileInputStream fis = new FileInputStream(new File(context.getString(R.string.pathWithoutFileName)+R.string.fileNameCurrency+".txt"));
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            currencyArrayList = (ArrayList) ois.readObject();
+
+
+
+            ois.close();
+            fis.close();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            return null;
+        } catch (ClassNotFoundException c) {
+            System.out.println(context.getString(R.string.class_not_found));
+            c.printStackTrace();
+            return null;
         }
-        return allQuotes;
+
+////        setValuesForFavorites(placeArrayList);
+//        ArrayList<Quote> allQuotes=new ArrayList<>();
+//
+//        for (int i = 0; i < quoteArrayList.size(); i++) {
+//            Timber.i("setValuesForFavories i= "+i);
+//            setValuesForFavorites(quoteArrayList, i);
+//            Quote quote=getQuoteDetails();
+//            allQuotes.add(quote);
+//        }
+//        return allQuotes;
+        return currencyArrayList;
     }
 
 
@@ -157,16 +217,62 @@ public class FlightDateViewModel extends AndroidViewModel implements RetrofitReq
         return quote;
     }
 
-    public void onRetrofitFinished(List<Quote> quoteList) {
-        if(quoteList==null){
-            Timber.i("quoteList equals null");
-            transformToLiveData(quoteList);
-            return;
+    public ArrayList<Quote> getQuoteArrayList(){
+        return quoteArrayList;
+    }
+
+//    public ArrayList<Currency> getCurrencyArrayList(){
+//        return this.currencyArrayList;
+//    }
+
+    public List<Currency> getCurrencyList(){
+        return this.currencyList;
+    }
+
+    public Currency getCurrency(){
+        if(this.currencyList.size()==1){
+            return currencyList.get(0);
         }
+        return null;
+    }
+
+//    public void onRetrofitQuoteFinished(List<Object> quoteCurrencyList) {
+//          if(quoteCurrencyList==null){
+//            Timber.i("quoteList equals null");
+//            transformToLiveData(null);
+//            return;
+//        }
+
+    public void onRetrofitQuoteFinished(ArrayList<Quote> quoteArrayList, ArrayList<Currency> currencyArrayList) {
+//        if(quoteCurrencyList==null){
+//            Timber.i("quoteList equals null");
+//            transformToLiveData(null);
+//            return;
+//        }
+//        ArrayList<Quote> quoteArrayList = new ArrayList<Quote>(quoteList);
+//        ArrayList<Quote> quoteArrayList = new ArrayList<Quote>();
+//        ArrayList<Object> objectquoteArrayList= quoteCurrencyList.get(0);
+//        for(Object object:objectquoteArrayList)
+       //quoteArrayList.add((Quote)quoteCurrencyList.get(0));
+//        currencyArrayList = new ArrayList<Currency>();
+        this.currencyArrayList=currencyArrayList;
+        if(this.currencyArrayList==null){
+            Timber.i("onRetrofitFinished currencyArrayList equals null");
+        }
+        if(this.currencyArrayList.isEmpty()){
+            Timber.i("onRetrofitFinished currencyArrayList is empty");
+        }
+        Timber.i("currencyArrayList size= "+this.currencyArrayList.size());
+        Currency currency1=this.currencyArrayList.get(0);
+        String symbol=currency1.getSymbol();
+        Timber.i("symbol equals "+symbol);
+        setCurrencyAL=this.currencyArrayList;
+        //currencyArrayList.add((Currency)quoteCurrencyList.get(1));
         Timber.i("FlightDateViewModel onRetrofitFinished called");
-        Timber.i("quoteList size= %s", quoteList.size());
-        this.quoteList=quoteList;
-        ArrayList<Quote> quoteArrayList = new ArrayList<Quote>(quoteList);
+        Timber.i("quoteList size= %s", quoteArrayList.size());
+        this.quoteList=quoteArrayList;
+        currencyList=currencyArrayList;
+
         //writeToFile(placeArrayList);
         transformToLiveData(quoteList);
     }

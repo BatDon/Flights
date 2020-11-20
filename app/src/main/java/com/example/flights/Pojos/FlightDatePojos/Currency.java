@@ -2,8 +2,11 @@ package com.example.flights.Pojos.FlightDatePojos;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
+
 //http://www.jsonschema2pojo.org/
-public class Currency {
+public class Currency implements Serializable {
 
     @SerializedName("Code")
     @Expose

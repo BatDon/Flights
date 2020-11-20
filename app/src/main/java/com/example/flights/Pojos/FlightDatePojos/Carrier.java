@@ -2,8 +2,11 @@ package com.example.flights.Pojos.FlightDatePojos;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
+
 //http://www.jsonschema2pojo.org/
-public class Carrier {
+public class Carrier implements Serializable {
 
     @SerializedName("CarrierId")
     @Expose

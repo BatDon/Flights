@@ -16,8 +16,12 @@ public class Quotes {
         return quotes;
     }
 
-    public void setPlaces(List<Quote> quotes) {
+    public void setQuotes(List<Quote> quotes) {
         this.quotes = quotes;
     }
+
+//    public void setPlaces(List<Quote> quotes) {
+//        this.quotes = quotes;
+//    }
 
 }

@@ -21,9 +21,11 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.flights.Adapters.FlightDateCurrencyAdapter;
 import com.example.flights.Constants;
 import com.example.flights.Fragments.DatePickerFragment;
 import com.example.flights.Fragments.TimePickerFragment;
+import com.example.flights.Pojos.FlightDatePojos.Currency;
 import com.example.flights.Pojos.FlightDatePojos.Quote;
 import com.example.flights.Pojos.Place;
 import com.example.flights.Pojos.Places;
@@ -33,6 +35,7 @@ import com.example.flights.ViewModels.FlightDateViewModelFactory;
 import com.example.flights.ViewModels.MainActivityViewModel;
 import com.example.flights.ViewModels.MainActivityViewModelFactory;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -47,6 +50,9 @@ import timber.log.Timber;
 
 //public class FlightDate extends AppCompatActivity implements DatePickerDialog.OnDateSetListener,
 //        TimePickerDialog.OnTimeSetListener {
+//public class FlightDate extends AppCompatActivity implements DatePickerDialog.OnDateSetListener,
+//        FlightDateCurrencyAdapter.OnDateCurrencyListener{
+
 public class FlightDate extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
 
     public static final int DEFAULT_POSITION=-1;
@@ -72,6 +78,9 @@ public class FlightDate extends AppCompatActivity implements DatePickerDialog.On
 
     String dateChosen;
     String dateFormatted;
+    Currency currency;
+
+    ArrayList quoteList=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,38 +124,100 @@ public class FlightDate extends AppCompatActivity implements DatePickerDialog.On
         flightDateViewModel=ViewModelProviders.of(this, flightDateViewModelFactory).get(FlightDateViewModel.class);
     }
 
-    private void setUpViewModelOnChanged(){
-        Observer<List<Quote>> observer=new Observer<List<Quote>>() {
-            int i=0;
+    private void setUpViewModelOnChanged() {
+        Observer<List<Quote>> observer = new Observer<List<Quote>>() {
+            int i = 0;
+
             @Override
             public void onChanged(@Nullable final List<Quote> quoteList) {
-                if(quoteList==null){
+                if(i>0 && quoteList==null) {
                     Toast.makeText(FlightDate.this, "No flights found", Toast.LENGTH_SHORT).show();
+                }
+                if(quoteList==null){
                     return;
                 }
-                i=quoteList.size();
+                FlightDate.this.quoteList = new ArrayList<Quote>(quoteList);
+                if (quoteList == null || flightDateViewModel.getCurrencyList()==null) {
+                    if(i>0) {
+                        Toast.makeText(FlightDate.this, "No flights found", Toast.LENGTH_SHORT).show();
+                    }
+                    return;
+                }
+                i++;
+                //i = quoteList.size();
                 //mainActivityViewModel.getPlaceDir();
                 // Update the cached copy of the words in the adapter.
                 Timber.i("onChanged triggered");
-                if(i>0){
+                if (i > 0) {
+                    for (Quote quote : quoteList) {
+                        Timber.i("setUpViewModelOnChanged quote= %s", quote.getQuoteDateTime());
+                    }
                     //placeRecyclerList=placeList;
 //                    for (int j = 0; j < placeList.size() ; j++) {
 //                        Timber.i(placeList.get(i).getCountryName());
 //                    }
                     //setUpGridAdapter();
                 }
-//                i++;
-//                //mainViewModel.requestMovies();
-//                resultList=movies;
-//                if(mainViewModel.getAllMovies().getValue()!=null){
-//                    mainViewModel.requestMovies();
-//                }
+
+//                currency=flightDateViewModel.getCurrencyArrayList().get(0);
+
+                //createRecyclerView();
+                saveQuotesFlightDateViewModel(FlightDate.this.quoteList);
+                saveCurrenciesFlightDateViewModel(new ArrayList<Currency>(flightDateViewModel.getCurrencyList()));
+//                sendFlightDateCurrencyIntent(currency);
+                sendFlightDateCurrencyIntent();
             }
         };
 
         flightDateViewModel.getAllQuotes().observe(this,observer);
     }
 
+    private void saveQuotesFlightDateViewModel(ArrayList<Quote> quoteList){
+        flightDateViewModel.writeToFile(quoteList);
+    }
+
+    private void saveCurrenciesFlightDateViewModel(ArrayList<Currency>currencyList){
+        flightDateViewModel.writeToCurrencyFile(currencyList);
+    }
+
+//    private void sendFlightDateCurrencyIntent(Currency currency){
+//        Intent intent = new Intent(FlightDate.this, FlightDateCurrency.class);
+////        intent.putExtra(Constants.QUOTE_ARRAY_LIST, (Serializable) quoteArrayList);
+//        intent.putExtra(Constants.CURRENCY,currency);
+//        startActivity(intent);
+//
+//    }
+    private void sendFlightDateCurrencyIntent(){
+            Intent intent = new Intent(FlightDate.this, FlightDateCurrency.class);
+    //        intent.putExtra(Constants.QUOTE_ARRAY_LIST, (Serializable) quoteArrayList);
+    //        intent.putExtra(Constants.CURRENCY,currency);
+            startActivity(intent);
+
+    }
+
+
+//    private void createRecyclerView() {
+//        ArrayList<Currency> currencyArrayList = flightDateViewModel.getCurrencyArrayList();
+//        if (currencyArrayList != null) {
+//            if (!currencyArrayList.isEmpty()) {
+//                currency = currencyArrayList.get(0);
+//                String currencySymbol = currencyArrayList.get(0).getSymbol();
+//                Timber.i("currencySymbol= " + currencySymbol);
+//            }
+//        }
+//
+//
+//        SharedPreferences sharedpreferences = getSharedPreferences(Constants.FLIGHT_PREFERENCES, Context.MODE_PRIVATE);
+//        String originPlaceId = sharedpreferences.getString(Constants.KEY_PREFERENCE_PLACE_ID, "SFO-sky");
+//        String destinationPlace = sharedpreferences.getString(Constants.KEY_PREFERENCE_DESTINATION_PLACE, "LAX-sky");
+//        String inboundDate = sharedpreferences.getString(Constants.KEY_PREFERENCE_INBOUND_DATE, "");
+//
+//        Quote[] quoteArray = new Quote[quoteList.size()];
+//        quoteList.toArray(quoteArray);
+//
+//        FlightDateCurrencyAdapter flightDateCurrencyAdapter = new FlightDateCurrencyAdapter(FlightDate.this, originPlaceId, destinationPlace, inboundDate
+//                , currency, quoteArray, FlightDate.this);
+//    }
 
     private void setUpViews(){
          originPlaceET=findViewById(R.id.originPlaceET);
@@ -273,17 +344,27 @@ public class FlightDate extends AppCompatActivity implements DatePickerDialog.On
         SharedPreferences sharedpreferences = getSharedPreferences(Constants.FLIGHT_PREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();
 
-        editor.putString(Constants.KEY_PREFERENCE_PLACE_ID, originPlaceId);
+        //TODO remove only for testing
+        editor.putString(Constants.KEY_PREFERENCE_PLACE_ID, "LAX-sky");
+        editor.putString(Constants.KEY_PREFERENCE_DESTINATION_PLACE, "SFO-sky");
+        editor.putString(Constants.KEY_PREFERENCE_COUNTRY, "US");
+        editor.putString(Constants.KEY_PREFERENCE_COUNTRY_ID, "US");
+        editor.putString(Constants.KEY_PREFERENCE_OUTBOUND_DATE, "2020-11-23");
+        editor.putString(Constants.KEY_PREFERENCE_INBOUND_DATE, "2020-11-30");
+        editor.putString(Constants.KEY_PREFERENCE_LOCALE, "en_US");
+        editor.putString(Constants.KEY_PREFERENCE_CURRENCY, "USD");
+        //TODO uncomment only for testing
+//        editor.putString(Constants.KEY_PREFERENCE_PLACE_ID, originPlaceId);
         //editor.putString(Constants.KEY_PREFERENCE_ORIGIN_PLACE, originPlace);
-        editor.putString(Constants.KEY_PREFERENCE_COUNTRY, originCountry);
-        editor.putString(Constants.KEY_PREFERENCE_COUNTRY_ID, countryAbbreviation);
-        editor.putString(Constants.KEY_PREFERENCE_OUTBOUND_DATE, departureDate);
-        editor.putString(Constants.KEY_PREFERENCE_INBOUND_DATE, returnDate);
-        editor.putString(Constants.KEY_PREFERENCE_DESTINATION_PLACE, destinationPlace);
-        editor.putString(Constants.KEY_PREFERENCE_LOCALE, locale);
-        editor.putString(Constants.KEY_PREFERENCE_CURRENCY, currency);
-        editor.putString(Constants.KEY_PREFERENCE_OUTBOUND_DATE, departureDate);
-        editor.putString(Constants.KEY_PREFERENCE_INBOUND_DATE, returnDate);
+//        editor.putString(Constants.KEY_PREFERENCE_COUNTRY, originCountry);
+//        editor.putString(Constants.KEY_PREFERENCE_COUNTRY_ID, countryAbbreviation);
+//        editor.putString(Constants.KEY_PREFERENCE_OUTBOUND_DATE, departureDate);
+//        editor.putString(Constants.KEY_PREFERENCE_INBOUND_DATE, returnDate);
+//        editor.putString(Constants.KEY_PREFERENCE_DESTINATION_PLACE, destinationPlace);
+//        editor.putString(Constants.KEY_PREFERENCE_LOCALE, locale);
+//        editor.putString(Constants.KEY_PREFERENCE_CURRENCY, currency);
+//        editor.putString(Constants.KEY_PREFERENCE_OUTBOUND_DATE, departureDate);
+//        editor.putString(Constants.KEY_PREFERENCE_INBOUND_DATE, returnDate);
         editor.commit();
 
         flightDateViewModel.requestFlightQuotes();

@@ -19,6 +19,6 @@ public class FlightDateViewModelFactory extends ViewModelProvider.NewInstanceFac
     @Override
     @SuppressWarnings("unchecked")
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        return (T) new FlightDateViewModel(application, position);
+        return (T) new FlightDateViewModel(application);
     }
 }

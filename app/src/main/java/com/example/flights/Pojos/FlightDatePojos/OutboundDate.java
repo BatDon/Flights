@@ -1,10 +1,11 @@
 package com.example.flights.Pojos.FlightDatePojos;
 
+import java.io.Serializable;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 //http://www.jsonschema2pojo.org/
-public class OutboundDate {
+public class OutboundDate implements Serializable {
 
     @SerializedName("PartialDate")
     @Expose

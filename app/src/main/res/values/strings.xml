@@ -22,6 +22,7 @@
 
     <string name="fileName">flightDepartures</string>
     <string name="fileNameQuote">flightQuotes</string>
+    <string name="fileNameCurrency">flightCurrency</string>
     <string name="pathWithoutFileName">/data/user/0/com.example.flights/files/</string>
     <string name="class_not_found">Class Not Found</string>
     <string name="placeId">Place Id</string>
@@ -39,4 +40,5 @@
     <string name="returnDate">Return Date</string>
     <string name="date">Date</string>
     <string name="search_flights">Search Flights</string>
+    <string name="price">Price</string>
 </resources>

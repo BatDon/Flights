@@ -27,5 +27,6 @@ public class Constants {
 
     public static final String FLIGHT_ORIGIN_POSITION="com.example.flights.flight_origin_position";
 
-
+    public static final String QUOTE_ARRAY_LIST = "com.example.flights.quote_array_list";
+    public static final String CURRENCY = "com.example.flights.currency";
 }

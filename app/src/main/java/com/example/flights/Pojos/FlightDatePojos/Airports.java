@@ -1,5 +1,6 @@
 package com.example.flights.Pojos.FlightDatePojos;
 
+import java.io.Serializable;
 import java.util.List;
 
 import com.example.flights.Pojos.Place;
@@ -8,7 +9,7 @@ import com.google.gson.annotations.SerializedName;
 
 //http://www.jsonschema2pojo.org/
 
-public class Airports {
+public class Airports implements Serializable {
 
     @SerializedName("Quotes")
     @Expose
@@ -25,6 +26,17 @@ public class Airports {
     @SerializedName("Dates")
     @Expose
     private Dates dates;
+
+    public Airports(List<Quote> quotes, List<Carrier> carriers, List<Place> places, List<Currency> currencies, Dates dates) {
+        this.quotes = quotes;
+        this.carriers = carriers;
+        this.places = places;
+        this.currencies = currencies;
+        this.dates = dates;
+    }
+
+    public Airports() {
+    }
 
     public List<Quote> getQuotes() {
         return quotes;

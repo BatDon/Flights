@@ -2,6 +2,7 @@ package com.example.flights.Api;
 
 import android.content.res.Resources;
 
+import com.example.flights.Pojos.FlightDatePojos.Airports;
 import com.example.flights.Pojos.FlightDatePojos.Dates;
 import com.example.flights.Pojos.FlightDatePojos.Quote;
 import com.example.flights.Pojos.FlightDatePojos.Quotes;
@@ -69,6 +70,25 @@ public interface TravelApi {
                                        @Path("locality") String locality, @Path("originPlace") String originPlace,
                                        @Path("destinationPlace") String destinationPlace, @Path("outboundDate") String outboundDate);
 
+
+
+
+
+//Airport call to get quote and currency
+
+
+    @GET("/apiservices/browsedates/v1.0/{country}/{currency}/{locality}/{originPlace}/{destinationPlace}/{outboundDate}/")
+    Call<Airports>getAirport(@Path("country") String country, @Path ("currency") String currency,
+                             @Path("locality") String locality, @Path("originPlace") String originPlace,
+                             @Path("destinationPlace") String destinationPlace, @Path("outboundDate") String outboundDate,
+                             @Query("inboundDate") String inboundDate);
+
+
+
+    @GET("/apiservices/browsedates/v1.0/{country}/{currency}/{locality}/{originPlace}/{destinationPlace}/{outboundDate}/")
+    Call<Airports>getAirportNoInboundDate(@Path("country") String country,@Path ("currency") String currency,
+                                       @Path("locality") String locality, @Path("originPlace") String originPlace,
+                                       @Path("destinationPlace") String destinationPlace, @Path("outboundDate") String outboundDate);
 
 //    @GET("users/{username}")
 //    Call<User> getUser(@Path("username") String username);

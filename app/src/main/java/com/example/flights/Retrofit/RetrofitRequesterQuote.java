@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.flights.Api.TravelApi;
 import com.example.flights.Constants;
+import com.example.flights.Pojos.FlightDatePojos.Airports;
+import com.example.flights.Pojos.FlightDatePojos.Currency;
 import com.example.flights.Pojos.FlightDatePojos.OutboundDate;
 import com.example.flights.Pojos.FlightDatePojos.Quote;
 import com.example.flights.Pojos.FlightDatePojos.Quotes;
@@ -16,6 +18,7 @@ import com.example.flights.Pojos.Places;
 import com.example.flights.R;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -30,6 +33,8 @@ public class RetrofitRequesterQuote extends AppCompatActivity {
 
     Context mContext;
 
+    Call<Airports> call;
+
     public RetrofitRequesterQuote(Context context){
         mContext=context;
     }
@@ -43,7 +48,8 @@ public class RetrofitRequesterQuote extends AppCompatActivity {
 //        public void onRetrofitFinished(List<Quote> quoteList);
 //    }
     public interface onRetrofitListener {
-        public void onRetrofitFinished(List<Quote> quoteList);
+//        public void onRetrofitQuoteFinished(List<Object> quoteCurrencyList);
+public void onRetrofitQuoteFinished(ArrayList<Quote> quoteArrayList, ArrayList<Currency> currencyArrayList);
     }
 
     private onRetrofitListener onRetrofitListener;
@@ -79,13 +85,22 @@ public class RetrofitRequesterQuote extends AppCompatActivity {
 
 //        Call<List<Quote>> call = travelApi.getQuotes(userCountry,userCurrency,userLocale, originPlace, destinationPlace,
 //                outboundDate, inboundDate);
+//        if(inboundDate.equals("")){
+//            Call<Quotes> call = travelApi.getQuotesNoInboundDate(userCountryId,userCurrency,userLocale, originPlaceId, destinationPlace,
+//                    outboundDate);
+//        }
+
         if(inboundDate.equals("")){
-            Call<Quotes> call = travelApi.getQuotesNoInboundDate(userCountryId,userCurrency,userLocale, originPlaceId, destinationPlace,
+            call = travelApi.getAirportNoInboundDate(userCountryId,userCurrency,userLocale, originPlaceId, destinationPlace,
                     outboundDate);
         }
+        else{
+            call = travelApi.getAirport(userCountryId,userCurrency,userLocale, originPlaceId, destinationPlace,
+                    outboundDate, inboundDate);
+        }
 
-        Call<Quotes> call = travelApi.getQuotes(userCountryId,userCurrency,userLocale, originPlaceId, destinationPlace,
-                outboundDate, inboundDate);
+//        Call<Airports> call = travelApi.getAirport(userCountryId,userCurrency,userLocale, originPlaceId, destinationPlace,
+//                outboundDate, inboundDate);
 //       Stockholm will be replaced by user selection
 //        Call<Places> call = travelApi.getPlaces("Stockholm");
 //        Call<Places> call = travelApi.getPlaces("Bogotá");
@@ -95,39 +110,86 @@ public class RetrofitRequesterQuote extends AppCompatActivity {
         Timber.i("requestQuote called");
 
 
-        call.enqueue(new Callback<Quotes>() {
+        call.enqueue(new Callback<Airports>() {
             @Override
-            public void onResponse(Call<Quotes> call, Response<Quotes> response) {
+            public void onResponse(Call<Airports> call, Response<Airports> response) {
                 Timber.i("onResponse called");
                 Timber.i("response= %s", response);
-                List<Quote> quoteList = generateDataList(response.body());
+                if(response==null){
+                    Timber.i("call equals null");
+                    //     Toast.makeText(RetrofitRequesterQuote.this, "No flights found", Toast.LENGTH_SHORT).show();
+                    if(onRetrofitListener !=null){
+                        onRetrofitListener.onRetrofitQuoteFinished(null, null);
+                    }
+                    return;
+                }
+
+                if(response.body()==null){
+                    Timber.i("airports equals null");
+                    if(onRetrofitListener !=null){
+                        onRetrofitListener.onRetrofitQuoteFinished(null, null);
+                    }
+                    return;
+                }
+                Airports airports=response.body();
+                Timber.i("airports= "+airports.toString());
+
+                List<Quote> quoteList=airports.getQuotes();
+               // List<Quote> quoteList=response.body().getQuotes();
+                //Quotes quotes= (Quotes) response.body().getQuotes();
+                //List<Quote> quoteList=quotes.getQuotes();
+                List<Currency> currencyList=airports.getCurrencies();
+                if(currencyList.isEmpty()){
+                    Timber.i("currencyList is empty");
+                }
+                //List<Quote> quoteList = generateDataList(response.body());
                 if(quoteList==null){
                     Timber.i("quoteList equals null");
                //     Toast.makeText(RetrofitRequesterQuote.this, "No flights found", Toast.LENGTH_SHORT).show();
                     if(onRetrofitListener !=null){
-                        onRetrofitListener.onRetrofitFinished(null);
+                        onRetrofitListener.onRetrofitQuoteFinished(null, null);
                     }
                     return;
                 }
-                if(quoteList.isEmpty()){
+                if(quoteList.size()==0){
                     Timber.i("quoteList is empty");
                     if(onRetrofitListener !=null){
-                        onRetrofitListener.onRetrofitFinished(null);
+                        onRetrofitListener.onRetrofitQuoteFinished(null, null);
                     }
             //        Toast.makeText(RetrofitRequesterQuote.this, "No flights found", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                Quote firstQuote=quoteList.get(0);
-                Integer minPrice=firstQuote.getMinPrice();
-                Timber.i("minPrice= %s", minPrice);
+//                Quote firstQuote=quoteList.get(0);
+//                Integer minPrice=firstQuote.getMinPrice();
+//                Timber.i("minPrice= %s", minPrice);
+//                Currency currency=currencyList.get(0);
+
+//                if(currency!=null) {
+//                    Timber.i("currency does not equal null");
+//                }
+
+//                ArrayList<<ArrayList<Quote><Currency>,<ArrayList>><ArrayList<Currency>> quoteCurrencyList=new ArrayList<Object>();
+//                ArrayList<Object> quoteCurrencyList=new ArrayList<Object>();
+//                quoteCurrencyList.add(0,quoteList);
+//                quoteCurrencyList.add(1,currencyList);
                 //List<Quote> quoteList=response.body();
+//                if (onRetrofitListener != null) {
+//                    onRetrofitListener.onRetrofitQuoteFinished(quoteCurrencyList);
+//                }
+
+                ArrayList<Quote> quoteArrayList=new ArrayList<Quote>(quoteList);
+                quoteArrayList.addAll(quoteList);
+
+                ArrayList<Currency> currencyArrayList=new ArrayList<Currency>(currencyList);
+//                ArrayList<String> arrlistofOptions = new ArrayList<String>(list);
+//                currencyArrayList.addAll(currencyList);
                 if (onRetrofitListener != null) {
-                    onRetrofitListener.onRetrofitFinished(quoteList);
+                    onRetrofitListener.onRetrofitQuoteFinished(quoteArrayList, currencyArrayList);
                 }
             }
 
             @Override
-            public void onFailure(Call<Quotes> call, Throwable t) {
+            public void onFailure(Call<Airports> call, Throwable t) {
                 Toast.makeText(RetrofitRequesterQuote.this, R.string.problem_retrieving_data, Toast.LENGTH_SHORT).show();
 
                 Timber.e("R.string.problem_retrieving_data");

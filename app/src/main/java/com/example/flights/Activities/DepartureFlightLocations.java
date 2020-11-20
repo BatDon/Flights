@@ -95,11 +95,9 @@ public class DepartureFlightLocations extends AppCompatActivity implements Fligh
         // Lookup the recyclerview in activity layout
         RecyclerView departureRecyclerView = (RecyclerView) findViewById(R.id.departureRecyclerView);
 
-        // Create adapter passing in the sample user data
+
         FlightDeparturesAdapter adapter = new FlightDeparturesAdapter(this, placeArray,this);
-        // Attach the adapter to the recyclerview to populate items
         departureRecyclerView.setAdapter(adapter);
-        // Set layout manager to position the items
         departureRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 

@@ -1,9 +1,15 @@
 package com.example.flights.Pojos.FlightDatePojos;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
+
 //http://www.jsonschema2pojo.org/
-public class Quote {
+public class Quote implements Serializable {
 
     @SerializedName("QuoteId")
     @Expose
