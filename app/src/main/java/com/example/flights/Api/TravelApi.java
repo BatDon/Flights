@@ -41,40 +41,41 @@ public interface TravelApi {
 //TODO Header here
 
 
-    @GET("/apiservices/browsedates/v1.0/{country}/{currency}/{locality}/{originPlace}/{destinationPlace}/{outboundDate}/")
-    Call<Quotes>getQuotes(@Path("country") String country, @Path ("currency") String currency,
-                          @Path("locality") String locality, @Path("originPlace") String originPlace,
-                          @Path("destinationPlace") String destinationPlace, @Path("outboundDate") String outboundDate,
-                          @Query("inboundDate") String inboundDate);
-
-//TODO Header here
-
-
-    @GET("/apiservices/browsedates/v1.0/{country}/{currency}/{locality}/{originPlace}/{destinationPlace}/{outboundDate}/")
-    Call<Quotes>getQuoteCurrency(@Path("country") String country, @Path ("currency") String currency,
-                          @Path("locality") String locality, @Path("originPlace") String originPlace,
-                          @Path("destinationPlace") String destinationPlace, @Path("outboundDate") String outboundDate,
-                          @Query("inboundDate") String inboundDate);
-
-//TODO Header here
-
-    @GET("/apiservices/browsedates/v1.0/{country}/{currency}/{locality}/{originPlace}/{destinationPlace}/{outboundDate}/")
-    Call<Quotes>getQuotesNoInboundDate(@Path("country") String country,@Path ("currency") String currency,
-                               @Path("locality") String locality, @Path("originPlace") String originPlace,
-                               @Path("destinationPlace") String destinationPlace, @Path("outboundDate") String outboundDate);
-
-//TODO Header here
-
-    @GET("/apiservices/browsedates/v1.0/{country}/{currency}/{locality}/{originPlace}/{destinationPlace}/{outboundDate}/")
-    Call<Quotes>getQuotesNoInboundDateCurrency(@Path("country") String country,@Path ("currency") String currency,
-                                       @Path("locality") String locality, @Path("originPlace") String originPlace,
-                                       @Path("destinationPlace") String destinationPlace, @Path("outboundDate") String outboundDate);
+//    @GET("/apiservices/browsedates/v1.0/{country}/{currency}/{locality}/{originPlace}/{destinationPlace}/{outboundDate}/")
+//    Call<Quotes>getQuotes(@Path("country") String country, @Path ("currency") String currency,
+//                          @Path("locality") String locality, @Path("originPlace") String originPlace,
+//                          @Path("destinationPlace") String destinationPlace, @Path("outboundDate") String outboundDate,
+//                          @Query("inboundDate") String inboundDate);
+//
+////TODO Header here
+//
+//
+//    @GET("/apiservices/browsedates/v1.0/{country}/{currency}/{locality}/{originPlace}/{destinationPlace}/{outboundDate}/")
+//    Call<Quotes>getQuoteCurrency(@Path("country") String country, @Path ("currency") String currency,
+//                          @Path("locality") String locality, @Path("originPlace") String originPlace,
+//                          @Path("destinationPlace") String destinationPlace, @Path("outboundDate") String outboundDate,
+//                          @Query("inboundDate") String inboundDate);
+//
+////TODO Header here
+//
+//    @GET("/apiservices/browsedates/v1.0/{country}/{currency}/{locality}/{originPlace}/{destinationPlace}/{outboundDate}/")
+//    Call<Quotes>getQuotesNoInboundDate(@Path("country") String country,@Path ("currency") String currency,
+//                               @Path("locality") String locality, @Path("originPlace") String originPlace,
+//                               @Path("destinationPlace") String destinationPlace, @Path("outboundDate") String outboundDate);
+//
+////TODO Header here
+//
+//    @GET("/apiservices/browsedates/v1.0/{country}/{currency}/{locality}/{originPlace}/{destinationPlace}/{outboundDate}/")
+//    Call<Quotes>getQuotesNoInboundDateCurrency(@Path("country") String country,@Path ("currency") String currency,
+//                                       @Path("locality") String locality, @Path("originPlace") String originPlace,
+//                                       @Path("destinationPlace") String destinationPlace, @Path("outboundDate") String outboundDate);
 
 
 
 
 
 //Airport call to get quote and currency
+
 
 
     @GET("/apiservices/browsedates/v1.0/{country}/{currency}/{locality}/{originPlace}/{destinationPlace}/{outboundDate}/")
@@ -84,6 +85,7 @@ public interface TravelApi {
                              @Query("inboundDate") String inboundDate);
 
 
+    
 
     @GET("/apiservices/browsedates/v1.0/{country}/{currency}/{locality}/{originPlace}/{destinationPlace}/{outboundDate}/")
     Call<Airports>getAirportNoInboundDate(@Path("country") String country,@Path ("currency") String currency,

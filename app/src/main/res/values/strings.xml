@@ -41,4 +41,6 @@
     <string name="date">Date</string>
     <string name="search_flights">Search Flights</string>
     <string name="price">Price</string>
+    <string name="action_favorite_flights">Favorite Flights</string>
+    <string name="favorite_flights_activity_name">Favorite Flights</string>
 </resources>

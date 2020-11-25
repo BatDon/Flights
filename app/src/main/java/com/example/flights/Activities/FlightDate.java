@@ -13,6 +13,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -91,6 +93,26 @@ public class FlightDate extends AppCompatActivity implements DatePickerDialog.On
         setUpViewModelOnChanged();
         getOriginFlightPosition();
         setUpViews();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_favorite_flights: {
+                Toast.makeText(this, R.string.action_favorite_flights, Toast.LENGTH_SHORT).show();
+                Intent intent=new Intent(this, FavoriteFlightsActivity.class);
+                startActivity(intent);
+                //new RetrofitRequester().requestMovies(this);
+                break;
+            }
+        }
+        return true;
     }
 
     public void getOriginFlightPosition() {
@@ -349,8 +371,8 @@ public class FlightDate extends AppCompatActivity implements DatePickerDialog.On
         editor.putString(Constants.KEY_PREFERENCE_DESTINATION_PLACE, "SFO-sky");
         editor.putString(Constants.KEY_PREFERENCE_COUNTRY, "US");
         editor.putString(Constants.KEY_PREFERENCE_COUNTRY_ID, "US");
-        editor.putString(Constants.KEY_PREFERENCE_OUTBOUND_DATE, "2020-11-23");
-        editor.putString(Constants.KEY_PREFERENCE_INBOUND_DATE, "2020-11-30");
+        editor.putString(Constants.KEY_PREFERENCE_OUTBOUND_DATE, "2020-11-26");
+        editor.putString(Constants.KEY_PREFERENCE_INBOUND_DATE, "2020-12-04");
         editor.putString(Constants.KEY_PREFERENCE_LOCALE, "en_US");
         editor.putString(Constants.KEY_PREFERENCE_CURRENCY, "USD");
         //TODO uncomment only for testing

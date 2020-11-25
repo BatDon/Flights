@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.flights.Adapters.FlightDeparturesAdapter;
@@ -34,6 +36,26 @@ public class DepartureFlightLocations extends AppCompatActivity implements Fligh
         setContentView(R.layout.activity_departure_flight_locations);
 
         setUpViewModel();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_favorite_flights: {
+                Toast.makeText(this, R.string.action_favorite_flights, Toast.LENGTH_SHORT).show();
+                Intent intent=new Intent(this, FavoriteFlightsActivity.class);
+                startActivity(intent);
+                //new RetrofitRequester().requestMovies(this);
+                break;
+            }
+        }
+        return true;
     }
 
     private void setUpViewModel(){

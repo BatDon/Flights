@@ -1,38 +1,45 @@
 package com.example.flights.DatabaseClasses;
 
+import com.google.firebase.database.Exclude;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class ReturnFlight {
 
-    String currency;
-    String price;
-    String quoteDateTime;
+    String destinationAirport;
+    String returnDate;
 
-    public ReturnFlight(String currency, String price, String quoteDateTime) {
-        this.currency = currency;
-        this.price = price;
-        this.quoteDateTime = quoteDateTime;
+    public ReturnFlight(String destinationAirport, String returnDate) {
+        this.destinationAirport = destinationAirport;
+        this.returnDate = returnDate;
     }
 
-    public String getCurrency() {
-        return currency;
+    public ReturnFlight() {
     }
 
-    public void setCurrency(String currency) {
-        this.currency = currency;
+    public String getDestinationAirport() {
+        return destinationAirport;
     }
 
-    public String getPrice() {
-        return price;
+    public void setDestinationAirport(String destinationAirport) {
+        this.destinationAirport = destinationAirport;
     }
 
-    public void setPrice(String price) {
-        this.price = price;
+    public String getReturnDate() {
+        return returnDate;
     }
 
-    public String getQuoteDateTime() {
-        return quoteDateTime;
+    public void setReturnDate(String returnDate) {
+        this.returnDate = returnDate;
     }
 
-    public void setQuoteDateTime(String quoteDateTime) {
-        this.quoteDateTime = quoteDateTime;
+    @Exclude
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("destinationAirport", destinationAirport);
+        result.put("returnDate", returnDate);
+
+        return result;
     }
 }

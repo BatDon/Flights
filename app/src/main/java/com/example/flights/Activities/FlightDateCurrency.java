@@ -4,24 +4,36 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Database;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.flights.Adapters.FlightDateCurrencyAdapter;
 import com.example.flights.Adapters.FlightDeparturesAdapter;
 import com.example.flights.Constants;
+import com.example.flights.DatabaseClasses.OutgoingFlight;
+import com.example.flights.DatabaseClasses.ReturnFlight;
+import com.example.flights.FavoriteFlightsData.FavoriteFlights;
 import com.example.flights.Pojos.FlightDatePojos.Currency;
 import com.example.flights.Pojos.FlightDatePojos.Quote;
 import com.example.flights.R;
+import com.example.flights.ViewModels.DatabaseViewModel;
+import com.example.flights.ViewModels.DatabaseViewModelFactory;
 import com.example.flights.ViewModels.FlightDateViewModel;
 import com.example.flights.ViewModels.FlightDateViewModelFactory;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import timber.log.Timber;
 
@@ -32,6 +44,9 @@ public class FlightDateCurrency extends AppCompatActivity implements FlightDateC
     Currency currency;
 
     FlightDateViewModel flightDateViewModel;
+    FirebaseDatabase firebaseDatabase;
+
+    DatabaseViewModel databaseViewModel;
 
 
 
@@ -41,15 +56,42 @@ public class FlightDateCurrency extends AppCompatActivity implements FlightDateC
         Timber.i("onCreate called");
         setContentView(R.layout.activity_flight_date_currency);
         setUpFlightDateViewModel();
+        setUpDatabaseViewModel();
         //getCurrencyIntent();
         //getCurrency();
         getQuotesFromFile();
         createRecyclerView();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_favorite_flights: {
+                Toast.makeText(this, R.string.action_favorite_flights, Toast.LENGTH_SHORT).show();
+                Intent intent=new Intent(this, FavoriteFlightsActivity.class);
+                startActivity(intent);
+                //new RetrofitRequester().requestMovies(this);
+                break;
+            }
+        }
+        return true;
     }
 
     private void setUpFlightDateViewModel(){
         FlightDateViewModelFactory flightDateViewModelFactory=new FlightDateViewModelFactory(getApplication());
         flightDateViewModel= ViewModelProviders.of(this, flightDateViewModelFactory).get(FlightDateViewModel.class);
+    }
+
+    private void setUpDatabaseViewModel(){
+        DatabaseViewModelFactory databaseViewModelFactory=new DatabaseViewModelFactory(getApplication());
+        databaseViewModel= ViewModelProviders.of(this, databaseViewModelFactory).get(DatabaseViewModel.class);
     }
 
 //    private void getCurrency(){
@@ -156,8 +198,92 @@ public class FlightDateCurrency extends AppCompatActivity implements FlightDateC
     }
 
 
-    @Override
-    public void onFlightDepartureClick(int position) {
+    int recyclerViewItemPosition=0;
 
+    @Override
+    public void onFlightDepartureClick(String originPlaceId,String departureDate,
+                                       String formattedPrice, String destinationPlaceId,
+                                       String returnDate, int position){
+
+        Toast.makeText(this, "Saved Flight to favorites", Toast.LENGTH_SHORT).show();
+
+//        databaseViewModel.setIndex(queryArrayList.size());
+//        String id=databaseViewModel.getFavoriteFlightsIndex();
+        String id=Integer.toString(position);
+
+
+        int endOfIndex = formattedPrice.indexOf(" ");
+
+        String price="";
+        String currency="";
+        //found T character
+        if (endOfIndex != -1)
+        {
+            currency= formattedPrice.substring(0 , endOfIndex);
+            price=formattedPrice.substring(endOfIndex+1);
+        }
+
+        FavoriteFlights favoriteFlights=new FavoriteFlights(id, originPlaceId, currency, price,
+                departureDate, destinationPlaceId, returnDate);
+
+        DatabaseReference rootDB=firebaseDatabase.getReference("/");
+
+//        String flightPath="/Flight"+id+"/";
+        String flightPath="Flight"+id;
+
+//        Map<String, FavoriteFlights> favoriteFlightsHashMap = new HashMap<>();
+//        favoriteFlightsHashMap.put(flightPath, favoriteFlights);
+
+        rootDB.child(id).setValue(favoriteFlights);
+
+
+//        rootDB.setValue(favoriteFlightsHashMap);
+
+//
+//
+//        rootDB.setValue(flightPath);
+//        rootDB.setValue(favoriteFlights);
+//        rootDB.child(flightPath).setValue(favoriteFlights);
+
+        databaseViewModel.increaseIndex();
+
+
+//        OutgoingFlight outgoingFlightData=new OutgoingFlight(originPlaceId, currency, price, departureDate);
+//        Map<String, Object> outgoingFlightValues = outgoingFlightData.toMap();
+//        // Write a message to the database
+//        DatabaseReference outgoingFlightDR = firebaseDatabase.getReference("outgoingFlight");
+//        //outgoingFlightDR.child("Flight").child(Integer.toString(position)).setValue(outgoingFlight);
+//        String flightPath="/Flight"+recyclerViewItemPosition+"/";
+//        outgoingFlightDR.setValue(flightPath);
+//
+//        outgoingFlightDR.child(flightPath).setValue(outgoingFlightData);
+//
+//        ReturnFlight returnFlightData=new ReturnFlight(destinationPlaceId, returnDate);
+//
+//        DatabaseReference returnFlightDR= firebaseDatabase.getReference("returnFlight");
+//
+//        returnFlightDR.setValue(flightPath);
+//        outgoingFlightDR.child(flightPath).setValue(returnFlightData);
+
+        recyclerViewItemPosition++;
+
+//        DatabaseReference outgoingFirstFlight=outgoingFlightDR.getReference(flight)/
+////        outgoingFlightDR.setValue(flight, postValues)
+//        DatabaseReference returnFlight= firebaseDatabase.getReference("returnFlight");
+
+//        Map<String, User> users = new HashMap<>();
+//
+//        outgoingFlightDR.setValue(outgoingFlight);
+//        outgoingFlight.setValue("Flight2");
+//
+//        DatabaseReference flight3Path = firebaseDatabase.getReference("outgoingFlight/Flight3");
+//
+//        flight3Path.setValue("airportPlaceName");
+//
+//        flight3Path.
+//
+//        myRef.setValue("Hello, World!");
+
+       // databaseViewModel.getDatabaseData();
     }
 }

@@ -7,6 +7,8 @@ import com.example.flights.GetFlightsService;
 import com.example.flights.Pojos.Place;
 import com.example.flights.R;
 import com.example.flights.Retrofit.RetrofitRequester;
+import com.example.flights.ViewModels.DatabaseViewModel;
+import com.example.flights.ViewModels.DatabaseViewModelFactory;
 import com.example.flights.ViewModels.MainActivityViewModel;
 import com.example.flights.ViewModels.MainActivityViewModelFactory;
 import com.google.android.gms.ads.AdListener;
@@ -72,6 +74,8 @@ public class MainActivity extends AppCompatActivity{
     String userSelectedCountryName;
     String userSelectedLocalityName;
 
+    DatabaseViewModel databaseViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +85,10 @@ public class MainActivity extends AppCompatActivity{
         setUpViews();
 
         setUpViewModel();
+
+        setUpDatabaseViewModel();
+
+        //databaseViewModel.getDatabaseData();
 
 
         MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
@@ -177,10 +185,37 @@ public class MainActivity extends AppCompatActivity{
 //        countrySpinner.setAdapter(countryArrayAdapter);
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_favorite_flights: {
+                Toast.makeText(this, R.string.action_favorite_flights, Toast.LENGTH_SHORT).show();
+                Intent intent=new Intent(this, FavoriteFlightsActivity.class);
+                startActivity(intent);
+
+                //new RetrofitRequester().requestMovies(this);
+                break;
+            }
+        }
+        return true;
+    }
+
     private void setUpViewModel(){
         MainActivityViewModelFactory mainActivityViewModelFactory=new MainActivityViewModelFactory(getApplication());
         mainActivityViewModel = ViewModelProviders.of(this, mainActivityViewModelFactory).get(MainActivityViewModel.class);
         //context=movieDetailsViewModel.getApplication();
+    }
+
+    private void setUpDatabaseViewModel(){
+        DatabaseViewModelFactory databaseViewModelFactory=new DatabaseViewModelFactory(getApplication());
+        databaseViewModel= ViewModelProviders.of(this, databaseViewModelFactory).get(DatabaseViewModel.class);
     }
 
     private void initializeBroadcastReceiver() {
@@ -191,28 +226,7 @@ public class MainActivity extends AppCompatActivity{
         registerReceiver(placeReceiver, filter);
     }
 
-    ;
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     private InterstitialAd newInterstitialAd() {
         InterstitialAd interstitialAd = new InterstitialAd(this);

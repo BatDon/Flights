@@ -2,6 +2,7 @@ package com.example.flights.ViewModels;
 
 import android.app.Application;
 import android.content.Context;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -139,16 +140,6 @@ public class FlightDateViewModel extends AndroidViewModel implements RetrofitReq
             return null;
         }
 
-////        setValuesForFavorites(placeArrayList);
-//        ArrayList<Quote> allQuotes=new ArrayList<>();
-//
-//        for (int i = 0; i < quoteArrayList.size(); i++) {
-//            Timber.i("setValuesForFavories i= "+i);
-//            setValuesForFavorites(quoteArrayList, i);
-//            Quote quote=getQuoteDetails();
-//            allQuotes.add(quote);
-//        }
-//        return allQuotes;
         return quoteArrayList;
     }
 
@@ -177,16 +168,6 @@ public class FlightDateViewModel extends AndroidViewModel implements RetrofitReq
             return null;
         }
 
-////        setValuesForFavorites(placeArrayList);
-//        ArrayList<Quote> allQuotes=new ArrayList<>();
-//
-//        for (int i = 0; i < quoteArrayList.size(); i++) {
-//            Timber.i("setValuesForFavories i= "+i);
-//            setValuesForFavorites(quoteArrayList, i);
-//            Quote quote=getQuoteDetails();
-//            allQuotes.add(quote);
-//        }
-//        return allQuotes;
         return currencyArrayList;
     }
 
@@ -244,29 +225,20 @@ public class FlightDateViewModel extends AndroidViewModel implements RetrofitReq
 //        }
 
     public void onRetrofitQuoteFinished(ArrayList<Quote> quoteArrayList, ArrayList<Currency> currencyArrayList) {
-//        if(quoteCurrencyList==null){
-//            Timber.i("quoteList equals null");
-//            transformToLiveData(null);
-//            return;
-//        }
-//        ArrayList<Quote> quoteArrayList = new ArrayList<Quote>(quoteList);
-//        ArrayList<Quote> quoteArrayList = new ArrayList<Quote>();
-//        ArrayList<Object> objectquoteArrayList= quoteCurrencyList.get(0);
-//        for(Object object:objectquoteArrayList)
-       //quoteArrayList.add((Quote)quoteCurrencyList.get(0));
-//        currencyArrayList = new ArrayList<Currency>();
+
         this.currencyArrayList=currencyArrayList;
         if(this.currencyArrayList==null){
             Timber.i("onRetrofitFinished currencyArrayList equals null");
+            Toast.makeText(context, "Flight does not exist", Toast.LENGTH_SHORT).show();
+            return;
         }
         if(this.currencyArrayList.isEmpty()){
             Timber.i("onRetrofitFinished currencyArrayList is empty");
+            Toast.makeText(context, "Flight does not exist", Toast.LENGTH_SHORT).show();
+            return;
         }
         Timber.i("currencyArrayList size= "+this.currencyArrayList.size());
-        Currency currency1=this.currencyArrayList.get(0);
-        String symbol=currency1.getSymbol();
-        Timber.i("symbol equals "+symbol);
-        setCurrencyAL=this.currencyArrayList;
+
         //currencyArrayList.add((Currency)quoteCurrencyList.get(1));
         Timber.i("FlightDateViewModel onRetrofitFinished called");
         Timber.i("quoteList size= %s", quoteArrayList.size());

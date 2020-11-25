@@ -34,7 +34,8 @@ public class FlightDateCurrencyAdapter extends RecyclerView.Adapter<FlightDateCu
     private OnDateCurrencyListener onDateCurrencyListener;
 
     public interface OnDateCurrencyListener {
-        void onFlightDepartureClick(int position);
+        void onFlightDepartureClick(String originPlaceId,String  departureDate,String  formattedPrice,
+                                    String destinationPlaceId, String returnDate, int position);
     }
 
     public FlightDateCurrencyAdapter(Context context, String originPlaceId, String destinationPlaceId,
@@ -89,9 +90,12 @@ public class FlightDateCurrencyAdapter extends RecyclerView.Adapter<FlightDateCu
         else{
             Quote quote = quoteArray[position];
             holder.originPlaceTV.setText(originPlaceId);
-            holder.departureDateTV.setText(quote.getOutboundLeg().getDepartureDate());
+//            holder.departureDateTV.setText(quote.getOutboundLeg().getDepartureDate());
             holder.destinationPlaceTV.setText(destinationPlaceId);
             holder.returnDateTV.setText(returnDate);
+
+            String departureDate=formatDepartureDate(quote.getOutboundLeg().getDepartureDate());
+            holder.departureDateTV.setText(departureDate);
 
             String formattedPrice = formatPriceCurrency(quote.getMinPrice().toString());
             holder.priceTV.setText(formattedPrice);
@@ -142,7 +146,15 @@ public class FlightDateCurrencyAdapter extends RecyclerView.Adapter<FlightDateCu
         @Override
         public void onClick(View view) {
             if (onDateCurrencyListener != null) {
-                onDateCurrencyListener.onFlightDepartureClick(getAdapterPosition());
+
+                Quote quote = quoteArray[getAdapterPosition()];
+                String departureDate=formatDepartureDate(quote.getOutboundLeg().getDepartureDate());
+                String formattedPrice = formatPriceCurrency(quote.getMinPrice().toString());
+
+
+
+                onDateCurrencyListener.onFlightDepartureClick(originPlaceId, departureDate, formattedPrice,
+                        destinationPlaceId, returnDate, getAdapterPosition());
             }
         }
 
@@ -192,13 +204,27 @@ public class FlightDateCurrencyAdapter extends RecyclerView.Adapter<FlightDateCu
 
         for (int i = priceLength; i > 0; i--) {
             currencyAdder += priceOfFlight.charAt(u);
-            if (i % 3 == 0) {
+            if (i % 3 == 0 && priceLength>3) {
                 currencyAdder += thousandsSeparator;
             }
             u++;
+//            currencyAdder += priceOfFlight.charAt(u);
         }
         return currencyAdder;
 
+    }
+
+    public String formatDepartureDate(String departureDate){
+
+        int endOfIndex = departureDate.indexOf("T");
+
+        String formattedDate=departureDate;
+        //found T character
+        if (endOfIndex != -1)
+        {
+            formattedDate= departureDate.substring(0 , endOfIndex);
+        }
+        return formattedDate;
     }
 
 
