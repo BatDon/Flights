@@ -30,6 +30,8 @@ import com.example.flights.ViewModels.FlightDateViewModel;
 import com.example.flights.ViewModels.FlightDateViewModelFactory;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+//import com.google.firebase.firestore.CollectionReference;
+//import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -200,6 +202,8 @@ public class FlightDateCurrency extends AppCompatActivity implements FlightDateC
 
     int recyclerViewItemPosition=0;
 
+    //adds flight to favoriteFlights
+
     @Override
     public void onFlightDepartureClick(String originPlaceId,String departureDate,
                                        String formattedPrice, String destinationPlaceId,
@@ -226,15 +230,22 @@ public class FlightDateCurrency extends AppCompatActivity implements FlightDateC
         FavoriteFlights favoriteFlights=new FavoriteFlights(id, originPlaceId, currency, price,
                 departureDate, destinationPlaceId, returnDate);
 
-        DatabaseReference rootDB=firebaseDatabase.getReference("/");
+//        DatabaseReference rootDB=firebaseDatabase.getReference("/");
+//        DatabaseReference flightsDatabaseReference=firebaseDatabase.getReference("Flights");
+        String idPrice = price.replaceAll("[^\\d]", "");
+        DatabaseReference flightsDatabaseReference=firebaseDatabase.getReference("Flights"+idPrice);
+//        DatabaseReference flightsDatabaseReference=firebaseDatabase.getReference();
 
 //        String flightPath="/Flight"+id+"/";
-        String flightPath="Flight"+id;
+        //String flightPath="Flight"+id;
 
 //        Map<String, FavoriteFlights> favoriteFlightsHashMap = new HashMap<>();
 //        favoriteFlightsHashMap.put(flightPath, favoriteFlights);
 
-        rootDB.child(id).setValue(favoriteFlights);
+//        flightsDatabaseReference.child(id).setValue(favoriteFlights);
+        //flightsDatabaseReference.updateChildren(favoriteFlights);
+        flightsDatabaseReference.setValue(favoriteFlights);
+        //rootDB.child(id).setValue(favoriteFlights);
 
 
 //        rootDB.setValue(favoriteFlightsHashMap);
@@ -248,42 +259,20 @@ public class FlightDateCurrency extends AppCompatActivity implements FlightDateC
         databaseViewModel.increaseIndex();
 
 
-//        OutgoingFlight outgoingFlightData=new OutgoingFlight(originPlaceId, currency, price, departureDate);
-//        Map<String, Object> outgoingFlightValues = outgoingFlightData.toMap();
-//        // Write a message to the database
-//        DatabaseReference outgoingFlightDR = firebaseDatabase.getReference("outgoingFlight");
-//        //outgoingFlightDR.child("Flight").child(Integer.toString(position)).setValue(outgoingFlight);
-//        String flightPath="/Flight"+recyclerViewItemPosition+"/";
-//        outgoingFlightDR.setValue(flightPath);
-//
-//        outgoingFlightDR.child(flightPath).setValue(outgoingFlightData);
-//
-//        ReturnFlight returnFlightData=new ReturnFlight(destinationPlaceId, returnDate);
-//
-//        DatabaseReference returnFlightDR= firebaseDatabase.getReference("returnFlight");
-//
-//        returnFlightDR.setValue(flightPath);
-//        outgoingFlightDR.child(flightPath).setValue(returnFlightData);
+
 
         recyclerViewItemPosition++;
 
-//        DatabaseReference outgoingFirstFlight=outgoingFlightDR.getReference(flight)/
-////        outgoingFlightDR.setValue(flight, postValues)
-//        DatabaseReference returnFlight= firebaseDatabase.getReference("returnFlight");
 
-//        Map<String, User> users = new HashMap<>();
-//
-//        outgoingFlightDR.setValue(outgoingFlight);
-//        outgoingFlight.setValue("Flight2");
-//
-//        DatabaseReference flight3Path = firebaseDatabase.getReference("outgoingFlight/Flight3");
-//
-//        flight3Path.setValue("airportPlaceName");
-//
-//        flight3Path.
-//
-//        myRef.setValue("Hello, World!");
 
        // databaseViewModel.getDatabaseData();
+
+
+//
+//        CollectionReference favoriteFlightRef = FirebaseFirestore.getInstance()
+//                .collection("Flight");
+//        favoriteFlightRef.add(favoriteFlights);
+//        Toast.makeText(this, "Saved Flight to favorites", Toast.LENGTH_SHORT).show();
+//        finish();
     }
 }

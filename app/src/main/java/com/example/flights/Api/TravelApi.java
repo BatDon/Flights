@@ -25,7 +25,6 @@ public interface TravelApi {
 //TODO Header here
 
 
-
 //    @GET("/apiservices/autosuggest/v1.0/UK/GBP/en-GB/")
 //    Call<Places> getPlaces(@Query("query") String place_name);
 
@@ -39,6 +38,7 @@ public interface TravelApi {
 //     @GET("/apiservices/browsedates/v1.0/US/USD/en-US/SFO-sky/LAX-sky/2020-11-18?params=2020-12-01")
 
 //TODO Header here
+
 
 
 //    @GET("/apiservices/browsedates/v1.0/{country}/{currency}/{locality}/{originPlace}/{destinationPlace}/{outboundDate}/")
@@ -75,7 +75,7 @@ public interface TravelApi {
 
 
 //Airport call to get quote and currency
-
+    
 
 
     @GET("/apiservices/browsedates/v1.0/{country}/{currency}/{locality}/{originPlace}/{destinationPlace}/{outboundDate}/")
@@ -85,7 +85,6 @@ public interface TravelApi {
                              @Query("inboundDate") String inboundDate);
 
 
-    
 
     @GET("/apiservices/browsedates/v1.0/{country}/{currency}/{locality}/{originPlace}/{destinationPlace}/{outboundDate}/")
     Call<Airports>getAirportNoInboundDate(@Path("country") String country,@Path ("currency") String currency,

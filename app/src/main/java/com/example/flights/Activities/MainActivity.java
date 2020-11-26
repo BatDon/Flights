@@ -1,5 +1,6 @@
 package com.example.flights.Activities;
 
+import com.example.flights.Activities.DatabaseClasses.FavoriteFlightsDatabaseActivity;
 import com.example.flights.Constants;
 import com.example.flights.DatabaseClasses.OutgoingFlight;
 import com.example.flights.DatabaseClasses.ReturnFlight;
@@ -17,8 +18,7 @@ import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -197,7 +197,9 @@ public class MainActivity extends AppCompatActivity{
         switch (item.getItemId()) {
             case R.id.action_favorite_flights: {
                 Toast.makeText(this, R.string.action_favorite_flights, Toast.LENGTH_SHORT).show();
-                Intent intent=new Intent(this, FavoriteFlightsActivity.class);
+                //TODO change all intents to activities
+//                Intent intent=new Intent(this, FavoriteFlightsActivity.class);
+                Intent intent=new Intent(this, FavoriteFlightsDatabaseActivity.class);
                 startActivity(intent);
 
                 //new RetrofitRequester().requestMovies(this);

@@ -16,8 +16,16 @@
         <activity android:name=".Activities.FlightDateCurrency" />
         <activity android:name=".Activities.FlightDate" />
         <activity android:name=".Activities.DepartureFlightLocations" />
+
+
+
+        <activity android:name=".Activities.DatabaseClasses.FavoriteFlightsDatabaseActivity"
+            android:label="@string/favorite_flights_activity_name"/>
         <activity android:name=".Activities.FavoriteFlightsActivity"
             android:label="@string/favorite_flights_activity_name"/>
+
+
+
         <activity
             android:name=".Activities.MainActivity"
             android:label="@string/app_name">
