@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.flights.Pojos.Place;
@@ -19,6 +20,7 @@ public class FlightDeparturesAdapter extends RecyclerView.Adapter<FlightDepartur
     Place[] placeArray;
     private LayoutInflater mInflater;
     int placeArraySize;
+    ConstraintLayout constraintLayoutFlightDepartureItem;
 
 
     private OnFlightDepartureListener onFlightDepartureListener;
@@ -63,6 +65,8 @@ public class FlightDeparturesAdapter extends RecyclerView.Adapter<FlightDepartur
         holder.regiondIdTV.setText(place.getRegionId());
         holder.cityIdTV.setText(place.getCityId());
         holder.countryNameTv.setText(place.getCountryName());
+        String contentDescription="Flight departure country is "+place.getCountryId()+" the city is "+place.getCityId();
+        holder.constraintLayoutFlightDepartureItem.setContentDescription(contentDescription);
     }
 
     @Override
@@ -74,6 +78,7 @@ public class FlightDeparturesAdapter extends RecyclerView.Adapter<FlightDepartur
     }
 
     public class DeparturesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        ConstraintLayout constraintLayoutFlightDepartureItem;
         public TextView placeIdTV;
         public TextView placeNameTV;
         public TextView countryIdTV;
@@ -86,6 +91,7 @@ public class FlightDeparturesAdapter extends RecyclerView.Adapter<FlightDepartur
         public DeparturesViewHolder(View itemView, OnFlightDepartureListener onFlightDepartureListener){
             super(itemView);
 
+            constraintLayoutFlightDepartureItem=(ConstraintLayout) itemView.findViewById(R.id.constraintLayoutFlightDepartureItem);
             placeIdTV=(TextView) itemView.findViewById(R.id.placeId);
             placeNameTV=(TextView) itemView.findViewById(R.id.placeName);
             countryIdTV=(TextView) itemView.findViewById(R.id.countryId);

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.flights.Pojos.FlightDatePojos.Currency;
@@ -25,6 +26,7 @@ public class FlightDateCurrencyAdapter extends RecyclerView.Adapter<FlightDateCu
     private LayoutInflater mInflater;
     int quoteArraySize;
 
+    ConstraintLayout constraintLayoutFlightCurrencyItem;
     String originPlaceId;
     String destinationPlaceId;
     String returnDate;
@@ -82,6 +84,9 @@ public class FlightDateCurrencyAdapter extends RecyclerView.Adapter<FlightDateCu
             holder.departureDateTV.setText("");
             holder.priceTV.setText("");
 
+            String contentDescription="Flight origin is "+originPlaceId+" destination is "+destinationPlaceId;
+            holder.constraintLayoutFlightCurrencyItem.setContentDescription(contentDescription);
+
             holder.originPlaceTV.setText(originPlaceId);
             holder.destinationPlaceTV.setText(destinationPlaceId);
             holder.returnDateTV.setText(returnDate);
@@ -99,6 +104,9 @@ public class FlightDateCurrencyAdapter extends RecyclerView.Adapter<FlightDateCu
 
             String formattedPrice = formatPriceCurrency(quote.getMinPrice().toString());
             holder.priceTV.setText(formattedPrice);
+
+            String contentDescription="Flight is from "+originPlaceId+" and leaves on "+departureDate;
+            holder.constraintLayoutFlightCurrencyItem.setContentDescription(contentDescription);
         }
 
 
@@ -120,6 +128,7 @@ public class FlightDateCurrencyAdapter extends RecyclerView.Adapter<FlightDateCu
     }
 
     public class DateCurrencyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        ConstraintLayout constraintLayoutFlightCurrencyItem;
         public TextView originPlaceTV;
         public TextView departureDateTV;
         public TextView destinationPlaceTV;
@@ -131,6 +140,7 @@ public class FlightDateCurrencyAdapter extends RecyclerView.Adapter<FlightDateCu
         public DateCurrencyViewHolder(View itemView, OnDateCurrencyListener onDateCurrencyListener) {
             super(itemView);
 
+            constraintLayoutFlightCurrencyItem=(ConstraintLayout) itemView.findViewById(R.id.constraintLayoutFlightCurrencyItem);
             originPlaceTV = (TextView) itemView.findViewById(R.id.originPlaceTV);
             departureDateTV = (TextView) itemView.findViewById(R.id.departureDateTV);
             destinationPlaceTV = (TextView) itemView.findViewById(R.id.destinationPlaceTV);

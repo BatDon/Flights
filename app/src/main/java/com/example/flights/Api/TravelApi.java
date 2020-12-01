@@ -30,7 +30,6 @@ public interface TravelApi {
 //    Call<Places> getPlaces(@Query("query") String place_name);
 
 
-
     //places path
     @GET("/apiservices/autosuggest/v1.0/{country}/{currency}/{locality}/")
     Call<Places> getPlaces(@Path("country") String country,@Path ("currency") String currency,
@@ -87,7 +86,6 @@ public interface TravelApi {
                              @Path("locality") String locality, @Path("originPlace") String originPlace,
                              @Path("destinationPlace") String destinationPlace, @Path("outboundDate") String outboundDate,
                              @Query("inboundDate") String inboundDate);
-
 
 
 

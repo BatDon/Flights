@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.flights.FavoriteFlightsData.FavoriteFlights;
@@ -51,6 +52,8 @@ public class FirebaseFavoriteFlightsAdapter extends FirebaseRecyclerAdapter<Favo
 
     @Override
     protected void onBindViewHolder(@NonNull FavoriteFlightsHolder holder, int position, @NonNull FavoriteFlights favoriteFlight) {
+        String contentDescriptionString="Flight origin= "+favoriteFlight.getOriginPlace()+" for "+favoriteFlight.getPrice()+" destination is "+favoriteFlight.getDestinationAirportName();
+        holder.constraintLayoutFlightCurrencyItem.setContentDescription(contentDescriptionString);
         holder.originPlaceTV.setText(favoriteFlight.getOriginPlace());
         holder.departureDateTV.setText(favoriteFlight.getOutgoingDate());
         holder.priceTV.setText(favoriteFlight.getPrice());
@@ -84,6 +87,8 @@ public class FirebaseFavoriteFlightsAdapter extends FirebaseRecyclerAdapter<Favo
 
     public class FavoriteFlightsHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         OnFavoriteFlightsListener onFavoriteFlightsListener;
+
+        public ConstraintLayout constraintLayoutFlightCurrencyItem;
         public TextView originPlaceTV;
         public TextView departureDateTV;
         public TextView destinationPlaceTV;
@@ -95,6 +100,7 @@ public class FirebaseFavoriteFlightsAdapter extends FirebaseRecyclerAdapter<Favo
 
             this.onFavoriteFlightsListener=onFavoriteFlightsListener;
             itemView.setOnClickListener(this);
+            constraintLayoutFlightCurrencyItem=(ConstraintLayout) itemView.findViewById(R.id.constraintLayoutFlightCurrencyItem);
             originPlaceTV = (TextView) itemView.findViewById(R.id.originPlaceTV);
             departureDateTV = (TextView) itemView.findViewById(R.id.departureDateTV);
             destinationPlaceTV = (TextView) itemView.findViewById(R.id.destinationPlaceTV);

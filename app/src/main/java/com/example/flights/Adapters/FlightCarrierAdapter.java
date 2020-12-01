@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.flights.Pojos.FlightDatePojos.Carrier;
@@ -47,6 +48,8 @@ public class FlightCarrierAdapter extends RecyclerView.Adapter<FlightCarrierAdap
     public void onBindViewHolder(@NonNull FlightCarrierAdapter.FlightCarrierViewHolder holder, int position) {
         if(carrierArrayList !=null && carrierArrayList.size()>0){
             Carrier carrier=carrierArrayList.get(position);
+            String contentDescription="Flight carrier id is "+carrier.getCarrierId()+" carrier name is "+carrier.getName();
+            holder.constraintLayoutCarrierItem.setContentDescription(contentDescription);
             holder.carrierIdTV.setText(carrier.getCarrierId().toString());
             holder.carrierNameTV.setText(carrier.getName());
         }
@@ -62,12 +65,14 @@ public class FlightCarrierAdapter extends RecyclerView.Adapter<FlightCarrierAdap
     }
 
     public class FlightCarrierViewHolder extends RecyclerView.ViewHolder {
+        ConstraintLayout constraintLayoutCarrierItem;
         public TextView carrierIdTV;
         public TextView carrierNameTV;
 
         public FlightCarrierViewHolder(View itemView) {
             super(itemView);
 
+            constraintLayoutCarrierItem=(ConstraintLayout) itemView.findViewById(R.id.constraintLayoutCarrierItem);
             carrierIdTV = (TextView) itemView.findViewById(R.id.carrierId);
             carrierNameTV = (TextView) itemView.findViewById(R.id.carrierName);
         }

@@ -2,10 +2,14 @@
     <string name="app_name">Flights</string>
     <string name="action_settings">Settings</string>
 
+<!--    activity_main-->
 
     <string name="interstitial_ad_sample">Interstitial Ad Sample</string>
     <string name="start_level">Level 1</string>
     <string name="next_level">Next Level</string>
+
+    <!--    activity_main content descriptions-->
+    <string name="find_flight_location_button">Click to see if flight location exists</string>
     <!-- -
         This is an ad unit ID for an interstitial test ad. Replace with your own interstitial ad unit id.
         For more information, see https://support.google.com/admob/answer/3052638
@@ -15,16 +19,22 @@
     <string name="interstitial_ad_unit_id">"ca-app-pub-3940256099942544/1033173712"</string>
     <string name="get_flights_service">GetFlightsService</string>
     <string name="problem_retrieving_data">Problem retrieving data...Please try later!</string>
+<!--    activity_main hints-->
     <string name="country_name">UK</string>
     <string name="currency">GBP</string>
     <string name="locale">en-GB</string>
     <string name="localeName">Stockholm</string>
 
+
+
+<!--    file names for saving and reading used to save classes to file-->
     <string name="fileName">flightDepartures</string>
     <string name="fileNameQuote">flightQuotes</string>
     <string name="fileNameCurrency">flightCurrency</string>
     <string name="fileNameCarrier">flightCarrier</string>
     <string name="pathWithoutFileName">/data/user/0/com.example.flights/files/</string>
+
+
     <string name="class_not_found">Class Not Found</string>
     <string name="placeId">Place Id</string>
     <string name="placeName">Place Name</string>
@@ -49,4 +59,12 @@
     <string name="widgetPrice">Price</string>
     <string name="carrierName">Carrier Name</string>
     <string name="carrierId">Carrier ID</string>
+
+<!--    activity_flight_date-->
+    <!--    content description-->
+    <string name="return_date_calendar_button">open calendar to select return date</string>
+    <string name="departure_date_calendar_button">open calendar to select departure date</string>
+    <string name="find_flights_button">Find if flight exists</string>
+
+
 </resources>
