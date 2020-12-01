@@ -15,6 +15,7 @@
         android:text="@string/date"
         app:layout_constraintBottom_toBottomOf="@+id/departureDateBT"
         app:layout_constraintStart_toStartOf="@+id/returnDateET"
+        app:layout_constraintLeft_toLeftOf="@+id/returnDateET"
         app:layout_constraintTop_toBottomOf="@+id/departureDate" />
 
     <EditText

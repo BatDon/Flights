@@ -25,8 +25,11 @@ public interface TravelApi {
 //TODO Header here
 
 
+
 //    @GET("/apiservices/autosuggest/v1.0/UK/GBP/en-GB/")
 //    Call<Places> getPlaces(@Query("query") String place_name);
+
+
 
     //places path
     @GET("/apiservices/autosuggest/v1.0/{country}/{currency}/{locality}/")
@@ -75,7 +78,8 @@ public interface TravelApi {
 
 
 //Airport call to get quote and currency
-    
+
+
 
 
     @GET("/apiservices/browsedates/v1.0/{country}/{currency}/{locality}/{originPlace}/{destinationPlace}/{outboundDate}/")
@@ -83,6 +87,7 @@ public interface TravelApi {
                              @Path("locality") String locality, @Path("originPlace") String originPlace,
                              @Path("destinationPlace") String destinationPlace, @Path("outboundDate") String outboundDate,
                              @Query("inboundDate") String inboundDate);
+
 
 
 

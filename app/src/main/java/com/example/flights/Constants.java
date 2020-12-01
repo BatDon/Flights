@@ -29,4 +29,17 @@ public class Constants {
 
     public static final String QUOTE_ARRAY_LIST = "com.example.flights.quote_array_list";
     public static final String CURRENCY = "com.example.flights.currency";
+
+    //widget constants
+    public static final String ACTION_INTENT_OPEN_FLIGHT="com.example.flights.action_intent_open_flight";
+    public static final String FLIGHT_DEPARTURE_DATE="com.example.flights.departure_date";
+    public static final String FLIGHT_DEPARTURE_PLACE="com.example.flights.departure_place";
+    public static final String FLIGHT_PRICE="com.example.flights.flights_price";
+
+    //FavoriteFlightDetails constants
+    public static final String DEPARTURE_DATE="com.example.favorite_flights_departure_date";
+    public static final String ORIGIN_PLACE="com.example.favorite_flights_origin_place";
+    public static final String PRICE="com.example.favorite_flights_price";
+    public static final String RETURN_DATE="com.example.favorite_flights_return_date";
+    public static final String DESTINATION_PLACE="com.example.favorite_flights_destination_place";
 }

@@ -8,13 +8,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.flights.Adapters.FavoriteFlightsAdapter;
 import com.example.flights.FavoriteFlightsData.FavoriteFlights;
 import com.example.flights.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.ObservableSnapshotArray;
-import com.google.firebase.database.FirebaseDatabase;
 
 import timber.log.Timber;
 //import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -23,6 +21,13 @@ import timber.log.Timber;
 
 
 public class FirebaseFavoriteFlightsAdapter extends FirebaseRecyclerAdapter<FavoriteFlights, FirebaseFavoriteFlightsAdapter.FavoriteFlightsHolder> {
+
+    private FirebaseFavoriteFlightsAdapter.OnFavoriteFlightsListener onFavoriteFlightsListener;
+
+    public interface OnFavoriteFlightsListener{
+//        void onFavoriteFlightsClick(int position);
+        void onFavoriteFlightsClick(FavoriteFlights favoriteFlights);
+    }
 
 
     FavoriteFlightsHolder favoriteFlightsHolder;
@@ -34,8 +39,10 @@ public class FirebaseFavoriteFlightsAdapter extends FirebaseRecyclerAdapter<Favo
 //    {
 //        super(options);
 //    }
-    public FirebaseFavoriteFlightsAdapter(@NonNull FirebaseRecyclerOptions<FavoriteFlights> options) {
+    public FirebaseFavoriteFlightsAdapter(@NonNull FirebaseRecyclerOptions<FavoriteFlights> options,
+                                          FirebaseFavoriteFlightsAdapter.OnFavoriteFlightsListener onFavoriteFlightsListener) {
         super(options);
+        this.onFavoriteFlightsListener=onFavoriteFlightsListener;
     }
 
 
@@ -68,25 +75,48 @@ public class FirebaseFavoriteFlightsAdapter extends FirebaseRecyclerAdapter<Favo
     public FavoriteFlightsHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.flight_date_currency_item,
                 parent, false);
-        favoriteFlightsHolder=new FirebaseFavoriteFlightsAdapter.FavoriteFlightsHolder(v);
+        favoriteFlightsHolder=new FirebaseFavoriteFlightsAdapter.FavoriteFlightsHolder(v, onFavoriteFlightsListener);
 //        return new FirebaseFavoriteFlightsAdapter.FavoriteFlightsHolder(v);
         return favoriteFlightsHolder;
     }
 
 
-    public class FavoriteFlightsHolder extends RecyclerView.ViewHolder {
+
+    public class FavoriteFlightsHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        OnFavoriteFlightsListener onFavoriteFlightsListener;
         public TextView originPlaceTV;
         public TextView departureDateTV;
         public TextView destinationPlaceTV;
         public TextView returnDateTV;
         public TextView priceTV;
-        public FavoriteFlightsHolder(View itemView) {
+
+        public FavoriteFlightsHolder(View itemView, FirebaseFavoriteFlightsAdapter.OnFavoriteFlightsListener onFavoriteFlightsListener) {
             super(itemView);
+
+            this.onFavoriteFlightsListener=onFavoriteFlightsListener;
+            itemView.setOnClickListener(this);
             originPlaceTV = (TextView) itemView.findViewById(R.id.originPlaceTV);
             departureDateTV = (TextView) itemView.findViewById(R.id.departureDateTV);
             destinationPlaceTV = (TextView) itemView.findViewById(R.id.destinationPlaceTV);
             returnDateTV = (TextView) itemView.findViewById(R.id.returnDateTV);
             priceTV = (TextView) itemView.findViewById(R.id.priceTV);
+        }
+
+        @Override
+        public void onClick(View view) {
+            Timber.i("onClick called in adapter");
+            if(onFavoriteFlightsListener!=null){
+//                onFavoriteFlightsListener.onFavoriteFlightsClick(getAdapterPosition());
+                int adapterPosition=favoriteFlightsHolder.getAdapterPosition();
+                ObservableSnapshotArray<FavoriteFlights> observableSnapshotArray=getSnapshots();
+                FavoriteFlights favoriteFlights=observableSnapshotArray.get(adapterPosition);
+                Timber.i("price in adapter= "+favoriteFlights.getPrice());
+                onFavoriteFlightsListener.onFavoriteFlightsClick(favoriteFlights);
+
+            }
+            else{
+                Timber.i("onFavoriteFlightsListener equals null");
+            }
         }
     }
 

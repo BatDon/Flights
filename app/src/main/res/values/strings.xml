@@ -23,6 +23,7 @@
     <string name="fileName">flightDepartures</string>
     <string name="fileNameQuote">flightQuotes</string>
     <string name="fileNameCurrency">flightCurrency</string>
+    <string name="fileNameCarrier">flightCarrier</string>
     <string name="pathWithoutFileName">/data/user/0/com.example.flights/files/</string>
     <string name="class_not_found">Class Not Found</string>
     <string name="placeId">Place Id</string>
@@ -43,4 +44,9 @@
     <string name="price">Price</string>
     <string name="action_favorite_flights">Favorite Flights</string>
     <string name="favorite_flights_activity_name">Favorite Flights</string>
+    <string name="widgetoutgoingdate">Outgoing Date</string>
+    <string name="widgetOutgoingPlace">Origin</string>
+    <string name="widgetPrice">Price</string>
+    <string name="carrierName">Carrier Name</string>
+    <string name="carrierId">Carrier ID</string>
 </resources>

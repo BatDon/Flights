@@ -29,6 +29,17 @@ public class FavoriteFlights {
         this.returnDate = returnDate;
     }
 
+//    public FavoriteFlights(String currency, String id, String originPlace, String price, String outgoingDate, String destinationAirportName, String returnDate) {
+//        this.currency = currency;
+//        this.id=id;
+//        this.originPlace = originPlace;
+//        this.price = price;
+//        this.outgoingDate = outgoingDate;
+//        this.destinationAirportName = destinationAirportName;
+//        this.returnDate = returnDate;
+//    }
+
+
     public String getId() {
         return id;
     }

@@ -6,24 +6,16 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.flights.Adapters.FavoriteFlightsAdapter;
 import com.example.flights.FavoriteFlightsData.FavoriteFlights;
-import com.example.flights.Pojos.FlightDatePojos.Quote;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import timber.log.Timber;
-
 public class DatabaseViewModel extends AndroidViewModel {
 
     FirebaseDatabase firebaseDatabase;
-    FavoriteFlightsAdapter favoriteFlightsAdapter;
+//    FavoriteFlightsAdapter favoriteFlightsAdapter;
     ArrayList<FavoriteFlights> favoriteFlightsArrayList= new ArrayList<>();
     FavoriteFlights[] favoriteFlightsArray;
 

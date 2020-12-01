@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.flights.Activities.DatabaseClasses.FavoriteFlightsDatabaseActivity;
 import com.example.flights.Adapters.FlightDeparturesAdapter;
 import com.example.flights.Constants;
 import com.example.flights.Pojos.Place;
@@ -49,7 +50,7 @@ public class DepartureFlightLocations extends AppCompatActivity implements Fligh
         switch (item.getItemId()) {
             case R.id.action_favorite_flights: {
                 Toast.makeText(this, R.string.action_favorite_flights, Toast.LENGTH_SHORT).show();
-                Intent intent=new Intent(this, FavoriteFlightsActivity.class);
+                Intent intent=new Intent(this, FavoriteFlightsDatabaseActivity.class);
                 startActivity(intent);
                 //new RetrofitRequester().requestMovies(this);
                 break;

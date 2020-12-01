@@ -34,7 +34,7 @@ public class FlightDateCurrencyAdapter extends RecyclerView.Adapter<FlightDateCu
     private OnDateCurrencyListener onDateCurrencyListener;
 
     public interface OnDateCurrencyListener {
-        void onFlightDepartureClick(String originPlaceId,String  departureDate,String  formattedPrice,
+        void onFlightDepartureClick(int quoteId, String originPlaceId,String  departureDate,String  formattedPrice,
                                     String destinationPlaceId, String returnDate, int position);
     }
 
@@ -148,13 +148,17 @@ public class FlightDateCurrencyAdapter extends RecyclerView.Adapter<FlightDateCu
             if (onDateCurrencyListener != null) {
 
                 Quote quote = quoteArray[getAdapterPosition()];
+                //adding quote id for id in database
+                int quoteId=quote.getQuoteId();
                 String departureDate=formatDepartureDate(quote.getOutboundLeg().getDepartureDate());
                 String formattedPrice = formatPriceCurrency(quote.getMinPrice().toString());
 
 
-
-                onDateCurrencyListener.onFlightDepartureClick(originPlaceId, departureDate, formattedPrice,
+                onDateCurrencyListener.onFlightDepartureClick(quoteId, originPlaceId, departureDate, formattedPrice,
                         destinationPlaceId, returnDate, getAdapterPosition());
+
+//                onDateCurrencyListener.onFlightDepartureClick(originPlaceId, departureDate, formattedPrice,
+//                        destinationPlaceId, returnDate, getAdapterPosition());
             }
         }
 

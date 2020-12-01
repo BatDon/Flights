@@ -1,5 +1,6 @@
 package com.example.flights.Activities.DatabaseClasses;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -9,29 +10,33 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.flights.Activities.FavoriteFlightsActivity;
+import com.example.flights.Activities.FavoriteFlightsDetails;
 import com.example.flights.Adapters.firebaseAdapter.FirebaseFavoriteFlightsAdapter;
+import com.example.flights.DatabaseClasses.OutgoingFlight;
 import com.example.flights.FavoriteFlightsData.FavoriteFlights;
 import com.example.flights.R;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 //import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.firebase.ui.database.ObservableSnapshotArray;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import timber.log.Timber;
+
+import static com.example.flights.Constants.DEPARTURE_DATE;
+import static com.example.flights.Constants.DESTINATION_PLACE;
+import static com.example.flights.Constants.ORIGIN_PLACE;
+import static com.example.flights.Constants.PRICE;
+import static com.example.flights.Constants.RETURN_DATE;
 //import com.google.firebase.firestore.CollectionReference;
 //import com.google.firebase.firestore.FirebaseFirestore;
 //import com.google.firebase.firestore.Query;
 
-public class FavoriteFlightsDatabaseActivity extends AppCompatActivity {
+public class FavoriteFlightsDatabaseActivity extends AppCompatActivity implements FirebaseFavoriteFlightsAdapter.OnFavoriteFlightsListener{
 //    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 //    private CollectionReference favoriteFlightRef = db.collection("Flights");
 
     FirebaseDatabase firebaseDatabase=FirebaseDatabase.getInstance();
-
-
 
     //FirebaseDatabase.getInstance();
     DatabaseReference flightsDatabaseReference;
@@ -72,7 +77,7 @@ public class FavoriteFlightsDatabaseActivity extends AppCompatActivity {
                 .build();
 
 
-        adapter = new FirebaseFavoriteFlightsAdapter(options);
+        adapter = new FirebaseFavoriteFlightsAdapter(options, this);
         RecyclerView recyclerView = findViewById(R.id.favoriteFlightsRecyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -118,8 +123,10 @@ public class FavoriteFlightsDatabaseActivity extends AppCompatActivity {
                 ObservableSnapshotArray<FavoriteFlights> observableSnapshotArray=adapter.getSnapshots();
                 FavoriteFlights favoriteFlights=observableSnapshotArray.get(adapterPosition);
                 String idCurrencySign=favoriteFlights.getPrice();
-                String idNumber= idCurrencySign.replaceAll("[^\\d]", "");
-                String flightToDelete="Flights"+idNumber;
+                String idNumber=favoriteFlights.getId();
+                //String idNumber= idCurrencySign.replaceAll("[^\\d]", "");
+//                String flightToDelete="Flights"+idNumber;
+                String flightToDelete="Flight"+idNumber;
 //
 //                String pathToDelete=firebaseDatabase.getReference(flightToDelete).toString();
 //                Timber.i("pathToDelete "+pathToDelete);
@@ -185,5 +192,36 @@ public class FavoriteFlightsDatabaseActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         adapter.stopListening();
+    }
+
+//    @Override
+//    public void OnFavoriteFlightsListener(int position) {
+//
+//    }
+
+    @Override
+    public void onFavoriteFlightsClick(FavoriteFlights favoriteFlights) {
+        String outgoingDate=favoriteFlights.getOutgoingDate();
+        String originPlace=favoriteFlights.getOriginPlace();
+        String price=favoriteFlights.getPrice();
+        String currency=favoriteFlights.getCurrency();
+        String currencyPrice=currency+" "+price;
+        String returnDate=favoriteFlights.getReturnDate();
+        String destinationPlace=favoriteFlights.getDestinationAirportName();
+
+
+
+        Timber.i("onFavoriteFlightsClick price= "+price);
+
+        Intent intent=new Intent(this, FavoriteFlightsDatabaseActivity.class);
+        startActivity(intent);
+        Intent carrierIntent=new Intent(this, FavoriteFlightsDetails.class);
+        carrierIntent.putExtra(DEPARTURE_DATE, outgoingDate);
+        carrierIntent.putExtra(ORIGIN_PLACE, originPlace);
+        carrierIntent.putExtra(PRICE, currencyPrice);
+        carrierIntent.putExtra(RETURN_DATE, returnDate);
+        carrierIntent.putExtra(DESTINATION_PLACE, destinationPlace);
+        startActivity(carrierIntent);
+
     }
 }

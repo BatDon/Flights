@@ -15,6 +15,14 @@ public class Carrier implements Serializable {
     @Expose
     private String name;
 
+    public Carrier(Integer carrierId, String name) {
+        this.carrierId = carrierId;
+        this.name = name;
+    }
+
+    public Carrier() {
+    }
+
     public Integer getCarrierId() {
         return carrierId;
     }

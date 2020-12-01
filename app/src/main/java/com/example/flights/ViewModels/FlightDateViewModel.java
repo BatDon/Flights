@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.flights.Pojos.FlightDatePojos.Carrier;
 import com.example.flights.Pojos.FlightDatePojos.Currency;
 import com.example.flights.Pojos.FlightDatePojos.InboundLeg;
 import com.example.flights.Pojos.FlightDatePojos.OutboundLeg;
@@ -40,6 +41,7 @@ public class FlightDateViewModel extends AndroidViewModel implements RetrofitReq
     public MutableLiveData<List<Quote>> liveDataQuoteList=new MutableLiveData<List<Quote>>(){};
 
     List<Currency> currencyList;
+    List<Carrier> carrierList;
 //    Quote quote;
 //    String minPrice;
 //    String direct;
@@ -60,6 +62,7 @@ public class FlightDateViewModel extends AndroidViewModel implements RetrofitReq
 
     ArrayList<Quote> quoteArrayList;
     ArrayList<Currency> currencyArrayList;
+    ArrayList<Carrier> carrierArrayList;
     public ArrayList<Currency> setCurrencyAL;
 
     int position;
@@ -107,6 +110,20 @@ public class FlightDateViewModel extends AndroidViewModel implements RetrofitReq
             FileOutputStream fileOut = new FileOutputStream(new File(context.getString(R.string.pathWithoutFileName)+R.string.fileNameCurrency+".txt"));
             ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
             objectOut.writeObject(currencyList);
+            objectOut.close();
+            fileOut.close();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void writeToCarrierFile(ArrayList<Carrier> carrierList) {
+
+        try {
+            FileOutputStream fileOut = new FileOutputStream(new File(context.getString(R.string.pathWithoutFileName)+R.string.fileNameCarrier+".txt"));
+            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+            objectOut.writeObject(carrierList);
             objectOut.close();
             fileOut.close();
 
@@ -171,6 +188,34 @@ public class FlightDateViewModel extends AndroidViewModel implements RetrofitReq
         return currencyArrayList;
     }
 
+    public ArrayList<Carrier> getCarrierDir() {
+        ArrayList<Carrier> carrierArrayList;
+
+        try {
+
+//            int fileNumber=Integer.parseInt(file_location);
+//            file_location=Integer.toString(fileNumber);
+//            FileInputStream fis = new FileInputStream(new File(context.getString(R.string.pathToRelatedMoviesFile)));
+            FileInputStream fis = new FileInputStream(new File(context.getString(R.string.pathWithoutFileName)+R.string.fileNameCarrier+".txt"));
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            carrierArrayList = (ArrayList) ois.readObject();
+
+
+
+            ois.close();
+            fis.close();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            return null;
+        } catch (ClassNotFoundException c) {
+            System.out.println(context.getString(R.string.class_not_found));
+            c.printStackTrace();
+            return null;
+        }
+
+        return carrierArrayList;
+    }
+
 
     private void setValuesForFavorites(ArrayList<Quote> quoteList, int position) {
 
@@ -210,6 +255,8 @@ public class FlightDateViewModel extends AndroidViewModel implements RetrofitReq
         return this.currencyList;
     }
 
+    public List<Carrier> getCarrierList(){return this.carrierList;}
+
     public Currency getCurrency(){
         if(this.currencyList.size()==1){
             return currencyList.get(0);
@@ -224,7 +271,7 @@ public class FlightDateViewModel extends AndroidViewModel implements RetrofitReq
 //            return;
 //        }
 
-    public void onRetrofitQuoteFinished(ArrayList<Quote> quoteArrayList, ArrayList<Currency> currencyArrayList) {
+    public void onRetrofitQuoteFinished(ArrayList<Quote> quoteArrayList, ArrayList<Currency> currencyArrayList, ArrayList<Carrier> carrierArrayList) {
 
         this.currencyArrayList=currencyArrayList;
         if(this.currencyArrayList==null){
@@ -243,7 +290,15 @@ public class FlightDateViewModel extends AndroidViewModel implements RetrofitReq
         Timber.i("FlightDateViewModel onRetrofitFinished called");
         Timber.i("quoteList size= %s", quoteArrayList.size());
         this.quoteList=quoteArrayList;
+
+        if(this.quoteList==null){
+            Timber.i("quote list is empty");
+            return;
+        }
         currencyList=currencyArrayList;
+        carrierList=carrierArrayList;
+
+        this.carrierArrayList=carrierArrayList;
 
         //writeToFile(placeArrayList);
         transformToLiveData(quoteList);

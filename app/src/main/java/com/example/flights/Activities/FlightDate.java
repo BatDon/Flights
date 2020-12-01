@@ -23,10 +23,12 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.flights.Activities.DatabaseClasses.FavoriteFlightsDatabaseActivity;
 import com.example.flights.Adapters.FlightDateCurrencyAdapter;
 import com.example.flights.Constants;
 import com.example.flights.Fragments.DatePickerFragment;
 import com.example.flights.Fragments.TimePickerFragment;
+import com.example.flights.Pojos.FlightDatePojos.Carrier;
 import com.example.flights.Pojos.FlightDatePojos.Currency;
 import com.example.flights.Pojos.FlightDatePojos.Quote;
 import com.example.flights.Pojos.Place;
@@ -106,7 +108,7 @@ public class FlightDate extends AppCompatActivity implements DatePickerDialog.On
         switch (item.getItemId()) {
             case R.id.action_favorite_flights: {
                 Toast.makeText(this, R.string.action_favorite_flights, Toast.LENGTH_SHORT).show();
-                Intent intent=new Intent(this, FavoriteFlightsActivity.class);
+                Intent intent=new Intent(this, FavoriteFlightsDatabaseActivity.class);
                 startActivity(intent);
                 //new RetrofitRequester().requestMovies(this);
                 break;
@@ -186,7 +188,8 @@ public class FlightDate extends AppCompatActivity implements DatePickerDialog.On
                 //createRecyclerView();
                 saveQuotesFlightDateViewModel(FlightDate.this.quoteList);
                 saveCurrenciesFlightDateViewModel(new ArrayList<Currency>(flightDateViewModel.getCurrencyList()));
-//                sendFlightDateCurrencyIntent(currency);
+                saveCarriersFlightDateViewModel(new ArrayList<Carrier>(flightDateViewModel.getCarrierList()));
+                //                sendFlightDateCurrencyIntent(currency);
                 sendFlightDateCurrencyIntent();
             }
         };
@@ -200,6 +203,9 @@ public class FlightDate extends AppCompatActivity implements DatePickerDialog.On
 
     private void saveCurrenciesFlightDateViewModel(ArrayList<Currency>currencyList){
         flightDateViewModel.writeToCurrencyFile(currencyList);
+    }
+    private void saveCarriersFlightDateViewModel(ArrayList<Carrier>carrierList){
+        flightDateViewModel.writeToCarrierFile(carrierList);
     }
 
 //    private void sendFlightDateCurrencyIntent(Currency currency){
@@ -338,6 +344,7 @@ public class FlightDate extends AppCompatActivity implements DatePickerDialog.On
 //    }
 
 
+
     public void searchFlights(View view) {
         //search flights using new api
         //returnDateET is not a required parameter
@@ -371,8 +378,8 @@ public class FlightDate extends AppCompatActivity implements DatePickerDialog.On
         editor.putString(Constants.KEY_PREFERENCE_DESTINATION_PLACE, "SFO-sky");
         editor.putString(Constants.KEY_PREFERENCE_COUNTRY, "US");
         editor.putString(Constants.KEY_PREFERENCE_COUNTRY_ID, "US");
-        editor.putString(Constants.KEY_PREFERENCE_OUTBOUND_DATE, "2020-11-26");
-        editor.putString(Constants.KEY_PREFERENCE_INBOUND_DATE, "2020-12-04");
+        editor.putString(Constants.KEY_PREFERENCE_OUTBOUND_DATE, "2020-12-01");
+        editor.putString(Constants.KEY_PREFERENCE_INBOUND_DATE, "2020-12-06");
         editor.putString(Constants.KEY_PREFERENCE_LOCALE, "en_US");
         editor.putString(Constants.KEY_PREFERENCE_CURRENCY, "USD");
         //TODO uncomment only for testing

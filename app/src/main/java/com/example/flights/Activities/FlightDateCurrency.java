@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.flights.Activities.DatabaseClasses.FavoriteFlightsDatabaseActivity;
 import com.example.flights.Adapters.FlightDateCurrencyAdapter;
 import com.example.flights.Adapters.FlightDeparturesAdapter;
 import com.example.flights.Constants;
@@ -77,7 +78,7 @@ public class FlightDateCurrency extends AppCompatActivity implements FlightDateC
         switch (item.getItemId()) {
             case R.id.action_favorite_flights: {
                 Toast.makeText(this, R.string.action_favorite_flights, Toast.LENGTH_SHORT).show();
-                Intent intent=new Intent(this, FavoriteFlightsActivity.class);
+                Intent intent=new Intent(this, FavoriteFlightsDatabaseActivity.class);
                 startActivity(intent);
                 //new RetrofitRequester().requestMovies(this);
                 break;
@@ -140,6 +141,7 @@ public class FlightDateCurrency extends AppCompatActivity implements FlightDateC
        queryArrayList= flightDateViewModel.getQuoteDir();
     }
 
+
     private void getCurrenciesFromFile(){
         currencyArrayList=flightDateViewModel.getCurrencyDir();
     }
@@ -180,6 +182,7 @@ public class FlightDateCurrency extends AppCompatActivity implements FlightDateC
         else{
             quoteArray= new Quote[queryArrayList.size()];
             queryArrayList.toArray(quoteArray);
+            Timber.i("quoteArray size= "+quoteArray.length);
         }
 
 //        quoteArray= new Quote[queryArrayList.size()];
@@ -204,8 +207,13 @@ public class FlightDateCurrency extends AppCompatActivity implements FlightDateC
 
     //adds flight to favoriteFlights
 
+//    @Override
+//    public void onFlightDepartureClick(String originPlaceId,String departureDate,
+//                                       String formattedPrice, String destinationPlaceId,
+//                                       String returnDate, int position){
+
     @Override
-    public void onFlightDepartureClick(String originPlaceId,String departureDate,
+    public void onFlightDepartureClick(int quoteId, String originPlaceId,String departureDate,
                                        String formattedPrice, String destinationPlaceId,
                                        String returnDate, int position){
 
@@ -227,13 +235,16 @@ public class FlightDateCurrency extends AppCompatActivity implements FlightDateC
             price=formattedPrice.substring(endOfIndex+1);
         }
 
-        FavoriteFlights favoriteFlights=new FavoriteFlights(id, originPlaceId, currency, price,
+//        FavoriteFlights favoriteFlights=new FavoriteFlights(id, originPlaceId, currency, price,
+//                departureDate, destinationPlaceId, returnDate);
+        FavoriteFlights favoriteFlights=new FavoriteFlights(Integer.toString(quoteId), originPlaceId, currency, price,
                 departureDate, destinationPlaceId, returnDate);
 
 //        DatabaseReference rootDB=firebaseDatabase.getReference("/");
 //        DatabaseReference flightsDatabaseReference=firebaseDatabase.getReference("Flights");
         String idPrice = price.replaceAll("[^\\d]", "");
-        DatabaseReference flightsDatabaseReference=firebaseDatabase.getReference("Flights"+idPrice);
+//        DatabaseReference flightsDatabaseReference=firebaseDatabase.getReference("Flights"+idPrice);
+        DatabaseReference flightsDatabaseReference=firebaseDatabase.getReference("Flight"+quoteId);
 //        DatabaseReference flightsDatabaseReference=firebaseDatabase.getReference();
 
 //        String flightPath="/Flight"+id+"/";

@@ -137,6 +137,9 @@ public class MainActivityViewModel extends AndroidViewModel implements RetrofitR
     }
 
     public void onRetrofitFinished(List<Place> placeList) {
+        if(placeList==null){
+            return;
+        }
         Timber.i("MainActivityViewModel onRetrofitFinished called");
         Timber.i("placeList size= %s", placeList.size());
         this.placeList=placeList;
