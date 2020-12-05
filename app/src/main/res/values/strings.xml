@@ -67,6 +67,7 @@
     <string name="find_flights_button">Find if flight exists</string>
 
 <!--    ClientApiKey Class-->
+    <string name="rapidApiKeyUrl">https://english.api.rakuten.net/skyscanner/api/skyscanner-flight-search/details</string>
     <string name="rapidApiKeyTitle">Rapid Api Key:</string>
     <string name="instructions_click_on_tab">After you have logged in to your google account. Click on endpoints in the Skyscanner api.</string>
     <string name="copyPasteInstructions">Copy and paste the your api key here.</string>
@@ -74,6 +75,12 @@
     <string name="start_button">START</string>
     <string name="invalid_api_key_message">Not a valid api key. Please try again.</string>
     <string name="welcome_to_flights">Welcome to Flights!</string>
+    <string name="clientApiKeyActivityName">Getting Started</string>
+    <string name="createNewAccountInstruction">Click button below to sign in and create a new account.</string>
+    <string name="signUpContentDescription">Sign up here</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="click_on_element_tab_to_get_api_key">Click on element tab to get api key</string>
+    <string name="copy_and_paste_your_api_key_from_highlighted_region">Copy and paste your api key from highlighted region</string>
 
 
 </resources>

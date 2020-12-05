@@ -101,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         if(firstTime){
             Intent clientApiKeyIntent=new Intent(MainActivity.this, ClientApiKey.class);
+//            clientApiKeyIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(clientApiKeyIntent);
         }else {
 

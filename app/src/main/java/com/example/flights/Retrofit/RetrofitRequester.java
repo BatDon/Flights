@@ -13,7 +13,9 @@ import com.example.flights.Pojos.Places;
 import com.example.flights.R;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 
@@ -31,8 +33,11 @@ public class RetrofitRequester extends AppCompatActivity {
 
     Context mContext;
 
+    Map<String, String> headersMap;
+
     public RetrofitRequester(Context context){
         mContext=context;
+        headersMap=createHeadersMap();
     }
 
     public RetrofitRequester(String userLocality, String userCountry){
@@ -64,7 +69,8 @@ public class RetrofitRequester extends AppCompatActivity {
         String userCurrency=sharedpreferences.getString(Constants.KEY_PREFERENCE_CURRENCY, "GBP");
         String userLocale=sharedpreferences.getString(Constants.KEY_PREFERENCE_LOCALE, "en-GB");
         String userLocalityName=sharedpreferences.getString(Constants.KEY_PREFERENCE_PLACE,"Stockholm");
-        Call<Places> call = travelApi.getPlaces(userCountry,userCurrency,userLocale, userLocalityName);
+        //Call<Places> call = travelApi.getPlaces(userCountry,userCurrency,userLocale, userLocalityName);
+        Call<Places> call = travelApi.getPlaces(headersMap,userCountry,userCurrency,userLocale, userLocalityName);
 //       Stockholm will be replaced by user selection
 //        Call<Places> call = travelApi.getPlaces("Stockholm");
 //        Call<Places> call = travelApi.getPlaces("Bogotá");
@@ -110,6 +116,16 @@ public class RetrofitRequester extends AppCompatActivity {
             placeList = places.getPlaces();
         }
         return placeList;
+    }
+
+    public Map<String, String> createHeadersMap(){
+        SharedPreferences sharedpreferences = mContext.getSharedPreferences(Constants.FLIGHT_PREFERENCES, Context.MODE_PRIVATE);
+        String apiKey=sharedpreferences.getString(Constants.API_KEY,"");
+        HashMap<String, String> headers = new HashMap<String, String>();
+        headers.put("x-rapidapi-key",apiKey);
+        headers.put("x-rapidapi-host", "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com");
+        headers.put("useQueryString", "true");
+        return headers;
     }
 }
 

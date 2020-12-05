@@ -3,8 +3,8 @@ package com.example.flights;
 public class Constants {
 
     //api key constants for header
-    public static String api_key="";
-    public static final String rapid_api_host="skyscanner-skyscanner-flight-search-v1.p.rapidapi.com";
+    public static final String API_KEY="com.example.flights.api_key";
+    public static final String RAPID_API_HOST="skyscanner-skyscanner-flight-search-v1.p.rapidapi.com";
 
 //    public static final String BASE_URL="https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/autosuggest/v1.0/";
     public static final String BASE_URL="https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/";

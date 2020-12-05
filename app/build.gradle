@@ -74,12 +74,12 @@ dependencies {
     // firebase firestore compatibility
     implementation platform('com.google.firebase:firebase-bom:26.1.0')
 
-
-
-
-
     //realtimeDatabase
     implementation 'com.firebaseui:firebase-ui-database:6.2.1'
+
+    //OkHTTP interceptor
+    //implementation("com.squareup.okhttp3:okhttp:4.9.0")
+
 
     //realtimeDatabase
 //    implementation 'com.google.firebase:firebase-database:19.3.1'

@@ -10,35 +10,37 @@ import com.example.flights.Pojos.FlightDatePojos.Quotes;
 import com.example.flights.Pojos.Places;
 import com.example.flights.R;
 import com.google.android.gms.tasks.Task;
+import com.google.gson.JsonObject;
 
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.HeaderMap;
 import retrofit2.http.Headers;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface TravelApi {
 
-//    @GET("/UK/GBP/en-GB/?query=Stockholm")
-
 //TODO Header here
 
-
-    
-//    @GET("/apiservices/autosuggest/v1.0/UK/GBP/en-GB/")
-//    Call<Places> getPlaces(@Query("query") String place_name);
 
 
     //places path
     @GET("/apiservices/autosuggest/v1.0/{country}/{currency}/{locality}/")
-    Call<Places> getPlaces(@Path("country") String country,@Path ("currency") String currency,
+    Call<Places> getPlaces(@HeaderMap Map<String, String> headers, @Path("country") String country, @Path ("currency") String currency,
                            @Path("locality") String locality, @Query("query") String place_name);
 
-    //dates path
-    //https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com base path
-//     @GET("/apiservices/browsedates/v1.0/US/USD/en-US/SFO-sky/LAX-sky/2020-11-18?params=2020-12-01")
+
+//    //places path
+//    @GET("/apiservices/autosuggest/v1.0/{country}/{currency}/{locality}/")
+//    Call<Places> getPlaces(@Path("country") String country,@Path ("currency") String currency,
+//                           @Path("locality") String locality, @Query("query") String place_name);
+
 
 //TODO Header here
 
@@ -81,19 +83,28 @@ public interface TravelApi {
 
 
 
-
     @GET("/apiservices/browsedates/v1.0/{country}/{currency}/{locality}/{originPlace}/{destinationPlace}/{outboundDate}/")
-    Call<Airports>getAirport(@Path("country") String country, @Path ("currency") String currency,
+    Call<Airports>getAirport( @HeaderMap Map<String, String> headers, @Path("country") String country, @Path ("currency") String currency,
                              @Path("locality") String locality, @Path("originPlace") String originPlace,
                              @Path("destinationPlace") String destinationPlace, @Path("outboundDate") String outboundDate,
                              @Query("inboundDate") String inboundDate);
-
+//
+//    @GET("/apiservices/browsedates/v1.0/{country}/{currency}/{locality}/{originPlace}/{destinationPlace}/{outboundDate}/")
+//    Call<Airports>getAirport(@Path("country") String country, @Path ("currency") String currency,
+//                             @Path("locality") String locality, @Path("originPlace") String originPlace,
+//                             @Path("destinationPlace") String destinationPlace, @Path("outboundDate") String outboundDate,
+//                             @Query("inboundDate") String inboundDate);
 
 
     @GET("/apiservices/browsedates/v1.0/{country}/{currency}/{locality}/{originPlace}/{destinationPlace}/{outboundDate}/")
-    Call<Airports>getAirportNoInboundDate(@Path("country") String country,@Path ("currency") String currency,
-                                       @Path("locality") String locality, @Path("originPlace") String originPlace,
-                                       @Path("destinationPlace") String destinationPlace, @Path("outboundDate") String outboundDate);
+    Call<Airports>getAirportNoInboundDate(@HeaderMap Map<String, String> headers, @Path("country") String country,@Path ("currency") String currency,
+                                          @Path("locality") String locality, @Path("originPlace") String originPlace,
+                                          @Path("destinationPlace") String destinationPlace, @Path("outboundDate") String outboundDate);
+
+//    @GET("/apiservices/browsedates/v1.0/{country}/{currency}/{locality}/{originPlace}/{destinationPlace}/{outboundDate}/")
+//    Call<Airports>getAirportNoInboundDate(@Path("country") String country,@Path ("currency") String currency,
+//                                       @Path("locality") String locality, @Path("originPlace") String originPlace,
+//                                       @Path("destinationPlace") String destinationPlace, @Path("outboundDate") String outboundDate);
 
 //    @GET("users/{username}")
 //    Call<User> getUser(@Path("username") String username);

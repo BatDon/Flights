@@ -20,7 +20,9 @@ import com.example.flights.R;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -33,11 +35,15 @@ public class RetrofitRequesterQuote extends AppCompatActivity {
     String userCountry;
 
     Context mContext;
+    Map<String, String> headersMap;
 
     Call<Airports> call;
 
     public RetrofitRequesterQuote(Context context){
+
         mContext=context;
+        headersMap=createHeadersMap();
+
     }
 
 //    public RetrofitRequesterQuote(String userLocality, String userCountry){
@@ -91,14 +97,25 @@ public void onRetrofitQuoteFinished(ArrayList<Quote> quoteArrayList, ArrayList<C
 //                    outboundDate);
 //        }
 
+
         if(inboundDate.equals("")){
-            call = travelApi.getAirportNoInboundDate(userCountryId,userCurrency,userLocale, originPlaceId, destinationPlace,
+            call = travelApi.getAirportNoInboundDate(headersMap, userCountryId,userCurrency,userLocale, originPlaceId, destinationPlace,
                     outboundDate);
         }
         else{
-            call = travelApi.getAirport(userCountryId,userCurrency,userLocale, originPlaceId, destinationPlace,
+            call = travelApi.getAirport(headersMap, userCountryId,userCurrency,userLocale, originPlaceId, destinationPlace,
                     outboundDate, inboundDate);
         }
+
+
+//        if(inboundDate.equals("")){
+//            call = travelApi.getAirportNoInboundDate(userCountryId,userCurrency,userLocale, originPlaceId, destinationPlace,
+//                    outboundDate);
+//        }
+//        else{
+//            call = travelApi.getAirport(userCountryId,userCurrency,userLocale, originPlaceId, destinationPlace,
+//                    outboundDate, inboundDate);
+//        }
 
 //        Call<Airports> call = travelApi.getAirport(userCountryId,userCurrency,userLocale, originPlaceId, destinationPlace,
 //                outboundDate, inboundDate);
@@ -249,6 +266,17 @@ public void onRetrofitQuoteFinished(ArrayList<Quote> quoteArrayList, ArrayList<C
             }
         }
         return quoteList;
+    }
+
+
+    public Map<String, String> createHeadersMap(){
+        SharedPreferences sharedpreferences = mContext.getSharedPreferences(Constants.FLIGHT_PREFERENCES, Context.MODE_PRIVATE);
+        String apiKey=sharedpreferences.getString(Constants.API_KEY,"");
+        HashMap<String, String> headers = new HashMap<String, String>();
+        headers.put("x-rapidapi-key",apiKey);
+        headers.put("x-rapidapi-host", "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com");
+        headers.put("useQueryString", "true");
+        return headers;
     }
 
 }
