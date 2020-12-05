@@ -33,8 +33,11 @@ import androidx.lifecycle.ViewModelProviders;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import android.widget.Toast;
@@ -43,13 +46,18 @@ import java.util.List;
 
 import timber.log.Timber;
 
-public class MainActivity extends AppCompatActivity{
+import static com.example.flights.Constants.CURRENCIES_ARRAY;
+import static com.example.flights.Constants.LOCALITY_ARRAY;
+
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
 //public class MainActivity extends AppCompatActivity implements RetrofitRequester.onRetrofitListener {
 
-//public class MainActivity extends AppCompatActivity implements RetrofitRequester.onRetrofitListener,
+    //public class MainActivity extends AppCompatActivity implements RetrofitRequester.onRetrofitListener,
 //        AdapterView.OnItemSelectedListener {
     // Remove the below line after defining your own ad unit ID.
+
+
     private static final String TOAST_TEXT = "Test ads are being shown. "
             + "To show live ads, replace the ad unit ID in res/values/strings.xml with your own ad unit ID.";
 
@@ -62,6 +70,12 @@ public class MainActivity extends AppCompatActivity{
     private EditText placeEditText;
     private EditText currencyEditText;
     private EditText localityEditText;
+
+    private Spinner localitySpinner;
+    private Spinner currencySpinner;
+
+
+
     //private Spinner countrySpinner;
     private MainActivityViewModel mainActivityViewModel;
 
@@ -81,49 +95,70 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
 //        if(BuildConfig.DEBUG){
         Timber.plant(new Timber.DebugTree());
-//        }
-        setUpViews();
-
-        setUpViewModel();
-
-        setUpDatabaseViewModel();
-
-        //databaseViewModel.getDatabaseData();
-
-
-        MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
-
-        // Create the InterstitialAd and set the adUnitId (defined in values/strings.xml).
-        mInterstitialAd = newInterstitialAd();
-        loadInterstitial();
-
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-
-        // Toasts the test ad message on the screen. Remove this after defining your own ad unit ID.
-        Toast.makeText(this, TOAST_TEXT, Toast.LENGTH_LONG).show();
-
-        initializeBroadcastReceiver();
-
         sharedpreferences = getSharedPreferences(Constants.FLIGHT_PREFERENCES, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedpreferences.edit();
-        editor.putString(Constants.KEY_PREFERENCE_COUNTRY, "UK");
-        editor.putString(Constants.KEY_PREFERENCE_CURRENCY, "GBP");
-        editor.putString(Constants.KEY_PREFERENCE_LOCALE, "en-GB");
-        editor.putString(Constants.KEY_PREFERENCE_LOCALITY_NAME,"Stockholm");
+
+        boolean firstTime=sharedpreferences.getBoolean(Constants.API_KEY_BOOLEAN, true);
+
+        if(firstTime){
+            Intent clientApiKeyIntent=new Intent(MainActivity.this, ClientApiKey.class);
+            startActivity(clientApiKeyIntent);
+        }else {
+
+            setUpViews();
+
+            setUpViewModel();
+
+            setUpDatabaseViewModel();
+
+            //databaseViewModel.getDatabaseData();
+
+
+            MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
+
+            // Create the InterstitialAd and set the adUnitId (defined in values/strings.xml).
+            mInterstitialAd = newInterstitialAd();
+            loadInterstitial();
+
+            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+            // Toasts the test ad message on the screen. Remove this after defining your own ad unit ID.
+            Toast.makeText(this, TOAST_TEXT, Toast.LENGTH_LONG).show();
+
+            initializeBroadcastReceiver();
+
+//        sharedpreferences = getSharedPreferences(Constants.FLIGHT_PREFERENCES, Context.MODE_PRIVATE);
+
+            //TODO add back in after testing
+            SharedPreferences.Editor editor = sharedpreferences.edit();
+            editor.putString(Constants.KEY_PREFERENCE_COUNTRY, "UK");
+            editor.putString(Constants.KEY_PREFERENCE_CURRENCY, "GBP");
+            editor.putString(Constants.KEY_PREFERENCE_LOCALE, "en-GB");
+            editor.putString(Constants.KEY_PREFERENCE_PLACE, "Stockholm");
+
+
+
+
+
 //        editor.putString("country", "UK");
 //        editor.putString("currency", "GBP");
 //        editor.putString("locale", "en-GB");
 //        editor.putString("localityName","Stockholm");
-        editor.commit();
+            editor.commit();
+        }
     }
 
-    private void setUpViews(){
+    private void setUpViews() {
         setContentView(R.layout.activity_main);
 
-        countryEditText=findViewById(R.id.countryEditText);
-        placeEditText=findViewById(R.id.placeEditText);
-        currencyEditText=findViewById(R.id.currencyEditText);
-        localityEditText=findViewById(R.id.localeEditText);
+        setUpSpinners();
+
+
+        countryEditText = findViewById(R.id.countryEditText);
+        placeEditText = findViewById(R.id.placeEditText);
+        currencyEditText = findViewById(R.id.currencyEditText);
+        localityEditText = findViewById(R.id.localeEditText);
+
+        setInitialViewValues();
 
 
         // Create the text view to show the level number.
@@ -154,19 +189,11 @@ public class MainActivity extends AppCompatActivity{
                 showInterstitial();
 
 
+                //TODO unblock when done testing
                 //correct but blocked out for testing
+ //               saveToSharedPreferences();
 
-//                SharedPreferences.Editor editor = sharedpreferences.edit();
-//                editor.putString(Constants.KEY_PREFERENCE_COUNTRY, countryEditText.getText().toString());
-//                editor.putString(Constants.KEY_PREFERENCE_LOCALITY_NAME, placeEditText.getText().toString());
-//                editor.putString(Constants.KEY_PREFERENCE_CURRENCY,currencyEditText.getText().toString());
-//                editor.putString(Constants.KEY_PREFERENCE_LOCALE, localityEditText.getText().toString());
-//                editor.commit();
-
-
-                //COMMENTED OUT FOR TESTING
                 mainActivityViewModel.requestFlightDestinations();
-
 
 
             }
@@ -185,6 +212,37 @@ public class MainActivity extends AppCompatActivity{
 //        countrySpinner.setAdapter(countryArrayAdapter);
     }
 
+    private void setInitialViewValues(){
+        SharedPreferences sharedpreferences = getSharedPreferences(Constants.FLIGHT_PREFERENCES, Context.MODE_PRIVATE);
+        String userCountry=sharedpreferences.getString(Constants.KEY_PREFERENCE_COUNTRY, "UK");
+        String userCurrency=sharedpreferences.getString(Constants.KEY_PREFERENCE_CURRENCY, "GBP");
+        String userLocale=sharedpreferences.getString(Constants.KEY_PREFERENCE_LOCALE, "en-GB");
+        String userLocalityName=sharedpreferences.getString(Constants.KEY_PREFERENCE_PLACE,"Stockholm");
+
+        placeEditText.setText(userLocalityName);
+        countryEditText.setText(userCountry);
+        localityEditText.setText(userLocale);
+        currencyEditText.setText(userCurrency);
+
+
+    }
+
+    public void setUpSpinners() {
+
+        localitySpinner = findViewById(R.id.localitySpinner);
+        localitySpinner.setOnItemSelectedListener(this);
+        ArrayAdapter localityArrayAdapter = new ArrayAdapter(this,android.R.layout.simple_spinner_item,LOCALITY_ARRAY);
+        localityArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //Setting the ArrayAdapter data on the Spinner
+        localitySpinner.setAdapter(localityArrayAdapter);
+        currencySpinner = findViewById(R.id.currencySpinner);
+        currencySpinner.setOnItemSelectedListener(this);
+        ArrayAdapter currencyArrayAdapter = new ArrayAdapter(this,android.R.layout.simple_spinner_item,CURRENCIES_ARRAY);
+        currencyArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //Setting the ArrayAdapter data on the Spinner
+        currencySpinner.setAdapter(currencyArrayAdapter);
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -199,7 +257,7 @@ public class MainActivity extends AppCompatActivity{
                 Toast.makeText(this, R.string.action_favorite_flights, Toast.LENGTH_SHORT).show();
                 //TODO change all intents to activities
 //                Intent intent=new Intent(this, FavoriteFlightsActivity.class);
-                Intent intent=new Intent(this, FavoriteFlightsDatabaseActivity.class);
+                Intent intent = new Intent(this, FavoriteFlightsDatabaseActivity.class);
                 startActivity(intent);
 
                 //new RetrofitRequester().requestMovies(this);
@@ -209,15 +267,15 @@ public class MainActivity extends AppCompatActivity{
         return true;
     }
 
-    private void setUpViewModel(){
-        MainActivityViewModelFactory mainActivityViewModelFactory=new MainActivityViewModelFactory(getApplication());
+    private void setUpViewModel() {
+        MainActivityViewModelFactory mainActivityViewModelFactory = new MainActivityViewModelFactory(getApplication());
         mainActivityViewModel = ViewModelProviders.of(this, mainActivityViewModelFactory).get(MainActivityViewModel.class);
         //context=movieDetailsViewModel.getApplication();
     }
 
-    private void setUpDatabaseViewModel(){
-        DatabaseViewModelFactory databaseViewModelFactory=new DatabaseViewModelFactory(getApplication());
-        databaseViewModel= ViewModelProviders.of(this, databaseViewModelFactory).get(DatabaseViewModel.class);
+    private void setUpDatabaseViewModel() {
+        DatabaseViewModelFactory databaseViewModelFactory = new DatabaseViewModelFactory(getApplication());
+        databaseViewModel = ViewModelProviders.of(this, databaseViewModelFactory).get(DatabaseViewModel.class);
     }
 
     private void initializeBroadcastReceiver() {
@@ -227,7 +285,6 @@ public class MainActivity extends AppCompatActivity{
         PlaceReceiver placeReceiver = new PlaceReceiver();
         registerReceiver(placeReceiver, filter);
     }
-
 
 
     private InterstitialAd newInterstitialAd() {
@@ -247,7 +304,7 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onAdClosed() {
                 // Proceed to the next level.
-                Intent intent=new Intent(MainActivity.this, DepartureFlightLocations.class);
+                Intent intent = new Intent(MainActivity.this, DepartureFlightLocations.class);
                 startActivity(intent);
 
                 //goToNextLevel();
@@ -285,6 +342,22 @@ public class MainActivity extends AppCompatActivity{
         loadInterstitial();
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+        if(parent.getId()==R.id.localitySpinner){
+            localityEditText.setText(LOCALITY_ARRAY[position]);
+        }
+        //currency spinner
+        else{
+            currencyEditText.setText(CURRENCIES_ARRAY[position]);
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
 
 
 //    @Override
@@ -351,7 +424,6 @@ public class MainActivity extends AppCompatActivity{
 //    }
 
 
-
     public class PlaceReceiver extends BroadcastReceiver {
 
         @Override
@@ -385,7 +457,6 @@ public class MainActivity extends AppCompatActivity{
 //                editor.putString(Constants.KEY_PREFERENCE_LOCALITY_NAME, userSelectedLocalityName);
 
 
-
 //                new RelativeUrlCreator().createURI("Colombia","COP","es-CO","Bogota");
 
                 //}
@@ -400,15 +471,29 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
+    public void saveToSharedPreferences(){
+        String place=placeEditText.getText().toString();
+        String country=countryEditText.getText().toString();
+        String locality=localityEditText.getText().toString();
+        String currency=currencyEditText.getText().toString();
+
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString(Constants.KEY_PREFERENCE_COUNTRY, country);
+        editor.putString(Constants.KEY_PREFERENCE_PLACE, place);
+        editor.putString(Constants.KEY_PREFERENCE_LOCALE, locality);
+        editor.putString(Constants.KEY_PREFERENCE_CURRENCY, currency);
+        editor.commit();
+    }
+
+
 
 }
-
 
 
 //  OutgoingFlight outgoingFlight=new OutgoingFlight("USD","59","2018-05-11T00:00:00");
 //                ReturnFlight returnFlight=new ReturnFlight("USD","59","2018-06-22T00:00:00");
 
-    // Write a message to the database
+// Write a message to the database
 //    FirebaseDatabase database = FirebaseDatabase.getInstance();
 //    DatabaseReference outgoingFlightReference = database.getReference("outgoingFlight");
 

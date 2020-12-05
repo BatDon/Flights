@@ -2,7 +2,7 @@
     <string name="app_name">Flights</string>
     <string name="action_settings">Settings</string>
 
-<!--    activity_main-->
+    <!--    activity_main-->
 
     <string name="interstitial_ad_sample">Interstitial Ad Sample</string>
     <string name="start_level">Level 1</string>
@@ -19,15 +19,14 @@
     <string name="interstitial_ad_unit_id">"ca-app-pub-3940256099942544/1033173712"</string>
     <string name="get_flights_service">GetFlightsService</string>
     <string name="problem_retrieving_data">Problem retrieving data...Please try later!</string>
-<!--    activity_main hints-->
+    <!--    activity_main hints-->
     <string name="country_name">UK</string>
     <string name="currency">GBP</string>
     <string name="locale">en-GB</string>
     <string name="localeName">Stockholm</string>
 
 
-
-<!--    file names for saving and reading used to save classes to file-->
+    <!--    file names for saving and reading used to save classes to file-->
     <string name="fileName">flightDepartures</string>
     <string name="fileNameQuote">flightQuotes</string>
     <string name="fileNameCurrency">flightCurrency</string>
@@ -49,6 +48,7 @@
     <string name="destinationPlace">Destination Place</string>
     <string name="inboundDate">Return Date</string>
     <string name="returnDate">Return Date</string>
+    <!--    activity_flight_date-->
     <string name="date">Date</string>
     <string name="search_flights">Search Flights</string>
     <string name="price">Price</string>
@@ -60,11 +60,20 @@
     <string name="carrierName">Carrier Name</string>
     <string name="carrierId">Carrier ID</string>
 
-<!--    activity_flight_date-->
+    <!--    activity_flight_date-->
     <!--    content description-->
     <string name="return_date_calendar_button">open calendar to select return date</string>
     <string name="departure_date_calendar_button">open calendar to select departure date</string>
     <string name="find_flights_button">Find if flight exists</string>
+
+<!--    ClientApiKey Class-->
+    <string name="rapidApiKeyTitle">Rapid Api Key:</string>
+    <string name="instructions_click_on_tab">After you have logged in to your google account. Click on endpoints in the Skyscanner api.</string>
+    <string name="copyPasteInstructions">Copy and paste the your api key here.</string>
+    <string name="api_key_hint">SIGN-UP-FOR-KEY</string>
+    <string name="start_button">START</string>
+    <string name="invalid_api_key_message">Not a valid api key. Please try again.</string>
+    <string name="welcome_to_flights">Welcome to Flights!</string>
 
 
 </resources>

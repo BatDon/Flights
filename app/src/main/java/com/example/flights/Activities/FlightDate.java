@@ -16,9 +16,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -52,13 +55,16 @@ import java.util.Map;
 import retrofit2.Call;
 import timber.log.Timber;
 
+import static com.example.flights.Constants.CURRENCIES_ARRAY;
+import static com.example.flights.Constants.LOCALITY_ARRAY;
+
 //public class FlightDate extends AppCompatActivity implements DatePickerDialog.OnDateSetListener,
 //        TimePickerDialog.OnTimeSetListener {
 //public class FlightDate extends AppCompatActivity implements DatePickerDialog.OnDateSetListener,
 //        FlightDateCurrencyAdapter.OnDateCurrencyListener{
 
-public class FlightDate extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
-
+public class FlightDate extends AppCompatActivity implements DatePickerDialog.OnDateSetListener,
+        AdapterView.OnItemSelectedListener{
     public static final int DEFAULT_POSITION=-1;
     int position;
 
@@ -77,6 +83,11 @@ public class FlightDate extends AppCompatActivity implements DatePickerDialog.On
     EditText localeET;
     EditText currencyET;
 
+    String activityRecreated="activityRecreated";
+
+    private Spinner localitySpinner;
+    private Spinner currencySpinner;
+
     boolean departureDateButtonBool=false;
     boolean returnDateButtonBool=false;
 
@@ -85,6 +96,8 @@ public class FlightDate extends AppCompatActivity implements DatePickerDialog.On
     Currency currency;
 
     ArrayList quoteList=null;
+
+    Bundle savedInstanceState=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -248,6 +261,8 @@ public class FlightDate extends AppCompatActivity implements DatePickerDialog.On
 //    }
 
     private void setUpViews(){
+        setUpSpinners();
+
          originPlaceET=findViewById(R.id.originPlaceET);
          originCountryET=findViewById(R.id.originCountryET);
          departureDateET=findViewById(R.id.departureDate);
@@ -257,30 +272,75 @@ public class FlightDate extends AppCompatActivity implements DatePickerDialog.On
          localeET=findViewById(R.id.localeET);
          currencyET=findViewById(R.id.currencyET);
 
+         if(activityRecreated!=null && savedInstanceState!=null && savedInstanceState.getBoolean(activityRecreated)){
+             Timber.i("savedInstanceState does not equal null");
+             setInitialViewValues();
+         }
+         else {
+
+//        setInitialViewValues();
+
+             SharedPreferences sharedpreferences = getSharedPreferences(Constants.FLIGHT_PREFERENCES, Context.MODE_PRIVATE);
+//        String userCountry=sharedpreferences.getString(Constants.KEY_PREFERENCE_COUNTRY, "UK");
+             String userCurrency = sharedpreferences.getString(Constants.KEY_PREFERENCE_CURRENCY, "GBP");
+             String userLocale = sharedpreferences.getString(Constants.KEY_PREFERENCE_LOCALE, "en-GB");
+//        String userLocalityName=sharedpreferences.getString(Constants.KEY_PREFERENCE_LOCALITY_NAME,"Stockholm");
+
+             if (placeArrayList != null) {
+                 Place place = placeArrayList.get(position);
+//             originPlaceET.setText(place.getPlaceName());
+                 originPlaceET.setText(place.getPlaceId());
+                 originCountryET.setText(place.getCountryName());
+                 String todaysDate = String.valueOf(android.text.format.DateFormat.format("yyyy-MM-dd", new java.util.Date()));
+                 departureDateET.setText(todaysDate);
+//             destinationPlaceET.setText()
+//             returnDateET.setText()
+                 localeET.setText(userLocale);
+                 currencyET.setText(userCurrency);
+
+
+                 //TODO REMOVE only used for testing
+                 destinationPlaceET.setText("NYO-sky");
+             }
+         }
+
+    }
+
+
+    private void setUpSpinners() {
+
+        localitySpinner = findViewById(R.id.localitySpinner);
+        localitySpinner.setOnItemSelectedListener(this);
+        ArrayAdapter localityArrayAdapter = new ArrayAdapter(this,android.R.layout.simple_spinner_item,LOCALITY_ARRAY);
+        localityArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //Setting the ArrayAdapter data on the Spinner
+        localitySpinner.setAdapter(localityArrayAdapter);
+        currencySpinner = findViewById(R.id.currencySpinner);
+        currencySpinner.setOnItemSelectedListener(this);
+        ArrayAdapter currencyArrayAdapter = new ArrayAdapter(this,android.R.layout.simple_spinner_item,CURRENCIES_ARRAY);
+        currencyArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //Setting the ArrayAdapter data on the Spinner
+        currencySpinner.setAdapter(currencyArrayAdapter);
+    }
+
+    private void setInitialViewValues(){
         SharedPreferences sharedpreferences = getSharedPreferences(Constants.FLIGHT_PREFERENCES, Context.MODE_PRIVATE);
+        String userPlace=sharedpreferences.getString(Constants.KEY_PREFERENCE_PLACE,"Stockholm");
         String userCountry=sharedpreferences.getString(Constants.KEY_PREFERENCE_COUNTRY, "UK");
         String userCurrency=sharedpreferences.getString(Constants.KEY_PREFERENCE_CURRENCY, "GBP");
         String userLocale=sharedpreferences.getString(Constants.KEY_PREFERENCE_LOCALE, "en-GB");
-        String userLocalityName=sharedpreferences.getString(Constants.KEY_PREFERENCE_LOCALITY_NAME,"Stockholm");
-
-         if(placeArrayList!=null){
-             Place place=placeArrayList.get(position);
-//             originPlaceET.setText(place.getPlaceName());
-             originPlaceET.setText(place.getPlaceId());
-             originCountryET.setText(place.getCountryName());
-             String todaysDate = String.valueOf(android.text.format.DateFormat.format("yyyy-MM-dd", new java.util.Date()));
-             departureDateET.setText(todaysDate);
-//             destinationPlaceET.setText()
-//             returnDateET.setText()
-             localeET.setText(userLocale);
-             currencyET.setText(userCurrency);
-
-             //TODO REMOVE only used for testing
-             destinationPlaceET.setText("NYO-sky");
-         }
+        String destinationPlace=sharedpreferences.getString(Constants.KEY_PREFERENCE_DESTINATION_PLACE,"LAX-sky");
+        String outboundDate=sharedpreferences.getString(Constants.KEY_PREFERENCE_OUTBOUND_DATE,"2021-09-01");
+        String inboundDate=sharedpreferences.getString(Constants.KEY_PREFERENCE_INBOUND_DATE,"");
 
 
-
+        originPlaceET.setText(userPlace);
+        originCountryET.setText(userCountry);
+        departureDateET.setText(outboundDate);
+        destinationPlaceET.setText(destinationPlace);
+        returnDateET.setText(inboundDate);
+        localeET.setText(userLocale);
+        currencyET.setText(userCurrency);
     }
 
     public void departureButtonClicked(View view) {
@@ -362,11 +422,12 @@ public class FlightDate extends AppCompatActivity implements DatePickerDialog.On
 //            return;
 //        }
 
-        if (originPlaceId.equals("") || originCountry.equals("") || departureDate.equals("")
-                || destinationPlace.equals("") || locale.equals("") || currency.equals("")){
-            Toast.makeText(this, "Fill in all required fields", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        //TODO add back when done testing
+//        if (originPlaceId.equals("") || originCountry.equals("") || departureDate.equals("")
+//                || destinationPlace.equals("") || locale.equals("") || currency.equals("")){
+//            Toast.makeText(this, "Fill in all required fields", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
 
         String countryAbbreviation=getCountryAbbreviationFromName(originCountry);
 
@@ -378,22 +439,20 @@ public class FlightDate extends AppCompatActivity implements DatePickerDialog.On
         editor.putString(Constants.KEY_PREFERENCE_DESTINATION_PLACE, "SFO-sky");
         editor.putString(Constants.KEY_PREFERENCE_COUNTRY, "US");
         editor.putString(Constants.KEY_PREFERENCE_COUNTRY_ID, "US");
-        editor.putString(Constants.KEY_PREFERENCE_OUTBOUND_DATE, "2020-12-01");
-        editor.putString(Constants.KEY_PREFERENCE_INBOUND_DATE, "2020-12-06");
+        editor.putString(Constants.KEY_PREFERENCE_OUTBOUND_DATE, "2020-12-05");
+        editor.putString(Constants.KEY_PREFERENCE_INBOUND_DATE, "2020-12-14");
         editor.putString(Constants.KEY_PREFERENCE_LOCALE, "en_US");
         editor.putString(Constants.KEY_PREFERENCE_CURRENCY, "USD");
-        //TODO uncomment only for testing
+        //TODO add back when done testing
 //        editor.putString(Constants.KEY_PREFERENCE_PLACE_ID, originPlaceId);
-        //editor.putString(Constants.KEY_PREFERENCE_ORIGIN_PLACE, originPlace);
+//        editor.putString(Constants.KEY_PREFERENCE_DESTINATION_PLACE, destinationPlace);
 //        editor.putString(Constants.KEY_PREFERENCE_COUNTRY, originCountry);
 //        editor.putString(Constants.KEY_PREFERENCE_COUNTRY_ID, countryAbbreviation);
 //        editor.putString(Constants.KEY_PREFERENCE_OUTBOUND_DATE, departureDate);
 //        editor.putString(Constants.KEY_PREFERENCE_INBOUND_DATE, returnDate);
-//        editor.putString(Constants.KEY_PREFERENCE_DESTINATION_PLACE, destinationPlace);
 //        editor.putString(Constants.KEY_PREFERENCE_LOCALE, locale);
 //        editor.putString(Constants.KEY_PREFERENCE_CURRENCY, currency);
-//        editor.putString(Constants.KEY_PREFERENCE_OUTBOUND_DATE, departureDate);
-//        editor.putString(Constants.KEY_PREFERENCE_INBOUND_DATE, returnDate);
+
         editor.commit();
 
         flightDateViewModel.requestFlightQuotes();
@@ -412,6 +471,84 @@ public class FlightDate extends AppCompatActivity implements DatePickerDialog.On
         return countries.get(countryName);
 
     }
+
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+        if(parent.getId()==R.id.localitySpinner){
+            localeET.setText(LOCALITY_ARRAY[position]);
+        }
+        //currency spinner
+        else{
+            currencyET.setText(CURRENCIES_ARRAY[position]);
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+    private void saveToSharedPreferences(){
+
+        String originPlaceId = originPlaceET.getText().toString();
+        String originCountry = originCountryET.getText().toString();
+        String departureDate = departureDateET.getText().toString();
+        String returnDate = returnDateET.getText().toString();
+        String destinationPlace = destinationPlaceET.getText().toString();
+        String locale = localeET.getText().toString();
+        String currency = currencyET.getText().toString();
+
+        String countryAbbreviation=getCountryAbbreviationFromName(originCountry);
+
+        SharedPreferences sharedpreferences = getSharedPreferences(Constants.FLIGHT_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+
+        //TODO remove only for testing
+//        editor.putString(Constants.KEY_PREFERENCE_PLACE_ID, "LAX-sky");
+//        editor.putString(Constants.KEY_PREFERENCE_DESTINATION_PLACE, "SFO-sky");
+//        editor.putString(Constants.KEY_PREFERENCE_COUNTRY, "US");
+//        editor.putString(Constants.KEY_PREFERENCE_COUNTRY_ID, "US");
+//        editor.putString(Constants.KEY_PREFERENCE_OUTBOUND_DATE, "2020-12-01");
+//        editor.putString(Constants.KEY_PREFERENCE_INBOUND_DATE, "2020-12-06");
+//        editor.putString(Constants.KEY_PREFERENCE_LOCALE, "en_US");
+//        editor.putString(Constants.KEY_PREFERENCE_CURRENCY, "USD");
+        //TODO uncomment only for testing
+        editor.putString(Constants.KEY_PREFERENCE_PLACE_ID, originPlaceId);
+        editor.putString(Constants.KEY_PREFERENCE_DESTINATION_PLACE, destinationPlace);
+        editor.putString(Constants.KEY_PREFERENCE_COUNTRY, originCountry);
+        editor.putString(Constants.KEY_PREFERENCE_COUNTRY_ID, countryAbbreviation);
+        editor.putString(Constants.KEY_PREFERENCE_OUTBOUND_DATE, departureDate);
+        editor.putString(Constants.KEY_PREFERENCE_INBOUND_DATE, returnDate);
+        editor.putString(Constants.KEY_PREFERENCE_LOCALE, locale);
+        editor.putString(Constants.KEY_PREFERENCE_CURRENCY, currency);
+        editor.commit();
+
+
+//        editor.putString(Constants.KEY_PREFERENCE_PLACE_ID, originPlaceId);
+        //editor.putString(Constants.KEY_PREFERENCE_ORIGIN_PLACE, originPlace);
+//        editor.putString(Constants.KEY_PREFERENCE_COUNTRY, originCountry);
+//        editor.putString(Constants.KEY_PREFERENCE_COUNTRY_ID, countryAbbreviation);
+//        editor.putString(Constants.KEY_PREFERENCE_OUTBOUND_DATE, departureDate);
+//        editor.putString(Constants.KEY_PREFERENCE_INBOUND_DATE, returnDate);
+//        editor.putString(Constants.KEY_PREFERENCE_DESTINATION_PLACE, destinationPlace);
+//        editor.putString(Constants.KEY_PREFERENCE_LOCALE, locale);
+//        editor.putString(Constants.KEY_PREFERENCE_CURRENCY, currency);
+//        editor.putString(Constants.KEY_PREFERENCE_OUTBOUND_DATE, departureDate);
+//        editor.putString(Constants.KEY_PREFERENCE_INBOUND_DATE, returnDate);
+//        editor.commit();
+
+
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+        saveToSharedPreferences();
+        savedInstanceState.putBoolean(activityRecreated, true);
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
 
 
 }

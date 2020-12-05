@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.FlightDate">
+
+    <EditText
+        android:id="@+id/originPlaceET"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:hint="@string/origin_place"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/originCountryET"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="@string/origin_country"
+        app:layout_constraintLeft_toLeftOf="@+id/originPlaceET"
+        app:layout_constraintStart_toStartOf="@+id/originPlaceET"
+        app:layout_constraintTop_toBottomOf="@+id/originPlaceET" />
+
+    <EditText
+        android:id="@+id/departureDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="@string/departure_date"
+        app:layout_constraintLeft_toLeftOf="@+id/originPlaceET"
+        app:layout_constraintStart_toStartOf="@+id/originPlaceET"
+        app:layout_constraintTop_toBottomOf="@+id/originCountryET" />
+
+    <Button
+        android:id="@+id/departureDateBT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:contentDescription="@string/departure_date_calendar_button"
+        android:onClick="departureButtonClicked"
+        android:text="@string/departure_date"
+        app:layout_constraintLeft_toLeftOf="@+id/departureDate"
+        app:layout_constraintStart_toStartOf="@+id/departureDate"
+        app:layout_constraintTop_toBottomOf="@+id/departureDate" />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/leftVerticalGuideline"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.33"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <EditText
+        android:id="@+id/destinationPlaceET"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="@string/destinationPlace"
+        app:layout_constraintLeft_toLeftOf="@id/leftVerticalGuideline"
+        app:layout_constraintStart_toStartOf="@id/leftVerticalGuideline"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <EditText
+        android:id="@+id/returnDateET"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="@string/returnDate"
+        app:layout_constraintLeft_toLeftOf="@+id/destinationPlaceET"
+        app:layout_constraintStart_toStartOf="@+id/destinationPlaceET"
+        app:layout_constraintTop_toBottomOf="@+id/destinationPlaceET" />
+
+
+    <Button
+        android:id="@+id/returnDateBT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:contentDescription="@string/return_date_calendar_button"
+        android:onClick="returnButtonClicked"
+        android:text="@string/returnDate"
+        app:layout_constraintLeft_toLeftOf="@+id/returnDateET"
+        app:layout_constraintStart_toStartOf="@+id/returnDateET"
+        app:layout_constraintTop_toBottomOf="@+id/returnDateET" />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/rightVerticalGuideline"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.66"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <Spinner
+        android:id="@+id/currencySpinner"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintLeft_toLeftOf="@+id/rightVerticalGuideline"
+        app:layout_constraintStart_toStartOf="@+id/rightVerticalGuideline"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/currencyET"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/currency"
+        app:layout_constraintLeft_toLeftOf="@id/currencySpinner"
+        app:layout_constraintStart_toStartOf="@+id/currencySpinner"
+        app:layout_constraintTop_toBottomOf="@+id/currencySpinner" />
+
+
+    <Spinner
+        android:id="@+id/localitySpinner"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toStartOf="@id/currencyET"
+        app:layout_constraintLeft_toLeftOf="@id/currencyET"
+        app:layout_constraintTop_toBottomOf="@+id/currencyET" />
+
+    <EditText
+        android:id="@+id/localeET"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/locale"
+        app:layout_constraintStart_toStartOf="@id/localitySpinner"
+        app:layout_constraintTop_toBottomOf="@+id/localitySpinner" />
+
+
+    <Button
+        android:id="@+id/searchFlightsBT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:contentDescription="@string/find_flights_button"
+        android:onClick="searchFlights"
+        android:text="@string/search_flights"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/leftVerticalGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/returnDateBT" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

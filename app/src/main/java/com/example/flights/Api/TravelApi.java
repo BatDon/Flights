@@ -2,6 +2,7 @@ package com.example.flights.Api;
 
 import android.content.res.Resources;
 
+import com.example.flights.Constants;
 import com.example.flights.Pojos.FlightDatePojos.Airports;
 import com.example.flights.Pojos.FlightDatePojos.Dates;
 import com.example.flights.Pojos.FlightDatePojos.Quote;
@@ -25,7 +26,7 @@ public interface TravelApi {
 //TODO Header here
 
 
-
+    
 //    @GET("/apiservices/autosuggest/v1.0/UK/GBP/en-GB/")
 //    Call<Places> getPlaces(@Query("query") String place_name);
 

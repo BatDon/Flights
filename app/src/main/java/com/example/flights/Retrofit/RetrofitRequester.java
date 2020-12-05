@@ -63,7 +63,7 @@ public class RetrofitRequester extends AppCompatActivity {
         String userCountry=sharedpreferences.getString(Constants.KEY_PREFERENCE_COUNTRY, "UK");
         String userCurrency=sharedpreferences.getString(Constants.KEY_PREFERENCE_CURRENCY, "GBP");
         String userLocale=sharedpreferences.getString(Constants.KEY_PREFERENCE_LOCALE, "en-GB");
-        String userLocalityName=sharedpreferences.getString(Constants.KEY_PREFERENCE_LOCALITY_NAME,"Stockholm");
+        String userLocalityName=sharedpreferences.getString(Constants.KEY_PREFERENCE_PLACE,"Stockholm");
         Call<Places> call = travelApi.getPlaces(userCountry,userCurrency,userLocale, userLocalityName);
 //       Stockholm will be replaced by user selection
 //        Call<Places> call = travelApi.getPlaces("Stockholm");
