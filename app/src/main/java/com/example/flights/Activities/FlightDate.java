@@ -233,6 +233,7 @@ public class FlightDate extends AppCompatActivity implements DatePickerDialog.On
     //        intent.putExtra(Constants.QUOTE_ARRAY_LIST, (Serializable) quoteArrayList);
     //        intent.putExtra(Constants.CURRENCY,currency);
             startActivity(intent);
+        overridePendingTransition(R.anim.anim_right_slide_in, R.anim.anim_left_slide_out);
 
     }
 
@@ -439,8 +440,8 @@ public class FlightDate extends AppCompatActivity implements DatePickerDialog.On
         editor.putString(Constants.KEY_PREFERENCE_DESTINATION_PLACE, "SFO-sky");
         editor.putString(Constants.KEY_PREFERENCE_COUNTRY, "US");
         editor.putString(Constants.KEY_PREFERENCE_COUNTRY_ID, "US");
-        editor.putString(Constants.KEY_PREFERENCE_OUTBOUND_DATE, "2020-12-05");
-        editor.putString(Constants.KEY_PREFERENCE_INBOUND_DATE, "2020-12-14");
+        editor.putString(Constants.KEY_PREFERENCE_OUTBOUND_DATE, "2020-12-12");
+        editor.putString(Constants.KEY_PREFERENCE_INBOUND_DATE, "2020-12-18");
         editor.putString(Constants.KEY_PREFERENCE_LOCALE, "en_US");
         editor.putString(Constants.KEY_PREFERENCE_CURRENCY, "USD");
         //TODO add back when done testing
@@ -542,6 +543,8 @@ public class FlightDate extends AppCompatActivity implements DatePickerDialog.On
 
     }
 
+
+
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState) {
         saveToSharedPreferences();
@@ -549,6 +552,12 @@ public class FlightDate extends AppCompatActivity implements DatePickerDialog.On
         super.onSaveInstanceState(savedInstanceState);
     }
 
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.anim_left_slide_in, R.anim.anim_right_slide_out);
+    }
 
 
 }

@@ -215,6 +215,7 @@ public class FavoriteFlightsDatabaseActivity extends AppCompatActivity implement
 
         Intent intent=new Intent(this, FavoriteFlightsDatabaseActivity.class);
         startActivity(intent);
+
         Intent carrierIntent=new Intent(this, FavoriteFlightsDetails.class);
         carrierIntent.putExtra(DEPARTURE_DATE, outgoingDate);
         carrierIntent.putExtra(ORIGIN_PLACE, originPlace);
@@ -222,6 +223,7 @@ public class FavoriteFlightsDatabaseActivity extends AppCompatActivity implement
         carrierIntent.putExtra(RETURN_DATE, returnDate);
         carrierIntent.putExtra(DESTINATION_PLACE, destinationPlace);
         startActivity(carrierIntent);
+        overridePendingTransition(R.anim.anim_right_slide_in, R.anim.anim_left_slide_out);
 
     }
 }

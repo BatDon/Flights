@@ -37,6 +37,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'com.google.android.gms:play-services-ads:19.5.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
@@ -74,8 +75,17 @@ dependencies {
     // firebase firestore compatibility
     implementation platform('com.google.firebase:firebase-bom:26.1.0')
 
+
     //realtimeDatabase
     implementation 'com.firebaseui:firebase-ui-database:6.2.1'
+
+//    //coordinator layout
+//    implementation "androidx.coordinatorlayout:coordinatorlayout:1.1.0"
+//
+//    //appbarlayout
+//    implementation 'com.google.android.material:material:1.0.0'
+//    implementation 'androidx.appcompat:appcompat:1.0.0'
+
 
     //OkHTTP interceptor
     //implementation("com.squareup.okhttp3:okhttp:4.9.0")

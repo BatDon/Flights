@@ -286,4 +286,10 @@ public class FlightDateCurrency extends AppCompatActivity implements FlightDateC
 //        Toast.makeText(this, "Saved Flight to favorites", Toast.LENGTH_SHORT).show();
 //        finish();
     }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.anim_left_slide_in, R.anim.anim_right_slide_out);
+    }
 }

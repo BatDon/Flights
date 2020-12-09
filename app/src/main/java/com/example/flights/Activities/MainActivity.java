@@ -307,6 +307,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 // Proceed to the next level.
                 Intent intent = new Intent(MainActivity.this, DepartureFlightLocations.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.anim_right_slide_in, R.anim.anim_left_slide_out);
 
                 //goToNextLevel();
 
@@ -333,6 +334,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 .build();
 //                .setRequestAgent("android_studio:ad_template").build();
         mInterstitialAd.loadAd(adRequest);
+
     }
 
     private void goToNextLevel() {

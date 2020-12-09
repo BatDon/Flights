@@ -115,4 +115,10 @@ public class FavoriteFlightsDetails extends AppCompatActivity {
             carrierRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.anim_left_slide_in, R.anim.anim_right_slide_out);
+    }
+
 }

@@ -36,6 +36,7 @@ public class DepartureFlightLocations extends AppCompatActivity implements Fligh
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_departure_flight_locations);
 
+
         setUpViewModel();
     }
 
@@ -130,5 +131,12 @@ public class DepartureFlightLocations extends AppCompatActivity implements Fligh
         Intent flightDateIntent=new Intent(this, FlightDate.class);
         flightDateIntent.putExtra(Constants.FLIGHT_ORIGIN_POSITION, position);
         startActivity(flightDateIntent);
+        overridePendingTransition(R.anim.anim_right_slide_in, R.anim.anim_left_slide_out);
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.anim_left_slide_in, R.anim.anim_right_slide_out);
     }
 }

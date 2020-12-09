@@ -39,7 +39,8 @@ public class ClientApiKey extends AppCompatActivity {
 
 
     public void startMainActivity(View view) {
-        String apiKey=apiKeyET.getText().toString();
+//        String apiKey=apiKeyET.getText().toString();
+        String apiKey="95c6693ba7msh6dc6656424e6e4dp1bdd9ejsnf08a3480ba20";
         if(apiKey.matches("[a-z0-9]*") && !apiKey.equals("") && apiKey.length()>45){
             Toast.makeText(this, getString(R.string.welcome_to_flights), Toast.LENGTH_SHORT).show();
             SharedPreferences sharedpreferences = getSharedPreferences(Constants.FLIGHT_PREFERENCES, Context.MODE_PRIVATE);
@@ -50,6 +51,8 @@ public class ClientApiKey extends AppCompatActivity {
              Intent intent=new Intent(ClientApiKey.this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
+            //slide in animation
+            overridePendingTransition(R.anim.anim_right_slide_in, R.anim.anim_left_slide_out);
 //            finish();
         }
         else{
