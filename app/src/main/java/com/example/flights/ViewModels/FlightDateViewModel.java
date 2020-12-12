@@ -27,6 +27,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import timber.log.Timber;
@@ -37,11 +39,14 @@ public class FlightDateViewModel extends AndroidViewModel implements RetrofitReq
     Context context;
     public static final String TAG=FlightDateViewModel.class.getSimpleName();
 
-    List<Quote> quoteList;
-    public MutableLiveData<List<Quote>> liveDataQuoteList=new MutableLiveData<List<Quote>>(){};
+//    List<Quote> quoteList;
+//    public MutableLiveData<List<Quote>> liveDataQuoteList=new MutableLiveData<List<Quote>>(){};
+    public MutableLiveData<ArrayList<Quote>> liveDataQuoteArrayList=new MutableLiveData<ArrayList<Quote>>(){};
 
-    List<Currency> currencyList;
-    List<Carrier> carrierList;
+//    List<Currency> currencyList;
+//    List<Carrier> carrierList;
+
+
 //    Quote quote;
 //    String minPrice;
 //    String direct;
@@ -66,24 +71,31 @@ public class FlightDateViewModel extends AndroidViewModel implements RetrofitReq
     public ArrayList<Currency> setCurrencyAL;
 
     int position;
+    int itemPosition;
+
+    int createViewModel=0;
 
     public FlightDateViewModel(@NonNull Application application) {
         super(application);
+        Timber.i("FlightDateViewModel constructor called");
         context=application;
 //        this.movieId=movieId;
 
 //        Place place=new Place("1","Stockholm","2","3","4","UK");
-        Quote quote=new Quote();
-        List<Quote> quoteList=new ArrayList<Quote>();
-        quoteList.add(quote);
-        liveDataQuoteList.setValue(quoteList);
+//        if(createViewModel==0) {
+            Quote quote = new Quote();
+            ArrayList<Quote> quoteList = new ArrayList<Quote>();
+            quoteList.add(quote);
+            liveDataQuoteArrayList.setValue(quoteList);
+//        }
         this.position=position;
+        createViewModel++;
     }
 
 //    public void requestRelatedMovies(){new RetrofitRequesterRelated().requestMovies(this)}
 
-    public MutableLiveData<List<Quote>> getAllQuotes(){
-        return this.liveDataQuoteList;
+    public MutableLiveData<ArrayList<Quote>> getAllQuotes(){
+        return this.liveDataQuoteArrayList;
     }
 
     public void requestFlightQuotes(){
@@ -133,7 +145,7 @@ public class FlightDateViewModel extends AndroidViewModel implements RetrofitReq
     }
 
     public ArrayList<Quote> getQuoteDir() {
-        ArrayList<Quote> quoteArrayList;
+//        ArrayList<Quote> quoteArrayList;
 
         try {
 
@@ -142,7 +154,7 @@ public class FlightDateViewModel extends AndroidViewModel implements RetrofitReq
 //            FileInputStream fis = new FileInputStream(new File(context.getString(R.string.pathToRelatedMoviesFile)));
             FileInputStream fis = new FileInputStream(new File(context.getString(R.string.pathWithoutFileName)+R.string.fileNameQuote+".txt"));
             ObjectInputStream ois = new ObjectInputStream(fis);
-            quoteArrayList = (ArrayList) ois.readObject();
+            this.quoteArrayList = (ArrayList) ois.readObject();
 
 
 
@@ -157,11 +169,11 @@ public class FlightDateViewModel extends AndroidViewModel implements RetrofitReq
             return null;
         }
 
-        return quoteArrayList;
+        return this.quoteArrayList;
     }
 
     public ArrayList<Currency> getCurrencyDir() {
-        ArrayList<Currency> currencyArrayList;
+//        ArrayList<Currency> currencyArrayList;
 
         try {
 
@@ -170,7 +182,7 @@ public class FlightDateViewModel extends AndroidViewModel implements RetrofitReq
 //            FileInputStream fis = new FileInputStream(new File(context.getString(R.string.pathToRelatedMoviesFile)));
             FileInputStream fis = new FileInputStream(new File(context.getString(R.string.pathWithoutFileName)+R.string.fileNameCurrency+".txt"));
             ObjectInputStream ois = new ObjectInputStream(fis);
-            currencyArrayList = (ArrayList) ois.readObject();
+            this.currencyArrayList = (ArrayList) ois.readObject();
 
 
 
@@ -185,11 +197,12 @@ public class FlightDateViewModel extends AndroidViewModel implements RetrofitReq
             return null;
         }
 
-        return currencyArrayList;
+        return this.currencyArrayList;
     }
 
     public ArrayList<Carrier> getCarrierDir() {
-        ArrayList<Carrier> carrierArrayList;
+//        List list;
+//        ArrayList arrayList ;
 
         try {
 
@@ -198,9 +211,11 @@ public class FlightDateViewModel extends AndroidViewModel implements RetrofitReq
 //            FileInputStream fis = new FileInputStream(new File(context.getString(R.string.pathToRelatedMoviesFile)));
             FileInputStream fis = new FileInputStream(new File(context.getString(R.string.pathWithoutFileName)+R.string.fileNameCarrier+".txt"));
             ObjectInputStream ois = new ObjectInputStream(fis);
-            carrierArrayList = (ArrayList) ois.readObject();
+            this.carrierArrayList = (ArrayList<Carrier>) ois.readObject();
+            //list=convertObjectToList(ois.readObject());
+//            arrayList = new ArrayList(list);
 
-
+//            Timber.i("getCarrierDir carrierArrayList "+carrierArrayList.size())
 
             ois.close();
             fis.close();
@@ -208,13 +223,34 @@ public class FlightDateViewModel extends AndroidViewModel implements RetrofitReq
             ioe.printStackTrace();
             return null;
         } catch (ClassNotFoundException c) {
-            System.out.println(context.getString(R.string.class_not_found));
+           Timber.i("Class not found");
             c.printStackTrace();
             return null;
         }
 
-        return carrierArrayList;
+        return this.carrierArrayList;
+//        return arrayList;
     }
+
+//    public static List<?> convertObjectToList(Object obj) {
+//        List<?> list = new ArrayList<>();
+//        if (obj.getClass().isArray()) {
+//            list = Arrays.asList((Object[])obj);
+//        } else if (obj instanceof Collection) {
+//            list = new ArrayList<>((Collection<?>)obj);
+//        }
+//        return list;
+//    }
+
+//    public static ArrayList<Carrier> convertObjectToList(Object obj) {
+//        ArrayList<Carrier> list = new ArrayList<Carrier>();
+//        if (obj.getClass().isArray()) {
+//            list = Arrays.asList((Object[])obj);
+//        } else if (obj instanceof Collection) {
+//            list = new ArrayList<>((Collection<?>)obj);
+//        }
+//        return list;
+//    }
 
 
     private void setValuesForFavorites(ArrayList<Quote> quoteList, int position) {
@@ -251,15 +287,15 @@ public class FlightDateViewModel extends AndroidViewModel implements RetrofitReq
 //        return this.currencyArrayList;
 //    }
 
-    public List<Currency> getCurrencyList(){
-        return this.currencyList;
+    public ArrayList<Currency> getCurrencyArrayList(){
+        return this.currencyArrayList;
     }
 
-    public List<Carrier> getCarrierList(){return this.carrierList;}
+    public ArrayList<Carrier> getCarrierArrayList(){return this.carrierArrayList;}
 
     public Currency getCurrency(){
-        if(this.currencyList.size()==1){
-            return currencyList.get(0);
+        if(this.currencyArrayList.size()==1){
+            return currencyArrayList.get(0);
         }
         return null;
     }
@@ -273,39 +309,65 @@ public class FlightDateViewModel extends AndroidViewModel implements RetrofitReq
 
     public void onRetrofitQuoteFinished(ArrayList<Quote> quoteArrayList, ArrayList<Currency> currencyArrayList, ArrayList<Carrier> carrierArrayList) {
 
+        this.quoteArrayList=quoteArrayList;
         this.currencyArrayList=currencyArrayList;
-        if(this.currencyArrayList==null){
-            Timber.i("onRetrofitFinished currencyArrayList equals null");
+        this.carrierArrayList=carrierArrayList;
+
+        if (this.quoteArrayList == null || this.quoteArrayList.isEmpty()) {
+            Timber.i("onRetrofitFinished quoteArrayList equals null or is empty");
             Toast.makeText(context, "Flight does not exist", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(this.currencyArrayList.isEmpty()){
-            Timber.i("onRetrofitFinished currencyArrayList is empty");
+
+        if(this.currencyArrayList==null || this.currencyArrayList.isEmpty()){
+            Timber.i("onRetrofitFinished currencyArrayList equals null or is empty");
             Toast.makeText(context, "Flight does not exist", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        if(this.carrierArrayList==null || this.currencyArrayList.isEmpty()){
+            Timber.i("onRetrofitFinished carrierArrayList equals null or is empty");
+            Toast.makeText(context, "Flight does not exist", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         Timber.i("currencyArrayList size= "+this.currencyArrayList.size());
+
+        if(this.carrierArrayList!=null && carrierArrayList.size()>0){
+            Carrier carrier=carrierArrayList.get(0);
+            String carrierName=carrier.getName();
+            Timber.i("carrierName= "+carrierName);
+        }
 
         //currencyArrayList.add((Currency)quoteCurrencyList.get(1));
         Timber.i("FlightDateViewModel onRetrofitFinished called");
         Timber.i("quoteList size= %s", quoteArrayList.size());
-        this.quoteList=quoteArrayList;
+//        this.quoteList=quoteArrayList;
 
-        if(this.quoteList==null){
-            Timber.i("quote list is empty");
-            return;
-        }
-        currencyList=currencyArrayList;
-        carrierList=carrierArrayList;
-
-        this.carrierArrayList=carrierArrayList;
+//        if(this.quoteList==null){
+//            Timber.i("quote list is empty");
+//            return;
+//        }
+//
+//        if(carrierArrayList==null){
+//            Timber.i("carrier list does not exist");
+//            return;
+//        }
+//        if(carrierArrayList.isEmpty()){
+//            Timber.i("carrier list is empty");
+//            return;
+//        }
+//        currencyList=currencyArrayList;
+//        carrierList=carrierArrayList;
+//
+//        this.carrierArrayList=carrierArrayList;
 
         //writeToFile(placeArrayList);
-        transformToLiveData(quoteList);
+        transformToLiveData(quoteArrayList);
     }
 
-    private void transformToLiveData(List<Quote> quoteList){
-        this.liveDataQuoteList.postValue(quoteList);
+    private void transformToLiveData(ArrayList<Quote> quoteArrayList){
+        this.liveDataQuoteArrayList.postValue(quoteArrayList);
     }
 
     public int getPosition() {
@@ -314,6 +376,14 @@ public class FlightDateViewModel extends AndroidViewModel implements RetrofitReq
 
     public void setPosition(int position) {
         this.position = position;
+    }
+
+    public void setItemPosition(int itemPosition){
+        this.itemPosition=itemPosition;
+    }
+
+    public int getItemPosition(){
+        return this.itemPosition;
     }
 
 

@@ -39,8 +39,7 @@ public class ClientApiKey extends AppCompatActivity {
 
 
     public void startMainActivity(View view) {
-//        String apiKey=apiKeyET.getText().toString();
-        String apiKey="95c6693ba7msh6dc6656424e6e4dp1bdd9ejsnf08a3480ba20";
+        String apiKey=apiKeyET.getText().toString();
         if(apiKey.matches("[a-z0-9]*") && !apiKey.equals("") && apiKey.length()>45){
             Toast.makeText(this, getString(R.string.welcome_to_flights), Toast.LENGTH_SHORT).show();
             SharedPreferences sharedpreferences = getSharedPreferences(Constants.FLIGHT_PREFERENCES, Context.MODE_PRIVATE);

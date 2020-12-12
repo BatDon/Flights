@@ -2,6 +2,7 @@ package com.example.flights.Activities;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -37,6 +38,7 @@ import com.example.flights.Pojos.FlightDatePojos.Quote;
 import com.example.flights.Pojos.Place;
 import com.example.flights.Pojos.Places;
 import com.example.flights.R;
+import com.example.flights.StaticMethods.AllFlightsMethods;
 import com.example.flights.ViewModels.FlightDateViewModel;
 import com.example.flights.ViewModels.FlightDateViewModelFactory;
 import com.example.flights.ViewModels.MainActivityViewModel;
@@ -66,7 +68,7 @@ import static com.example.flights.Constants.LOCALITY_ARRAY;
 public class FlightDate extends AppCompatActivity implements DatePickerDialog.OnDateSetListener,
         AdapterView.OnItemSelectedListener{
     public static final int DEFAULT_POSITION=-1;
-    int position;
+    int position=-1;
 
     MainActivityViewModel mainActivityViewModel;
     ArrayList<Place> placeArrayList;
@@ -102,6 +104,7 @@ public class FlightDate extends AppCompatActivity implements DatePickerDialog.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Timber.i("onCreate called");
         setContentView(R.layout.activity_flight_date);
         setUpMainViewModel();
         setUpFlightDateViewModel();
@@ -126,22 +129,46 @@ public class FlightDate extends AppCompatActivity implements DatePickerDialog.On
                 //new RetrofitRequester().requestMovies(this);
                 break;
             }
+            case android.R.id.home:
+                Intent intent = new Intent(FlightDate.this, DepartureFlightLocations.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+                return true;
         }
         return true;
     }
 
     public void getOriginFlightPosition() {
         Intent intent = getIntent();
-        if (intent == null) {
-            Timber.i("Error getting position");
-            closeOnError();
+        if(intent==null){
+            Timber.i("intent equals null");
         }
-
         position = intent.getIntExtra(Constants.FLIGHT_ORIGIN_POSITION, DEFAULT_POSITION);
-
-        if (position == DEFAULT_POSITION) {
-            closeOnError();
+        if(position==DEFAULT_POSITION){
+            position=flightDateViewModel.getItemPosition();
+            Timber.i("position= "+position);
+            if(position==DEFAULT_POSITION){
+                closeOnError();
+            }
         }
+//        if (intent == null) {
+//            //try to get position from view model
+//            position=flightDateViewModel.getItemPosition();
+////            Timber.i("Error getting position");
+////            closeOnError();
+//        }
+        else {
+
+            //position = intent.getIntExtra(Constants.FLIGHT_ORIGIN_POSITION, DEFAULT_POSITION);
+
+            Timber.i("setting position in flightdateViewModel");
+            flightDateViewModel.setItemPosition(position);
+        }
+
+//        if (position == DEFAULT_POSITION) {
+//            closeOnError();
+//        }
     }
 
     private void closeOnError() {
@@ -162,19 +189,19 @@ public class FlightDate extends AppCompatActivity implements DatePickerDialog.On
     }
 
     private void setUpViewModelOnChanged() {
-        Observer<List<Quote>> observer = new Observer<List<Quote>>() {
+        Observer<ArrayList<Quote>> observer = new Observer<ArrayList<Quote>>() {
             int i = 0;
 
             @Override
-            public void onChanged(@Nullable final List<Quote> quoteList) {
-                if(i>0 && quoteList==null) {
+            public void onChanged(@Nullable final ArrayList<Quote> quoteArrayList) {
+                if(i>0 && quoteArrayList==null) {
                     Toast.makeText(FlightDate.this, "No flights found", Toast.LENGTH_SHORT).show();
                 }
-                if(quoteList==null){
+                if(quoteArrayList==null){
                     return;
                 }
-                FlightDate.this.quoteList = new ArrayList<Quote>(quoteList);
-                if (quoteList == null || flightDateViewModel.getCurrencyList()==null) {
+                //FlightDate.this.quoteList = new ArrayList<Quote>(quoteArrayList);
+                if (quoteArrayList == null || flightDateViewModel.getCurrencyArrayList()==null || flightDateViewModel.getCarrierArrayList()==null) {
                     if(i>0) {
                         Toast.makeText(FlightDate.this, "No flights found", Toast.LENGTH_SHORT).show();
                     }
@@ -186,7 +213,7 @@ public class FlightDate extends AppCompatActivity implements DatePickerDialog.On
                 // Update the cached copy of the words in the adapter.
                 Timber.i("onChanged triggered");
                 if (i > 0) {
-                    for (Quote quote : quoteList) {
+                    for (Quote quote : quoteArrayList) {
                         Timber.i("setUpViewModelOnChanged quote= %s", quote.getQuoteDateTime());
                     }
                     //placeRecyclerList=placeList;
@@ -199,9 +226,9 @@ public class FlightDate extends AppCompatActivity implements DatePickerDialog.On
 //                currency=flightDateViewModel.getCurrencyArrayList().get(0);
 
                 //createRecyclerView();
-                saveQuotesFlightDateViewModel(FlightDate.this.quoteList);
-                saveCurrenciesFlightDateViewModel(new ArrayList<Currency>(flightDateViewModel.getCurrencyList()));
-                saveCarriersFlightDateViewModel(new ArrayList<Carrier>(flightDateViewModel.getCarrierList()));
+                saveQuotesFlightDateViewModel(quoteArrayList);
+                saveCurrenciesFlightDateViewModel(flightDateViewModel.getCurrencyArrayList());
+                saveCarriersFlightDateViewModel(flightDateViewModel.getCarrierArrayList());
                 //                sendFlightDateCurrencyIntent(currency);
                 sendFlightDateCurrencyIntent();
             }
@@ -262,6 +289,24 @@ public class FlightDate extends AppCompatActivity implements DatePickerDialog.On
 //    }
 
     private void setUpViews(){
+        View simpleAppBar = findViewById(R.id.simpleAppBar);
+        Toolbar dateToolbar = (Toolbar) simpleAppBar.findViewById(R.id.toolbar);
+
+        //Toolbar departureLocationToolbar = (Toolbar) findViewById(R.id.toolbar);
+        if(dateToolbar==null){
+            Timber.i("departureLocationToolbar equals null");
+        }
+
+        setSupportActionBar(dateToolbar);
+        if(getSupportActionBar()!=null){
+
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+        else{
+            Timber.i("support action bar is null");
+        }
+
         setUpSpinners();
 
          originPlaceET=findViewById(R.id.originPlaceET);
@@ -456,7 +501,13 @@ public class FlightDate extends AppCompatActivity implements DatePickerDialog.On
 
         editor.commit();
 
-        flightDateViewModel.requestFlightQuotes();
+        if(AllFlightsMethods.getInstance().isInternetConnection(FlightDate.this)){
+            flightDateViewModel.requestFlightQuotes();
+        }
+        else{
+            Toast.makeText(FlightDate.this, R.string.need_internet_message, Toast.LENGTH_SHORT).show();
+            Timber.i("No internet connection");
+        }
 
     }
 

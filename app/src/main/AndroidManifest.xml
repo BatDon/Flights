@@ -5,35 +5,18 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- permission to get Coarse Location -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+<!--check for internet connection before making calls-->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_plane_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Flights">
-        <activity android:name=".Activities.ClientApiKey"
-            android:label="@string/clientApiKeyActivityName">
+        android:theme="@style/AppTheme.NoActionBar">
 
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <!-- Include the host attribute if you want your app to respond
-                     only to URLs with your app's domain. -->
-                <data android:scheme="http" android:host="www.google.com" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <!-- The BROWSABLE category is required to get links from web pages. -->
-                <category android:name="android.intent.category.BROWSABLE" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".Activities.FavoriteFlightsDetails" />
-        <activity android:name=".Activities.FlightDateCurrency" />
-        <activity android:name=".Activities.FlightDate" />
-        <activity android:name=".Activities.DepartureFlightLocations" />
-        <activity
-            android:name=".Activities.DatabaseClasses.FavoriteFlightsDatabaseActivity"
-            android:label="@string/favorite_flights_activity_name"
-            android:launchMode="singleTop" />
         <activity
             android:name=".Activities.MainActivity"
             android:label="@string/app_name">
@@ -47,6 +30,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity> <!-- Sample AdMob App ID: ca-app-pub-3940256099942544~3347511713 -->
+<!--        android:theme="@style/Theme.Flights">-->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3940256099942544~1033173712" /> <!-- <meta-data -->
@@ -57,6 +41,57 @@
             android:name="com.google.android.gms.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
             android:theme="@android:style/Theme.Translucent" />
+
+        <activity android:name=".Activities.ClientApiKey"
+            android:label="@string/clientApiKeyActivityName">
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <!-- Include the host attribute if you want your app to respond
+                     only to URLs with your app's domain. -->
+                <data android:scheme="http" android:host="www.google.com" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <!-- The BROWSABLE category is required to get links from web pages. -->
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".Activities.DepartureFlightLocations"
+            android:label="Flight Locations"/>
+<!--            android:parentActivityName=".Activities.MainActivity" >-->
+<!--            <meta-data-->
+<!--                android:name="android.support.PARENT_ACTIVITY"-->
+<!--                android:value=".Activities.MainActivity" />-->
+<!--        </activity>-->
+
+        <activity android:name=".Activities.FlightDate"
+            android:label="Flight Date"/>
+<!--            android:parentActivityName=".Activities.DepartureFlightLocations" >-->
+<!--            <meta-data-->
+<!--                android:name="android.support.PARENT_ACTIVITY"-->
+<!--                android:value=".Activities.DepartureFlightLocations" />-->
+<!--        </activity>-->
+
+        <activity android:name=".Activities.FlightDateCurrency"
+            android:label="Available Flights"/>
+<!--            android:parentActivityName=".Activities.FlightDate" >-->
+<!--            <meta-data-->
+<!--                android:name="android.support.PARENT_ACTIVITY"-->
+<!--                android:value=".Activities.FlightDate" />-->
+<!--        </activity>-->
+
+
+        <activity
+            android:name=".Activities.DatabaseClasses.FavoriteFlightsDatabaseActivity"
+            android:label="@string/favorite_flights_activity_name"
+            android:launchMode="singleTop"/>
+        <!--                    android:launchMode="singleTop"-->
+
+        <activity android:name=".Activities.FavoriteFlightsDetails"
+            android:label="Favorite Flights"
+            android:textColor="@color/colorPrimaryDark"
+            />
+
 
         <service
             android:name=".GetFlightsService"

@@ -1,11 +1,13 @@
 package com.example.flights.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -17,6 +19,8 @@ import com.example.flights.Pojos.Place;
 import com.example.flights.R;
 import com.example.flights.ViewModels.FlightDateViewModel;
 import com.example.flights.ViewModels.FlightDateViewModelFactory;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 import org.w3c.dom.Text;
 
@@ -99,11 +103,51 @@ public class FavoriteFlightsDetails extends AppCompatActivity {
         destinationPlaceTV.setText(destinationPlace);
 
         carrierArrayList= flightDateViewModel.getCarrierDir();
-        setUpCarrierRecyclerView(carrierArrayList);
+        Timber.i("carrierArrayList class type= "+flightDateViewModel.getCarrierDir().getClass());
+        if(carrierArrayList==null) {
+            Timber.i("carrierArrayList equals null");
+        }else{
+            setUpCarrierRecyclerView(carrierArrayList);
+        }
+
+
+        final CollapsingToolbarLayout collapsingToolbarLayout=findViewById(R.id.collapsingToolbar);
+        collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.white));
+        collapsingToolbarLayout.setExpandedTitleTextColor(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimaryDark)));
+
+        final Toolbar favoriteToolbar =findViewById(R.id.toolbar);
+        setSupportActionBar(favoriteToolbar);
+
+        AppBarLayout mAppBarLayout = (AppBarLayout) findViewById(R.id.appBar);
+        mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = false;
+            int scrollRange = -1;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                Timber.i("onOffestChanged called");
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + verticalOffset == 0) {
+                    isShow = true;
+//                   favoriteToolbar.setTitleTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                    setTitleColor(R.color.colorPrimaryDark);
+                } else if (isShow) {
+                    Timber.i("onOffsetChanged isShow true");
+                    isShow = false;
+//                    favoriteToolbar.setTitleTextColor(getResources().getColor(R.color.colorAccent));
+                    setTitleColor(R.color.colorAccent);
+                }
+            }
+        });
     }
 
-    private void setUpCarrierRecyclerView(ArrayList<Carrier> carrierArrayList){
 
+    private void setUpCarrierRecyclerView(ArrayList<Carrier> carrierArrayList){
+        Timber.i("setUpCarrierRecyclerView carrierArrayList size "+carrierArrayList.size());
+
+        Timber.i("carrier class= "+carrierArrayList.get(0).getClass());
         Carrier carrier=carrierArrayList.get(0);
         Timber.i("carrierName= "+carrier.getName());
 

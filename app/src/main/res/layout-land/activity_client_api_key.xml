@@ -10,7 +10,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -18,23 +18,25 @@
             android:id="@+id/signUpInstructionsTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
+            android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginLeft="@dimen/default_margin"
+            android:layout_marginTop="@dimen/default_margin"
+            android:layout_marginEnd="@dimen/default_margin"
+            android:layout_marginRight="@dimen/default_margin"
             android:gravity="center"
             android:text="@string/createNewAccountInstruction"
-            android:textSize="18sp" />
+            android:textSize="@dimen/title_text" />
 
 
         <Button
             android:id="@+id/signUpButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryDark"
             android:contentDescription="@string/signUpContentDescription"
             android:onClick="signUpLaunchIntent"
             android:text="@string/sign_up"
+            android:padding="@dimen/button_padding"
             app:layout_constraintTop_toBottomOf="@+id/signUpInstructionsTV" />
 
         <TextView
@@ -42,13 +44,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
+            android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginLeft="@dimen/default_margin"
+            android:layout_marginTop="@dimen/medium_margin"
+            android:layout_marginEnd="@dimen/default_margin"
+            android:layout_marginRight="@dimen/default_margin"
             android:text="@string/instructions_click_on_tab"
-            android:textSize="18sp" />
+            android:textSize="@dimen/title_text" />
 
         <ImageView
             android:id="@+id/tabLayoutIV"
@@ -62,11 +64,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_marginTop="32dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
+            android:layout_marginTop="@dimen/medium_margin"
+            android:layout_marginLeft="@dimen/default_margin"
+            android:layout_marginRight="@dimen/default_margin"
             android:text="@string/copyPasteInstructions"
-            android:textSize="18sp" />
+            android:textSize="@dimen/title_text" />
 
         <ImageView
             android:id="@+id/apiKeyIV"
@@ -75,17 +77,6 @@
             android:contentDescription="@string/copy_and_paste_your_api_key_from_highlighted_region"
             app:srcCompat="@drawable/api_key_input" />
 
-        <TextView
-            android:id="@+id/rapid_api_key_title"
-            android:layout_width="wrap_content"
-            android:layout_height="44dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="32dp"
-            android:gravity="center"
-            android:text="@string/rapidApiKeyTitle"
-            android:textColor="@color/black"
-            android:textSize="18sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -93,12 +84,22 @@
             android:gravity="center"
             android:orientation="horizontal">
 
+            <TextView
+                android:id="@+id/rapid_api_key_title"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_marginTop="@dimen/default_margin"
+                android:gravity="center"
+                android:text="@string/rapidApiKeyTitle"
+                android:textColor="@color/white"
+                android:textSize="@dimen/title_text" />
+
             <EditText
                 android:id="@+id/apiKeyET"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="@dimen/default_margin"
                 android:ems="10"
                 android:hint="@string/api_key_hint"
                 android:inputType="textPersonName" />
@@ -107,8 +108,10 @@
                 android:id="@+id/startButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="@dimen/default_margin"
+                android:background="@color/colorPrimaryDark"
                 android:onClick="startMainActivity"
+                android:padding="@dimen/button_padding"
                 android:text="@string/start_button" />
         </LinearLayout>
 

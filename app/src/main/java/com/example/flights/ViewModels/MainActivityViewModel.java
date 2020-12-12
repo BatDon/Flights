@@ -46,16 +46,21 @@ public class MainActivityViewModel extends AndroidViewModel implements RetrofitR
 
     int position;
 
+    int createViewModel=0;
+
     public MainActivityViewModel(@NonNull Application application) {
         super(application);
         context=application;
 //        this.movieId=movieId;
 
 //        Place place=new Place("1","Stockholm","2","3","4","UK");
-        Place place=new Place();
-        List<Place> placeList=new ArrayList<Place>();
-        placeList.add(place);
-        liveDataPlacetList.setValue(placeList);
+   //     if(createViewModel==0) {
+            Place place = new Place();
+            List<Place> placeList = new ArrayList<Place>();
+            placeList.add(place);
+            liveDataPlacetList.setValue(placeList);
+            createViewModel++;
+  //      }
     }
 
 //    public void requestRelatedMovies(){new RetrofitRequesterRelated().requestMovies(this)}
@@ -138,6 +143,7 @@ public class MainActivityViewModel extends AndroidViewModel implements RetrofitR
 
     public void onRetrofitFinished(List<Place> placeList) {
         if(placeList==null){
+            Timber.i("placesList equals null");
             return;
         }
         Timber.i("MainActivityViewModel onRetrofitFinished called");

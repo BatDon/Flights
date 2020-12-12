@@ -2,12 +2,9 @@ package com.example.flights.Activities;
 
 import com.example.flights.Activities.DatabaseClasses.FavoriteFlightsDatabaseActivity;
 import com.example.flights.Constants;
-import com.example.flights.DatabaseClasses.OutgoingFlight;
-import com.example.flights.DatabaseClasses.ReturnFlight;
 import com.example.flights.GetFlightsService;
-import com.example.flights.Pojos.Place;
 import com.example.flights.R;
-import com.example.flights.Retrofit.RetrofitRequester;
+import com.example.flights.StaticMethods.AllFlightsMethods;
 import com.example.flights.ViewModels.DatabaseViewModel;
 import com.example.flights.ViewModels.DatabaseViewModelFactory;
 import com.example.flights.ViewModels.MainActivityViewModel;
@@ -25,9 +22,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.view.Menu;
@@ -38,11 +37,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import android.widget.Toast;
-
-import java.util.List;
 
 import timber.log.Timber;
 
@@ -65,7 +61,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private int mLevel;
     private Button mNextLevelButton;
     private InterstitialAd mInterstitialAd;
-    private TextView mLevelTextView;
     private EditText countryEditText;
     private EditText placeEditText;
     private EditText currencyEditText;
@@ -89,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     String userSelectedLocalityName;
 
     DatabaseViewModel databaseViewModel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,6 +146,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private void setUpViews() {
         setContentView(R.layout.activity_main);
+        Toolbar mainToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mainToolbar);
 
         setUpSpinners();
 
@@ -163,11 +161,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
 
         // Create the text view to show the level number.
-        mLevelTextView = (TextView) findViewById(R.id.level);
-        mLevel = START_LEVEL;
 
         // Create the next level button, which tries to show an interstitial when clicked.
-        mNextLevelButton = ((Button) findViewById(R.id.next_level_button));
+        mNextLevelButton = ((Button) findViewById(R.id.flight_origin_location_button));
         mNextLevelButton.setEnabled(false);
 
         Intent i = new Intent(MainActivity.this, GetFlightsService.class);
@@ -194,8 +190,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 //correct but blocked out for testing
  //               saveToSharedPreferences();
 
-                mainActivityViewModel.requestFlightDestinations();
-
+                if(AllFlightsMethods.getInstance().isInternetConnection(MainActivity.this)){
+                    mainActivityViewModel.requestFlightDestinations();
+                }
+                else{
+                    Toast.makeText(MainActivity.this, R.string.need_internet_message, Toast.LENGTH_SHORT).show();
+                    Timber.i("No internet connection");
+                }
 
             }
 
@@ -339,7 +340,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private void goToNextLevel() {
         // Show the next level and reload the ad to prepare for the level after.
-        mLevelTextView.setText("Level " + (++mLevel));
         mInterstitialAd = newInterstitialAd();
 //        mInterstitialAd.setAdUnitId(getString(R.string.interstitial_ad_unit_id));
         loadInterstitial();
@@ -487,6 +487,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         editor.putString(Constants.KEY_PREFERENCE_CURRENCY, currency);
         editor.commit();
     }
+
+//    private boolean isInternetConnection() {
+//        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+//
+//        return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
+//    }
 
 
 

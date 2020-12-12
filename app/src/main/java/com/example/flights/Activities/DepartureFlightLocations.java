@@ -1,7 +1,9 @@
 package com.example.flights.Activities;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,6 +13,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.flights.Activities.DatabaseClasses.FavoriteFlightsDatabaseActivity;
@@ -34,8 +38,27 @@ public class DepartureFlightLocations extends AppCompatActivity implements Fligh
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Timber.i("onCreate called");
         setContentView(R.layout.activity_departure_flight_locations);
 
+
+        View simpleAppBar = findViewById(R.id.simpleAppBar);
+        Toolbar departureLocationToolbar = (Toolbar) simpleAppBar.findViewById(R.id.toolbar);
+
+        //Toolbar departureLocationToolbar = (Toolbar) findViewById(R.id.toolbar);
+        if(departureLocationToolbar==null){
+            Timber.i("departureLocationToolbar equals null");
+        }
+
+        setSupportActionBar(departureLocationToolbar);
+        if(getSupportActionBar()!=null){
+
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+        else{
+            Timber.i("support action bar is null");
+        }
 
         setUpViewModel();
     }
@@ -45,6 +68,8 @@ public class DepartureFlightLocations extends AppCompatActivity implements Fligh
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
+
+//    https://stackoverflow.com/questions/35810229/how-to-display-and-set-click-event-on-back-arrow-on-toolbar
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -56,6 +81,13 @@ public class DepartureFlightLocations extends AppCompatActivity implements Fligh
                 //new RetrofitRequester().requestMovies(this);
                 break;
             }
+            case android.R.id.home:
+
+                Intent intent = new Intent(DepartureFlightLocations.this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+                return true;
         }
         return true;
     }
@@ -67,6 +99,9 @@ public class DepartureFlightLocations extends AppCompatActivity implements Fligh
         placeRecyclerList=mainActivityViewModel.getPlaceDir();
         if(placeRecyclerList==null){
             Timber.i("placeRecyclerList equals null");
+            Toast.makeText(this, getString(R.string.check_api_or_try_again), Toast.LENGTH_SHORT).show();
+            finish();
+            return;
         }
         int i=0;
         for(Place place: placeRecyclerList){

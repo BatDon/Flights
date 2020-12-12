@@ -81,6 +81,14 @@
     <string name="sign_up">Sign Up</string>
     <string name="click_on_element_tab_to_get_api_key">Click on element tab to get api key</string>
     <string name="copy_and_paste_your_api_key_from_highlighted_region">Copy and paste your api key from highlighted region</string>
+    <string name="plane_content_description">plane slide up or down to collapse</string>
+    <string name="destination_flight_title">Destination Flight</string>
+    <string name="destinatioin_plane_content_description">destination plane</string>
+    <string name="find_flight_location">Flight Location</string>
+    <string name="destination_plane_content_description">Destination Plane</string>
+    <string name="departure_flight_title">Departure Flight</string>
+    <string name="need_internet_message">Need an internet connection to check flights</string>
+    <string name="check_api_or_try_again">Check your Api key or try again</string>
 
 
 </resources>

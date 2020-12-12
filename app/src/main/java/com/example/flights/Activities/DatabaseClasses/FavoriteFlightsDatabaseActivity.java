@@ -2,15 +2,20 @@ package com.example.flights.Activities.DatabaseClasses;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.flights.Activities.DepartureFlightLocations;
 import com.example.flights.Activities.FavoriteFlightsDetails;
+import com.example.flights.Activities.FlightDate;
 import com.example.flights.Adapters.firebaseAdapter.FirebaseFavoriteFlightsAdapter;
 import com.example.flights.DatabaseClasses.OutgoingFlight;
 import com.example.flights.FavoriteFlightsData.FavoriteFlights;
@@ -47,10 +52,17 @@ public class FavoriteFlightsDatabaseActivity extends AppCompatActivity implement
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorite_flights);
+        Toolbar favoriteToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(favoriteToolbar);
+        if(getSupportActionBar()!=null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        else{
+            Timber.i("support action bar is null");
+        }
         flightsDatabaseReference=firebaseDatabase.getReference();
         Timber.i("flightsDatabaseReference= %s", flightsDatabaseReference.toString());
         setUpRecyclerView();
-
 
 
         //flightsDatabaseReference.child();
@@ -82,8 +94,11 @@ public class FavoriteFlightsDatabaseActivity extends AppCompatActivity implement
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+//        ViewGroup.LayoutParams layoutParams=recyclerView.getLayoutParams();
+//        layoutParams.height=0;
+//        recyclerView.setLayoutParams(layoutParams);
         recyclerView.setVisibility(View.VISIBLE);
-        findViewById(R.id.loading_progress_bar).setVisibility(View.INVISIBLE);
+//        findViewById(R.id.loading_progress_bar).setVisibility(View.GONE);
 
 
 
@@ -180,7 +195,6 @@ public class FavoriteFlightsDatabaseActivity extends AppCompatActivity implement
 //    public FavoriteFlights getFavoriteFlightAt(int position) {
 //        return favoriteFlightsArray[position];
 //    }
-
 
 
     @Override

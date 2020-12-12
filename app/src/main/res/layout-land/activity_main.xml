@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/default_margin"
         android:layout_marginLeft="@dimen/default_margin"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="@dimen/medium_margin"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/placeEditText" />
 
@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/default_margin"
         android:layout_marginLeft="@dimen/default_margin"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="@dimen/medium_margin"
         android:hint="@string/localeName"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,7 +54,7 @@
         android:id="@+id/countryEditText"
         android:layout_width="@dimen/edit_text_margin"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="@dimen/medium_margin"
         android:layout_marginEnd="@dimen/default_margin"
         android:layout_marginRight="@dimen/default_margin"
         android:hint="@string/country_name"
@@ -92,7 +92,7 @@
         android:id="@+id/currencySpinner"
         android:layout_width="@dimen/edit_text_margin"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="@dimen/medium_margin"
         android:layout_marginRight="@dimen/default_margin"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/countryEditText" />
@@ -118,29 +118,32 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_marginBottom="@dimen/medium_margin"
+        android:layout_marginTop="16dp"
+        android:padding="@dimen/button_padding"
+        android:background="@color/colorPrimaryDark"
         android:contentDescription="@string/find_flight_location_button"
         android:text="@string/find_flight_location"
-        android:background="@color/colorPrimaryDark"
-        android:padding="@dimen/button_padding"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/default_margin"
-        android:layout_marginRight="@dimen/default_margin"
-        app:layout_constraintBottom_toTopOf="@+id/flight_origin_location_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/currencyEditText"
-        app:srcCompat="@drawable/plane_head_on"
-        android:contentDescription="@string/destinatioin_plane_content_description"/>
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/destination_plane_content_description"
+        app:layout_constraintEnd_toStartOf="@+id/currencySpinner"
+        app:layout_constraintStart_toEndOf="@+id/localitySpinner"
+        app:layout_constraintTop_toBottomOf="@+id/include"
+        app:srcCompat="@drawable/plane_head_on" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
