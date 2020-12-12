@@ -42,6 +42,8 @@ import java.util.Map;
 
 import timber.log.Timber;
 
+import static com.example.flights.Constants.CLASS_NAME;
+
 public class FlightDateCurrency extends AppCompatActivity implements FlightDateCurrencyAdapter.OnDateCurrencyListener{
 
     ArrayList<Quote> queryArrayList;
@@ -99,12 +101,12 @@ public class FlightDateCurrency extends AppCompatActivity implements FlightDateC
             case R.id.action_favorite_flights: {
                 Toast.makeText(this, R.string.action_favorite_flights, Toast.LENGTH_SHORT).show();
                 Intent intent=new Intent(this, FavoriteFlightsDatabaseActivity.class);
+                intent.putExtra(CLASS_NAME, FlightDateCurrency.this.getClass().getSimpleName());
                 startActivity(intent);
                 //new RetrofitRequester().requestMovies(this);
                 break;
             }
             case android.R.id.home:
-
                 Intent intent = new Intent(FlightDateCurrency.this, FlightDate.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);

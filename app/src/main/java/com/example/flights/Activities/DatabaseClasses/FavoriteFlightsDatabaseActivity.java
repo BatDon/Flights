@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.flights.Activities.DepartureFlightLocations;
 import com.example.flights.Activities.FavoriteFlightsDetails;
 import com.example.flights.Activities.FlightDate;
+import com.example.flights.Activities.FlightDateCurrency;
+import com.example.flights.Activities.MainActivity;
 import com.example.flights.Adapters.firebaseAdapter.FirebaseFavoriteFlightsAdapter;
 import com.example.flights.DatabaseClasses.OutgoingFlight;
 import com.example.flights.FavoriteFlightsData.FavoriteFlights;
@@ -28,6 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import timber.log.Timber;
 
+import static com.example.flights.Constants.CLASS_NAME;
 import static com.example.flights.Constants.DEPARTURE_DATE;
 import static com.example.flights.Constants.DESTINATION_PLACE;
 import static com.example.flights.Constants.ORIGIN_PLACE;
@@ -45,6 +48,7 @@ public class FavoriteFlightsDatabaseActivity extends AppCompatActivity implement
 
     //FirebaseDatabase.getInstance();
     DatabaseReference flightsDatabaseReference;
+    String className="";
 
 
     private FirebaseFavoriteFlightsAdapter adapter;
@@ -52,6 +56,7 @@ public class FavoriteFlightsDatabaseActivity extends AppCompatActivity implement
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorite_flights);
+        checkIntent();
         Toolbar favoriteToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(favoriteToolbar);
         if(getSupportActionBar()!=null){
@@ -60,12 +65,22 @@ public class FavoriteFlightsDatabaseActivity extends AppCompatActivity implement
         else{
             Timber.i("support action bar is null");
         }
+
         flightsDatabaseReference=firebaseDatabase.getReference();
         Timber.i("flightsDatabaseReference= %s", flightsDatabaseReference.toString());
         setUpRecyclerView();
 
 
         //flightsDatabaseReference.child();
+    }
+
+    private void checkIntent(){
+        Intent intent=getIntent();
+        if(intent!=null){
+            if(intent.hasExtra(CLASS_NAME)){
+                className=intent.getStringExtra(CLASS_NAME);
+            }
+        }
     }
     private void setUpRecyclerView() {
 //        String id=favoriteFlightRef.getId();
@@ -206,6 +221,35 @@ public class FavoriteFlightsDatabaseActivity extends AppCompatActivity implement
     protected void onStop() {
         super.onStop();
         adapter.stopListening();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                if(className.equals("MainActivity")){
+                    intent = new Intent(FavoriteFlightsDatabaseActivity.this, MainActivity.class);
+                }else if(className.equals("FlightDate")){
+                    intent = new Intent(FavoriteFlightsDatabaseActivity.this, FlightDate.class);
+                }else if(className.equals("FlightDateCurrency")){
+                    intent = new Intent(FavoriteFlightsDatabaseActivity.this, FlightDateCurrency.class);
+                }else if(className.equals("DepartureFlightLocations")){
+                    intent = new Intent(FavoriteFlightsDatabaseActivity.this, DepartureFlightLocations.class);
+                }else{
+                    intent=null;
+                }
+                if(intent!=null){
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    return true;
+                }
+//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                startActivity(intent);
+//                finish();
+//                return true;
+        }
+        return true;
     }
 
 //    @Override

@@ -8,9 +8,9 @@
 <!--check for internet connection before making calls-->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
-
+    <!--        android:allowBackup="true"-->
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_plane_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"

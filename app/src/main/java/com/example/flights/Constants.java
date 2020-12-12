@@ -54,4 +54,7 @@ public class Constants {
     //ClientApiKey
     public static final String API_KEY_BOOLEAN="com.example.flights.clientapikey";
 
+    //FavoriteFlightsDatabaseActivity
+    public static final String CLASS_NAME="com.example.flights.class_name";
+
 }

@@ -29,6 +29,8 @@ import java.util.List;
 
 import timber.log.Timber;
 
+import static com.example.flights.Constants.CLASS_NAME;
+
 public class DepartureFlightLocations extends AppCompatActivity implements FlightDeparturesAdapter.OnFlightDepartureListener {
 
     MainActivityViewModel mainActivityViewModel;
@@ -77,6 +79,7 @@ public class DepartureFlightLocations extends AppCompatActivity implements Fligh
             case R.id.action_favorite_flights: {
                 Toast.makeText(this, R.string.action_favorite_flights, Toast.LENGTH_SHORT).show();
                 Intent intent=new Intent(this, FavoriteFlightsDatabaseActivity.class);
+                intent.putExtra(CLASS_NAME, DepartureFlightLocations.this.getClass().getSimpleName());
                 startActivity(intent);
                 //new RetrofitRequester().requestMovies(this);
                 break;

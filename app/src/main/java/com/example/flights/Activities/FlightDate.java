@@ -57,6 +57,7 @@ import java.util.Map;
 import retrofit2.Call;
 import timber.log.Timber;
 
+import static com.example.flights.Constants.CLASS_NAME;
 import static com.example.flights.Constants.CURRENCIES_ARRAY;
 import static com.example.flights.Constants.LOCALITY_ARRAY;
 
@@ -125,6 +126,7 @@ public class FlightDate extends AppCompatActivity implements DatePickerDialog.On
             case R.id.action_favorite_flights: {
                 Toast.makeText(this, R.string.action_favorite_flights, Toast.LENGTH_SHORT).show();
                 Intent intent=new Intent(this, FavoriteFlightsDatabaseActivity.class);
+                intent.putExtra(CLASS_NAME, FlightDate.this.getClass().getSimpleName());
                 startActivity(intent);
                 //new RetrofitRequester().requestMovies(this);
                 break;

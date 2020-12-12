@@ -42,6 +42,7 @@ import android.widget.Toast;
 
 import timber.log.Timber;
 
+import static com.example.flights.Constants.CLASS_NAME;
 import static com.example.flights.Constants.CURRENCIES_ARRAY;
 import static com.example.flights.Constants.LOCALITY_ARRAY;
 
@@ -260,6 +261,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 //TODO change all intents to activities
 //                Intent intent=new Intent(this, FavoriteFlightsActivity.class);
                 Intent intent = new Intent(this, FavoriteFlightsDatabaseActivity.class);
+                intent.putExtra(CLASS_NAME, MainActivity.this.getClass().getSimpleName());
                 startActivity(intent);
 
                 //new RetrofitRequester().requestMovies(this);
