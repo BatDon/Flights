@@ -15,6 +15,7 @@ parameters must be filled in before making a request to the Skyscanner api.
 ## Set-up
 Click on Sign up in the app and you'll be taken to this link https://english.api.rakuten.net/skyscanner/api/skyscanner-flight-search/details  
 Sign up in the browser, which is shown in the left image. After signing up for an api key you'll see this screen on the right. 
+
 <img src="app/src/main/res/drawable/github_sign_up_api_key.png" width=450> | <img src="app/src/main/res/drawable/github_copy_api_key.png" width=450>
 
 Copy your api key and paste it into the SIGN-UP-FOR-KEY field. After that click the START button
