@@ -13,13 +13,15 @@ CollapsingToolbarLayout are shown in user favorite flights details screen. App c
 parameters must be filled in before making a request to the Skyscanner api.
 
 ## Set-up
+Click on Sign up in the app and you'll be taken to this link https://english.api.rakuten.net/skyscanner/api/skyscanner-flight-search/details  
+Sign up in the browser, which is shown in the left image. After signing up for an api key you'll see this screen on the right. 
 
-put image here and explain
-Click on Sign up and you'll be taken to this link https://english.api.rakuten.net/skyscanner/api/skyscanner-flight-search/details  
-After signing up for an api key you'll see this screen. 
+<img src="app/src/main/res/drawable/github_sign_up_api_key.png" width=450> | <img src="app/src/main/res/drawable/github_copy_api_key.png" width=450>
 
 Copy your api key and paste it into the SIGN-UP-FOR-KEY field. After that click the START button
 and you can start searching for flights. 
+
+<img src="app/src/main/res/drawable/github_activity_client_api_key.jpg" width=250 align=center>
 
 
 ## Libraries
@@ -35,4 +37,11 @@ and you can start searching for flights.
 - Firebase Realtime Database
 - Firebase UI
 
-place screenshots of app down here.
+
+## Screenshots
+
+<img src="app/src/main/res/drawable/github_activity_main.jpg" width=200>|<img src="app/src/main/res/drawable/github_activity_departure_flight_locations.jpg" width=200> | <img src="app/src/main/res/drawable/github_activity_flight_date.jpg" width=200>
+| <img src="app/src/main/res/drawable/github_activity_favorite_flights_details.jpg" width=200> 
+
+
+
