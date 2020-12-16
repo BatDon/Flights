@@ -341,14 +341,14 @@ public class FlightDate extends AppCompatActivity implements DatePickerDialog.On
                  originCountryET.setText(place.getCountryName());
                  String todaysDate = String.valueOf(android.text.format.DateFormat.format("yyyy-MM-dd", new java.util.Date()));
                  departureDateET.setText(todaysDate);
-//             destinationPlaceET.setText()
+                 destinationPlaceET.setText(place.getCountryId());
 //             returnDateET.setText()
                  localeET.setText(userLocale);
                  currencyET.setText(userCurrency);
 
 
                  //TODO REMOVE only used for testing
-                 destinationPlaceET.setText("NYO-sky");
+                 //destinationPlaceET.setText("NYO-sky");
              }
          }
 
@@ -471,11 +471,11 @@ public class FlightDate extends AppCompatActivity implements DatePickerDialog.On
 //        }
 
         //TODO add back when done testing
-//        if (originPlaceId.equals("") || originCountry.equals("") || departureDate.equals("")
-//                || destinationPlace.equals("") || locale.equals("") || currency.equals("")){
-//            Toast.makeText(this, "Fill in all required fields", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
+        if (originPlaceId.equals("") || originCountry.equals("") || departureDate.equals("")
+                || destinationPlace.equals("") || locale.equals("") || currency.equals("")){
+            Toast.makeText(this, "Fill in all required fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         String countryAbbreviation=getCountryAbbreviationFromName(originCountry);
 
@@ -483,23 +483,23 @@ public class FlightDate extends AppCompatActivity implements DatePickerDialog.On
         SharedPreferences.Editor editor = sharedpreferences.edit();
 
         //TODO remove only for testing
-        editor.putString(Constants.KEY_PREFERENCE_PLACE_ID, "LAX-sky");
-        editor.putString(Constants.KEY_PREFERENCE_DESTINATION_PLACE, "SFO-sky");
-        editor.putString(Constants.KEY_PREFERENCE_COUNTRY, "US");
-        editor.putString(Constants.KEY_PREFERENCE_COUNTRY_ID, "US");
-        editor.putString(Constants.KEY_PREFERENCE_OUTBOUND_DATE, "2020-12-12");
-        editor.putString(Constants.KEY_PREFERENCE_INBOUND_DATE, "2020-12-18");
-        editor.putString(Constants.KEY_PREFERENCE_LOCALE, "en_US");
-        editor.putString(Constants.KEY_PREFERENCE_CURRENCY, "USD");
+//        editor.putString(Constants.KEY_PREFERENCE_PLACE_ID, "LAX-sky");
+//        editor.putString(Constants.KEY_PREFERENCE_DESTINATION_PLACE, "SFO-sky");
+//        editor.putString(Constants.KEY_PREFERENCE_COUNTRY, "US");
+//        editor.putString(Constants.KEY_PREFERENCE_COUNTRY_ID, "US");
+//        editor.putString(Constants.KEY_PREFERENCE_OUTBOUND_DATE, "2020-12-12");
+//        editor.putString(Constants.KEY_PREFERENCE_INBOUND_DATE, "2020-12-18");
+//        editor.putString(Constants.KEY_PREFERENCE_LOCALE, "en_US");
+//        editor.putString(Constants.KEY_PREFERENCE_CURRENCY, "USD");
         //TODO add back when done testing
-//        editor.putString(Constants.KEY_PREFERENCE_PLACE_ID, originPlaceId);
-//        editor.putString(Constants.KEY_PREFERENCE_DESTINATION_PLACE, destinationPlace);
-//        editor.putString(Constants.KEY_PREFERENCE_COUNTRY, originCountry);
-//        editor.putString(Constants.KEY_PREFERENCE_COUNTRY_ID, countryAbbreviation);
-//        editor.putString(Constants.KEY_PREFERENCE_OUTBOUND_DATE, departureDate);
-//        editor.putString(Constants.KEY_PREFERENCE_INBOUND_DATE, returnDate);
-//        editor.putString(Constants.KEY_PREFERENCE_LOCALE, locale);
-//        editor.putString(Constants.KEY_PREFERENCE_CURRENCY, currency);
+        editor.putString(Constants.KEY_PREFERENCE_PLACE_ID, originPlaceId);
+        editor.putString(Constants.KEY_PREFERENCE_DESTINATION_PLACE, destinationPlace);
+        editor.putString(Constants.KEY_PREFERENCE_COUNTRY, originCountry);
+        editor.putString(Constants.KEY_PREFERENCE_COUNTRY_ID, countryAbbreviation);
+        editor.putString(Constants.KEY_PREFERENCE_OUTBOUND_DATE, departureDate);
+        editor.putString(Constants.KEY_PREFERENCE_INBOUND_DATE, returnDate);
+        editor.putString(Constants.KEY_PREFERENCE_LOCALE, locale);
+        editor.putString(Constants.KEY_PREFERENCE_CURRENCY, currency);
 
         editor.commit();
 

@@ -127,11 +127,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 //        sharedpreferences = getSharedPreferences(Constants.FLIGHT_PREFERENCES, Context.MODE_PRIVATE);
 
             //TODO add back in after testing
-            SharedPreferences.Editor editor = sharedpreferences.edit();
-            editor.putString(Constants.KEY_PREFERENCE_COUNTRY, "UK");
-            editor.putString(Constants.KEY_PREFERENCE_CURRENCY, "GBP");
-            editor.putString(Constants.KEY_PREFERENCE_LOCALE, "en-GB");
-            editor.putString(Constants.KEY_PREFERENCE_PLACE, "Stockholm");
+//            SharedPreferences.Editor editor = sharedpreferences.edit();
+//            editor.putString(Constants.KEY_PREFERENCE_COUNTRY, "UK");
+//            editor.putString(Constants.KEY_PREFERENCE_CURRENCY, "GBP");
+//            editor.putString(Constants.KEY_PREFERENCE_LOCALE, "en-GB");
+//            editor.putString(Constants.KEY_PREFERENCE_PLACE, "Stockholm");
 
 
 
@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 //        editor.putString("currency", "GBP");
 //        editor.putString("locale", "en-GB");
 //        editor.putString("localityName","Stockholm");
-            editor.commit();
+//            editor.commit();
         }
     }
 
@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         currencyEditText = findViewById(R.id.currencyEditText);
         localityEditText = findViewById(R.id.localeEditText);
 
-        setInitialViewValues();
+        //setInitialViewValues();
 
 
         // Create the text view to show the level number.
@@ -167,6 +167,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         mNextLevelButton = ((Button) findViewById(R.id.flight_origin_location_button));
         mNextLevelButton.setEnabled(false);
 
+        //returns location fills in for origin flight
         Intent i = new Intent(MainActivity.this, GetFlightsService.class);
 // potentially add data to the intent
 //                i.putExtra("KEY1", "Value to be used by the service");
@@ -179,17 +180,17 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 //TODO uncomment after done testing
                 //correct but blocked out for testing
 
-//                if(countryEditText.getText().toString().equals("") || placeEditText.getText().toString().equals("") ||
-//                        currencyEditText.getText().toString().equals("") || localityEditText.getText().toString().equals("")){
-//                    Toast.makeText(MainActivity.this, "Please fill in all flight information", Toast.LENGTH_LONG).show();
-//                    return;
-//                }
+                if(countryEditText.getText().toString().equals("") || placeEditText.getText().toString().equals("") ||
+                        currencyEditText.getText().toString().equals("") || localityEditText.getText().toString().equals("")){
+                    Toast.makeText(MainActivity.this, "Please fill in all flight information", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 showInterstitial();
 
 
                 //TODO unblock when done testing
                 //correct but blocked out for testing
- //               saveToSharedPreferences();
+                saveToSharedPreferences();
 
                 if(AllFlightsMethods.getInstance().isInternetConnection(MainActivity.this)){
                     mainActivityViewModel.requestFlightDestinations();
@@ -215,20 +216,21 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 //        countrySpinner.setAdapter(countryArrayAdapter);
     }
 
-    private void setInitialViewValues(){
-        SharedPreferences sharedpreferences = getSharedPreferences(Constants.FLIGHT_PREFERENCES, Context.MODE_PRIVATE);
-        String userCountry=sharedpreferences.getString(Constants.KEY_PREFERENCE_COUNTRY, "UK");
-        String userCurrency=sharedpreferences.getString(Constants.KEY_PREFERENCE_CURRENCY, "GBP");
-        String userLocale=sharedpreferences.getString(Constants.KEY_PREFERENCE_LOCALE, "en-GB");
-        String userLocalityName=sharedpreferences.getString(Constants.KEY_PREFERENCE_PLACE,"Stockholm");
+    //TODO remove only for testing
+//    private void setInitialViewValues(){
+//        SharedPreferences sharedpreferences = getSharedPreferences(Constants.FLIGHT_PREFERENCES, Context.MODE_PRIVATE);
+//        String userCountry=sharedpreferences.getString(Constants.KEY_PREFERENCE_COUNTRY, "UK");
+//        String userCurrency=sharedpreferences.getString(Constants.KEY_PREFERENCE_CURRENCY, "GBP");
+//        String userLocale=sharedpreferences.getString(Constants.KEY_PREFERENCE_LOCALE, "en-GB");
+//        String userLocalityName=sharedpreferences.getString(Constants.KEY_PREFERENCE_PLACE,"Stockholm");
 
-        placeEditText.setText(userLocalityName);
-        countryEditText.setText(userCountry);
-        localityEditText.setText(userLocale);
-        currencyEditText.setText(userCurrency);
+//        placeEditText.setText(userLocalityName);
+//        countryEditText.setText(userCountry);
+//        localityEditText.setText(userLocale);
+//        currencyEditText.setText(userCurrency);
 
 
-    }
+
 
     public void setUpSpinners() {
 
@@ -359,9 +361,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
     }
 
+
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-
     }
 
 
